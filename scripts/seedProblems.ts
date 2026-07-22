@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
 import mongoose from 'mongoose';
 import Problem from '../models/Problem';
 
