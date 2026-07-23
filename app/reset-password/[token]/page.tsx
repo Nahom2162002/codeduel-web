@@ -112,7 +112,7 @@ export default function ResetPasswordPage() {
                         Reset Password
                     </div>
                     <div style={{ fontSize: 14, color: dim, lineHeight: 1.5 }}>
-                        Choose a new password for your InfoDiet account.
+                        Choose a new password for your CodeDuel account.
                     </div>
                 </div>
 
