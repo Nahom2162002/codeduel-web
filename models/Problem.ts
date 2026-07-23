@@ -20,10 +20,11 @@ const starterCodeSchema = new Schema({
 });
 
 const problemSchema = new Schema({
-    title:       { type: String, required: true },
-    description: { type: String, required: true },
-    difficulty:  { type: String, enum: ['easy', 'medium', 'hard'], required: true },
-    category:    { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design'], required: true },
+    title:        { type: String, required: true },
+    description:  { type: String, required: true },
+    difficulty:   { type: String, enum: ['easy', 'medium', 'hard'], required: true },
+    category:     { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design'], required: true },
+    functionName: { type: String, required: true },
     testCases:   [testCaseSchema],
     examples:    [exampleSchema],
     starterCode: starterCodeSchema,
