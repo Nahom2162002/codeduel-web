@@ -39,6 +39,7 @@ export default function ResultsPage() {
     const router = useRouter();
     const [duel, setDuel] = useState<DuelResult | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'overview' | 'code' | 'learn'>('overview');
 
     useEffect(() => {
@@ -48,12 +49,26 @@ export default function ResultsPage() {
         fetch(`/api/duels/${id}`, {
             headers: { authorization: `Bearer ${token}` }
         })
-            .then(res => res.json())
+            .then(async res => {
+                if (res.status === 401) {
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                    return null;
+                }
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data?.error || 'Failed to load results');
+                }
+                return data;
+            })
             .then(data => {
-                setDuel(data);
+                if (data) setDuel(data);
                 setLoading(false);
             })
-            .catch(() => setLoading(false));
+            .catch((err: Error) => {
+                setError(err.message);
+                setLoading(false);
+            });
     }, [id]);
 
     if (loading) return (
@@ -62,7 +77,12 @@ export default function ResultsPage() {
         </div>
     );
 
-    if (!duel) return null;
+    if (error || !duel) return (
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
+            <div style={{ color: 'var(--text-muted)' }}>{error || 'Results not found.'}</div>
+            <Link href="/problems" style={{ color: 'var(--green)' }}>← Back to Problems</Link>
+        </div>
+    );
 
     const config = RESULT_CONFIG[duel.result];
     const formatTime = (s: number) => s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`;
