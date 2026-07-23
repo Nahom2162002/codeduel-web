@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 
 const duelSchema = new Schema({
-    userId:           { type: String, required: true },
-    problemId:        { type: String, required: true },
+    userId:           { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    problemId:        { type: mongoose.Schema.Types.ObjectId, ref: 'Problem', required: true },
     language:         { type: String, required: true },
     userCode:         { type: String, required: true },
     aiCode:           { type: String, required: true },
