@@ -136,14 +136,14 @@ export default function DuelPage() {
 
             const data = await res.json();
 
-            if (data.error) {
-                setError(data.error);
+            if (data.limitReached) {
+                setLimitReached(true);
                 setSubmitting(false);
                 return;
             }
 
-            if (data.limitReached) {
-                setLimitReached(true);
+            if (data.error) {
+                setError(data.error);
                 setSubmitting(false);
                 return;
             }
@@ -393,7 +393,7 @@ export default function DuelPage() {
                             zIndex: 1000,
                             padding: 24
                         }}>
-                            <UpgradeBanner hasHadTrial={hasHadTrial} />
+                            <UpgradeBanner hasHadTrial={hasHadTrial} onClose={() => setLimitReached(false)} />
                         </div>
                     )}
                 </div>
