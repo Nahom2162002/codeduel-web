@@ -31,25 +31,42 @@ You can return the answer in any order.`,
             { input: { nums: [1, 2, 3, 4, 5], target: 9 }, expectedOutput: [3, 4], isHidden: true },
         ],
         starterCode: {
-            python: `def two_sum(nums: list[int], target: int) -> list[int]:
-    # Write your solution here
-    pass`,
-            javascript: `function twoSum(nums, target) {
-    // Write your solution here
-}`,
-            java: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        // Write your solution here
-        return new int[]{};
-    }
-}`,
-            cpp: `class Solution {
-public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        // Write your solution here
-        return {};
-    }
-};`
+            python: `import json 
+            import sys 
+            def two_sum(nums: list[int], target: int) -> list[int]:
+            # Write your solution here
+            pass 
+            # Do not modify below this line
+            if __name__ == "__main__":
+                data = json.loads(sys.stdin.read())
+                result = two_sum(data["nums"], data["target"])
+                print(json.dumps(result))`,
+            javascript: `const readline = require('readline');
+            const rl = readline.createInterface({ input: process.stdin });
+            let input = '';
+            rl.on('line', line => input += line);
+            rl.on('close', () => {
+                const data = JSON.parse(input);
+                console.log(JSON.stringify(twoSum(data.nums, data.target)));
+            });
+            function twoSum(nums, target) {
+                // Write your solution here
+            }`,
+            java: `import java.util.*;
+            import com.fasterxml.jackson.databind.ObjectMapper;
+            class Solution {
+                public int[] twoSum(int[] nums, int target) {
+                // Write your solution here
+                return new int[]{};
+                }
+                public static void main(String[] args) throws Exception {
+                    Scanner scanner = new Scanner(System.in);
+                    String input = scanner.useDelimiter("\\A").next();
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map<String, Object> data = mapper.readValue(input, Map.class);
+                    // Parse and call solution
+                }
+            }`
         }
     },
     {
@@ -82,14 +99,7 @@ public:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int maxSubArray(vector<int>& nums) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -120,14 +130,7 @@ public:
         // Write your solution here
         return new int[][]{};
     }
-}`,
-            cpp: `class Solution {
-public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        // Write your solution here
-        return {};
-    }
-};`
+}`
         }
     },
     {
@@ -158,14 +161,7 @@ public:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int trap(vector<int>& height) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
 
@@ -202,14 +198,7 @@ Given a string \`s\`, return \`true\` if it is a palindrome, or \`false\` otherw
         // Write your solution here
         return false;
     }
-}`,
-            cpp: `class Solution {
-public:
-    bool isPalindrome(string s) {
-        // Write your solution here
-        return false;
-    }
-};`
+}`
         }
     },
     {
@@ -242,14 +231,7 @@ public:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -281,14 +263,7 @@ public:
         // Write your solution here
         return "";
     }
-}`,
-            cpp: `class Solution {
-public:
-    string minWindow(string s, string t) {
-        // Write your solution here
-        return "";
-    }
-};`
+}`
         }
     },
 
@@ -331,14 +306,7 @@ def max_depth(root: TreeNode) -> int:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int maxDepth(TreeNode* root) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -382,14 +350,7 @@ def is_valid_bst(root: TreeNode) -> bool:
         // Write your solution here
         return false;
     }
-}`,
-            cpp: `class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        // Write your solution here
-        return false;
-    }
-};`
+}`
         }
     },
     {
@@ -432,14 +393,7 @@ def max_path_sum(root: TreeNode) -> int:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int maxPathSum(TreeNode* root) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
 
@@ -475,14 +429,7 @@ An island is surrounded by water and is formed by connecting adjacent lands hori
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int numIslands(vector<vector<char>>& grid) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -520,14 +467,7 @@ def clone_graph(node: Node) -> Node:
         // Write your solution here
         return null;
     }
-}`,
-            cpp: `class Solution {
-public:
-    Node* cloneGraph(Node* node) {
-        // Write your solution here
-        return nullptr;
-    }
-};`
+}`
         }
     },
     {
@@ -559,14 +499,7 @@ Given \`beginWord\`, \`endWord\`, and \`wordList\`, return the number of words i
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
 
@@ -603,14 +536,7 @@ Each time you can either climb \`1\` or \`2\` steps. In how many distinct ways c
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int climbStairs(int n) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -647,14 +573,7 @@ You may assume that you have an infinite number of each kind of coin.`,
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int coinChange(vector<int>& coins, int amount) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -689,14 +608,7 @@ A subsequence of a string is a new string generated from the original string wit
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int longestCommonSubsequence(string text1, string text2) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
     {
@@ -734,14 +646,7 @@ You have the following three operations permitted on a word:
         // Write your solution here
         return 0;
     }
-}`,
-            cpp: `class Solution {
-public:
-    int minDistance(string word1, string word2) {
-        // Write your solution here
-        return 0;
-    }
-};`
+}`
         }
     },
 
@@ -828,24 +733,7 @@ public class URLShortener {
         // Return the original URL
         return "";
     }
-}`,
-            cpp: `// Design a URL Shortener
-class URLShortener {
-public:
-    URLShortener() {
-        // Initialize your data structures
-    }
-    
-    string encode(string longUrl) {
-        // Generate a short URL
-        return "";
-    }
-    
-    string decode(string shortUrl) {
-        // Return the original URL
-        return "";
-    }
-};`
+}`
         }
     },
     {
@@ -921,23 +809,7 @@ public class RateLimiter {
         // Return true if request is allowed, false if rate limited
         return false;
     }
-}`,
-            cpp: `// Design a Rate Limiter
-class RateLimiter {
-    int limit;
-    int window;
-public:
-    RateLimiter(int limit, int windowSeconds) {
-        this->limit = limit;
-        this->window = windowSeconds;
-        // Initialize your data structures
-    }
-    
-    bool isAllowed(string userId) {
-        // Return true if request is allowed, false if rate limited
-        return false;
-    }
-};`
+}`
         }
     },
     {
@@ -1020,22 +892,7 @@ class Twitter {
     public void follow(int followerId, int followeeId) {}
     
     public void unfollow(int followerId, int followeeId) {}
-}`,
-            cpp: `// Design Twitter Feed
-class Twitter {
-public:
-    Twitter() {
-        // Initialize your data structures
-    }
-    
-    void postTweet(int userId, int tweetId) {}
-    
-    vector<int> getNewsFeed(int userId) { return {}; }
-    
-    void follow(int followerId, int followeeId) {}
-    
-    void unfollow(int followerId, int followeeId) {}
-};`
+}`
         }
     }
 ];
