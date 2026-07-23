@@ -12,8 +12,7 @@ const corsHeaders = {
 const LANGUAGE_IDS: Record<string, number> = {
     python: 71,
     javascript: 63,
-    java: 62,
-    cpp: 54
+    java: 62
 };
 
 export async function OPTIONS() {
