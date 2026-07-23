@@ -65,7 +65,7 @@ We do not sell your data to third parties. We do not use your data for advertisi
 - Vercel — hosting and infrastructure (vercel.com/legal/privacy-policy)
 - Anthropic — Claude AI for solution generation and evaluation (anthropic.com/privacy)
 - Judge0 — sandboxed code execution (judge0.com)
-- Resend — transactional email (resend.com/legal/privacy-policy)
+- Google / Gmail — transactional email (policies.google.com/privacy)
 
 Each of these services has their own privacy policy governing how they handle data.`
                     },
