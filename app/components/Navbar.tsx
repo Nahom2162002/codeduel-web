@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-    const [user, setUser] = useState<{ username: string; plan: string } | null>(null);
-    const router = useRouter();
+    const [user, setUser] = useState<{ username: string; plan: string; hasHadTrial?: boolean } | null>(null);    const router = useRouter();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -16,7 +15,11 @@ export default function Navbar() {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.username) setUser(data);
+                if (data.username) setUser({
+                    username: data.username,
+                    plan: data.plan,
+                    hasHadTrial: data.hasHadTrial 
+                });
             })
             .catch(() => {});
     }, []);
@@ -106,6 +109,65 @@ export default function Navbar() {
                             Get started
                         </Link>
                     </>
+                )}
+
+                {user?.plan === 'pro' && (
+                    <button
+                        onClick={async () => {
+                            const token = localStorage.getItem('token');
+                            const res = await fetch('/api/stripe/portal', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                     authorization: `Bearer ${token}`
+                                }
+                            });
+                            const data = await res.json();
+                            if (data.url) window.location.href = data.url;
+                        }}
+                        style={{
+                            padding: '6px 14px',
+                            borderRadius: 6,
+                            border: '1px solid rgba(0,255,135,0.3)',
+                            background: 'rgba(0,255,135,0.08)',
+                            color: '#00ff87',
+                            fontSize: 12,
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        ⭐ Pro
+                    </button>
+                )}
+
+                {user?.plan === 'free' && (
+                    <button
+                        onClick={async () => {
+                            const token = localStorage.getItem('token');
+                            const res = await fetch('/api/stripe/checkout', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                     authorization: `Bearer ${token}`
+                                },
+                                body: JSON.stringify({ hasHadTrial: user.hasHadTrial ?? false })
+                            });
+                            const data = await res.json();
+                            if (data.url) window.location.href = data.url;
+                        }}
+                        style={{
+                            padding: '6px 14px',
+                            borderRadius: 6,
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #00ff87, #00cc6a)',
+                            color: '#000',
+                            fontSize: 12,
+                            cursor: 'pointer',
+                            fontWeight: 700
+                        }}
+                    >
+                        Upgrade to Pro
+                    </button>
                 )}
             </div>
         </nav>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Navbar from '../../components/Navbar';
+import UpgradeBanner from '../../components/UpgradeBanner';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -39,6 +40,8 @@ export default function DuelPage() {
     const [timer, setTimer] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
     const [showHint, setShowHint] = useState(false);
+    const [limitReached, setLimitReached] = useState(false);
+    const [hasHadTrial, setHasHadTrial] = useState(false);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const startTimeRef = useRef<number>(0);
 
@@ -46,20 +49,36 @@ export default function DuelPage() {
         const token = localStorage.getItem('token');
         if (!token) { router.push('/login'); return; }
 
-        fetch(`/api/problems/${id}`, {
-            headers: { authorization: `Bearer ${token}` }
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    setError(data.error);
+        const loadData = async () => {
+            try {
+                const [problemRes, meRes] = await Promise.all([
+                    fetch(`/api/problems/${id}`, {
+                        headers: { authorization: `Bearer ${token}` }
+                    }),
+                    fetch('/api/user/me', {
+                        headers: { authorization: `Bearer ${token}` }
+                    })
+                ]);
+
+                const problemData = await problemRes.json();
+                const meData = await meRes.json();
+
+                if (problemData.error) {
+                    setError(problemData.error);
                 } else {
-                    setProblem(data);
-                    setCode(data.starterCode.python || '');
+                    setProblem(problemData);
+                    setCode(problemData.starterCode.python || '');
                 }
+
+                setHasHadTrial(meData.hasHadTrial ?? false);
                 setLoading(false);
-            })
-            .catch(() => { setError('Failed to load problem'); setLoading(false); });
+            } catch {
+                setError('Failed to load problem');
+                setLoading(false);
+            }
+        };
+
+        loadData();
     }, [id]);
 
     // Start timer when user first types
@@ -119,6 +138,12 @@ export default function DuelPage() {
 
             if (data.error) {
                 setError(data.error);
+                setSubmitting(false);
+                return;
+            }
+
+            if (data.limitReached) {
+                setLimitReached(true);
                 setSubmitting(false);
                 return;
             }
@@ -354,6 +379,21 @@ export default function DuelPage() {
                             fontSize: 13
                         }}>
                             {error}
+                        </div>
+                    )}
+
+                    {limitReached && (
+                        <div style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.85)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 1000,
+                            padding: 24
+                        }}>
+                            <UpgradeBanner hasHadTrial={hasHadTrial} />
                         </div>
                     )}
                 </div>
