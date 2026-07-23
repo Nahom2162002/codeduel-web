@@ -1,0 +1,6 @@
+{
+    "problemId": "6a618a01236432b6a528709a",
+    "language": "python",
+    "userCode": "import json\nimport sys\n\ndef two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen:\n            return [seen[target-n], i]\n        seen[n] = i\n\nif __name__ == '__main__':\n    data = json.loads(sys.stdin.read())\n    result = two_sum(data['nums'], data['target'])\n    print(json.dumps(result))",
+    "userTime": 120
+}
