@@ -18,6 +18,7 @@ You can return the answer in any order.`,
         difficulty: 'easy',
         category: 'arrays',
         isPremium: false,
+        functionName: 'two_sum',
         examples: [
             { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
             { input: 'nums = [3,2,4], target = 6', output: '[1,2]', explanation: '' },
@@ -74,6 +75,7 @@ You can return the answer in any order.`,
         difficulty: 'medium',
         category: 'arrays',
         isPremium: false,
+        functionName: 'max_subarray',
         examples: [
             { input: 'nums = [-2,1,-3,4,-1,2,1,-5,4]', output: '6', explanation: 'The subarray [4,-1,2,1] has the largest sum 6.' },
             { input: 'nums = [1]', output: '1', explanation: '' },
@@ -106,6 +108,7 @@ You can return the answer in any order.`,
         difficulty: 'medium',
         category: 'arrays',
         isPremium: true,
+        functionName: 'merge',
         examples: [
             { input: 'intervals = [[1,3],[2,6],[8,10],[15,18]]', output: '[[1,6],[8,10],[15,18]]', explanation: 'Since intervals [1,3] and [2,6] overlap, merge them into [1,6].' },
         ],
@@ -136,6 +139,7 @@ You can return the answer in any order.`,
         difficulty: 'hard',
         category: 'arrays',
         isPremium: true,
+        functionName: 'trap',
         examples: [
             { input: 'height = [0,1,0,2,1,0,1,3,2,1,2,1]', output: '6', explanation: 'The above elevation map is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water are being trapped.' },
         ],
@@ -170,6 +174,7 @@ Given a string \`s\`, return \`true\` if it is a palindrome, or \`false\` otherw
         difficulty: 'easy',
         category: 'strings',
         isPremium: false,
+        functionName: 'is_palindrome',
         examples: [
             { input: 's = "A man, a plan, a canal: Panama"', output: 'true', explanation: '"amanaplanacanalpanama" is a palindrome.' },
             { input: 's = "race a car"', output: 'false', explanation: '"raceacar" is not a palindrome.' },
@@ -202,6 +207,7 @@ Given a string \`s\`, return \`true\` if it is a palindrome, or \`false\` otherw
         difficulty: 'medium',
         category: 'strings',
         isPremium: false,
+        functionName: 'length_of_longest_substring',
         examples: [
             { input: 's = "abcabcbb"', output: '3', explanation: 'The answer is "abc", with the length of 3.' },
             { input: 's = "bbbbb"', output: '1', explanation: 'The answer is "b", with the length of 1.' },
@@ -234,6 +240,7 @@ Given a string \`s\`, return \`true\` if it is a palindrome, or \`false\` otherw
         difficulty: 'hard',
         category: 'strings',
         isPremium: true,
+        functionName: 'min_window',
         examples: [
             { input: 's = "ADOBECODEBANC", t = "ABC"', output: '"BANC"', explanation: 'The minimum window substring "BANC" includes A, B, and C from string t.' },
         ],
@@ -269,6 +276,7 @@ A binary tree's maximum depth is the number of nodes along the longest path from
         difficulty: 'easy',
         category: 'trees',
         isPremium: false,
+        functionName: 'max_depth',
         examples: [
             { input: 'root = [3,9,20,null,null,15,7]', output: '3', explanation: '' },
             { input: 'root = [1,null,2]', output: '2', explanation: '' },
@@ -312,6 +320,7 @@ A valid BST is defined as follows:
         difficulty: 'medium',
         category: 'trees',
         isPremium: true,
+        functionName: 'is_valid_bst',
         examples: [
             { input: 'root = [2,1,3]', output: 'true', explanation: '' },
             { input: 'root = [5,1,4,null,null,3,6]', output: 'false', explanation: 'The root node\'s value is 5 but its right child\'s value is 4.' },
@@ -354,6 +363,7 @@ Given the \`root\` of a binary tree, return the maximum path sum of any non-empt
         difficulty: 'hard',
         category: 'trees',
         isPremium: true,
+        functionName: 'max_path_sum',
         examples: [
             { input: 'root = [1,2,3]', output: '6', explanation: 'The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.' },
             { input: 'root = [-10,9,20,null,null,15,7]', output: '42', explanation: 'The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.' },
@@ -396,6 +406,7 @@ An island is surrounded by water and is formed by connecting adjacent lands hori
         difficulty: 'medium',
         category: 'graphs',
         isPremium: false,
+        functionName: 'num_islands',
         examples: [
             { input: 'grid = [["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]', output: '1', explanation: '' },
             { input: 'grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]', output: '3', explanation: '' },
@@ -429,6 +440,7 @@ Each node in the graph contains a value (int) and a list (List[Node]) of its nei
         difficulty: 'medium',
         category: 'graphs',
         isPremium: true,
+        functionName: 'clone_graph',
         examples: [
             { input: 'adjList = [[2,4],[1,3],[2,4],[1,3]]', output: '[[2,4],[1,3],[2,4],[1,3]]', explanation: 'There are 4 nodes in the graph. Node 1\'s neighbors are 2 and 4. Node 2\'s neighbors are 1 and 3. Node 3\'s neighbors are 2 and 4. Node 4\'s neighbors are 1 and 3.' },
         ],
@@ -466,6 +478,7 @@ Given \`beginWord\`, \`endWord\`, and \`wordList\`, return the number of words i
         difficulty: 'hard',
         category: 'graphs',
         isPremium: true,
+        functionName: 'ladder_length',
         examples: [
             { input: 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]', output: '5', explanation: 'One shortest transformation sequence is "hit" -> "hot" -> "dot" -> "dog" -> cog", which is 5 words long.' },
         ],
@@ -499,6 +512,7 @@ Each time you can either climb \`1\` or \`2\` steps. In how many distinct ways c
         difficulty: 'easy',
         category: 'dynamic-programming',
         isPremium: false,
+        functionName: 'climb_stairs',
         examples: [
             { input: 'n = 2', output: '2', explanation: 'There are two ways to climb to the top. 1. 1 step + 1 step 2. 2 steps' },
             { input: 'n = 3', output: '3', explanation: 'There are three ways to climb to the top. 1. 1 step + 1 step + 1 step 2. 1 step + 2 steps 3. 2 steps + 1 step' },
@@ -535,6 +549,7 @@ You may assume that you have an infinite number of each kind of coin.`,
         difficulty: 'medium',
         category: 'dynamic-programming',
         isPremium: false,
+        functionName: 'coin_change',
         examples: [
             { input: 'coins = [1,2,5], amount = 11', output: '3', explanation: '11 = 5 + 5 + 1' },
             { input: 'coins = [2], amount = 3', output: '-1', explanation: '' },
@@ -569,6 +584,7 @@ A subsequence of a string is a new string generated from the original string wit
         difficulty: 'medium',
         category: 'dynamic-programming',
         isPremium: true,
+        functionName: 'longest_common_subsequence',
         examples: [
             { input: 'text1 = "abcde", text2 = "ace"', output: '3', explanation: 'The longest common subsequence is "ace" and its length is 3.' },
             { input: 'text1 = "abc", text2 = "abc"', output: '3', explanation: 'The longest common subsequence is "abc" and its length is 3.' },
@@ -606,6 +622,7 @@ You have the following three operations permitted on a word:
         difficulty: 'hard',
         category: 'dynamic-programming',
         isPremium: true,
+        functionName: 'min_distance',
         examples: [
             { input: 'word1 = "horse", word2 = "ros"', output: '3', explanation: 'horse -> rorse (replace h with r) -> rose (remove r) -> ros (remove e)' },
             { input: 'word1 = "intention", word2 = "execution"', output: '5', explanation: '' },
@@ -654,6 +671,7 @@ Explain your design decisions and any trade-offs.`,
         difficulty: 'medium',
         category: 'system-design',
         isPremium: true,
+        functionName: 'solution',
         examples: [
             { input: 'longUrl = "https://www.example.com/very/long/path?with=params"', output: '"https://tinyurl.com/abc123"', explanation: 'Generate a unique 6-character code and store the mapping.' },
         ],
@@ -737,6 +755,7 @@ Explain which algorithm you chose and why, then implement it.`,
         difficulty: 'medium',
         category: 'system-design',
         isPremium: true,
+        functionName: 'solution',
         examples: [
             { input: 'userId = "user123", limit = 100, window = 60', output: 'true (request allowed) or false (rate limited)', explanation: 'Return true if the user is within their rate limit, false if exceeded.' },
         ],
@@ -814,6 +833,7 @@ Explain how you would scale this to 100M users.`,
         difficulty: 'hard',
         category: 'system-design',
         isPremium: true,
+        functionName: 'solution',
         examples: [
             { input: 'postTweet(1, 5), postTweet(1, 3), follow(2, 1), getNewsFeed(2)', output: '[3, 5]', explanation: 'User 2 follows user 1. User 1 posted tweets 5 and 3. getNewsFeed returns most recent first.' },
         ],

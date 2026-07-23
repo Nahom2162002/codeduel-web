@@ -13,7 +13,7 @@ const corsHeaders = {
 };
 
 const LANGUAGE_IDS: Record<string, number> = {
-    python: 71,
+    python: 100, // Python (3.12.5) — 71 is 3.8.1, too old for `list[int]`-style starter code annotations
     javascript: 63,
     java: 62
 };
@@ -35,14 +35,26 @@ async function executeCode(code: string, language: string, testCases: any[]) {
                         source_code: code,
                         language_id: languageId,
                         stdin: JSON.stringify(testCase.input),
-                        expected_output: JSON.stringify(testCase.expectedOutput),
                         cpu_time_limit: 5,
                         memory_limit: 128000
                     })
                 }
             );
             const result = await submitRes.json();
-            return { passed: result.status?.id === 3, time: parseFloat(result.time || '0') };
+
+            // Compare parsed JSON rather than raw stdout — different languages'
+            // JSON serializers format output differently (e.g. Python's json.dumps
+            // adds spaces after commas), so an exact string match against
+            // Judge0's expected_output is unreliable across languages.
+            let outputsMatch = false;
+            try {
+                const actual = JSON.parse((result.stdout || '').trim());
+                outputsMatch = JSON.stringify(actual) === JSON.stringify(testCase.expectedOutput);
+            } catch {
+                outputsMatch = false;
+            }
+
+            return { passed: result.status?.id === 3 && outputsMatch, time: parseFloat(result.time || '0') };
         })
     );
     return results;
@@ -64,9 +76,11 @@ ${problem.constraints.join('\n')}
 Examples:
 ${problem.examples.map((e: any) => `Input: ${e.input}\nOutput: ${e.output}`).join('\n\n')}
 
-Write ONLY the solution code in ${language}. No explanation, no markdown, just the raw code that can be executed directly. Use the same function signature as the starter code:
+Write ONLY the solution function body in ${language}. No imports, no main function, no stdin/stdout handling — just the function implementation. Use this exact function signature:
 
-${problem.starterCode[language]}`;
+${problem.starterCode[language]}
+
+No explanation, no markdown, just the raw function code.`;
 
     const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
@@ -76,9 +90,65 @@ ${problem.starterCode[language]}`;
 
     const aiTime = (Date.now() - startTime) / 1000;
     const content = message.content[0];
-    const code = content.type === 'text' ? content.text.trim() : '';
+    const rawCode = content.type === 'text' ? content.text.trim() : '';
 
-    return { code, time: aiTime };
+    // Claude often omits the stdin/stdout wrapper despite instructions — wrap it ourselves
+    const wrappedCode = wrapWithIO(rawCode, language, problem);
+
+    return { code: wrappedCode, time: aiTime };
+}
+
+function wrapWithIO(solutionCode: string, language: string, problem: any): string {
+    const funcName = problem.functionName;
+    const sampleInput = problem.testCases[0]?.input || {};
+    const inputKeys = Object.keys(sampleInput);
+
+    if (language === 'python') {
+        const dataArgs = inputKeys.map(k => `data["${k}"]`).join(', ');
+        return `import json
+import sys
+
+${solutionCode}
+
+if __name__ == "__main__":
+    data = json.loads(sys.stdin.read())
+    result = ${funcName}(${dataArgs})
+    print(json.dumps(result, separators=(",", ":")))`;
+    }
+
+    if (language === 'javascript') {
+        const camelName = funcName.replace(/_([a-z])/g, (_: string, l: string) => l.toUpperCase());
+        const dataArgs = inputKeys.map(k => `data.${k}`).join(', ');
+        return `${solutionCode}
+
+const chunks = [];
+process.stdin.on('data', chunk => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const result = ${camelName}(${dataArgs});
+    console.log(JSON.stringify(result));
+});`;
+    }
+
+    if (language === 'java') {
+        const dataArgs = inputKeys.map(k => `data.get("${k}")`).join(', ');
+        return `import java.util.*;
+import org.json.*;
+
+public class Solution {
+    ${solutionCode}
+
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.useDelimiter("\\\\A").next();
+        JSONObject data = new JSONObject(input);
+        Object result = new Solution().${funcName}(${dataArgs});
+        System.out.println(result.toString());
+    }
+}`;
+    }
+
+    return solutionCode;
 }
 
 async function evaluateCodeQuality(
@@ -181,8 +251,13 @@ export async function POST(req: NextRequest) {
             }
         }
 
+        // Wrap user code with stdin/stdout if not already wrapped
+        const wrappedUserCode = userCode.includes('stdin') || userCode.includes('sys.stdin')
+            ? userCode
+            : wrapWithIO(userCode, language, problem);
+
         // Run user code against test cases
-        const userResults = await executeCode(userCode, language, problem.testCases);
+        const userResults = await executeCode(wrappedUserCode, language, problem.testCases);
         const userTestsPassed = userResults.filter(r => r.passed).length;
 
         // Get Claude's solution
