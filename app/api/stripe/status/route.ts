@@ -23,57 +23,44 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({
                 plan: user.plan,
                 cancelAtPeriodEnd: false,
-                currentPeriodEnd: null,
-                hasHadTrial: user.hasHadTrial ?? false
+                isTrialing: false,
+                trialEnd: null
             }, { headers: corsHeaders });
         }
 
         const subscriptions = await stripe.subscriptions.list({
             customer: user.stripeCustomerId,
-            limit: 1,
-            status: 'all'
+            status: 'all',
+            limit: 1
         });
 
         const sub = subscriptions.data[0] as any;
-        console.log('Subscription keys:', Object.keys(sub));
-        console.log('Raw sub:', JSON.stringify({
-            status: sub.status,
-            current_period_end: sub.current_period_end,
-            cancel_at_period_end: sub.cancel_at_period_end,
-            cancel_at: sub.cancel_at,
-            ended_at: sub.ended_at,
-            items: sub.items?.data?.[0]
-        }));
 
         if (!sub || sub.status === 'canceled') {
             return NextResponse.json({
                 plan: 'free',
                 cancelAtPeriodEnd: false,
-                currentPeriodEnd: null,
-                hasHadTrial: user.hasHadTrial ?? false
+                isTrialing: false,
+                trialEnd: null
             }, { headers: corsHeaders });
         }
 
-        const cancelAtPeriodEnd = sub.cancel_at_period_end || (sub.cancel_at !== null && sub.cancel_at !== undefined);
-        const periodEnd = sub.items?.current_period_end || sub.current_period_end || sub.cancel_at;
-        const currentPeriodEnd = periodEnd ? new Date(periodEnd * 1000).toISOString() : null;
-
+        const cancelAtPeriodEnd = sub.cancel_at_period_end ||
+            (sub.cancel_at !== null && sub.cancel_at !== undefined);
         const isTrialing = sub.status === 'trialing';
-        const trialEnd = sub.trial_end 
-            ? new Date((sub.trial_end as number) * 1000).toISOString() 
+        const periodEnd = sub.items?.current_period_end || sub.current_period_end;
+        const trialEnd = sub.trial_end
+            ? new Date((sub.trial_end as number) * 1000).toISOString()
             : null;
-
-        if (cancelAtPeriodEnd !== user.cancelAtPeriodEnd) {
-            await user.updateOne({ cancelAtPeriodEnd });
-        }
 
         return NextResponse.json({
             plan: user.plan,
             cancelAtPeriodEnd,
-            currentPeriodEnd,
             isTrialing,
             trialEnd,
-            hasHadTrial: user.hasHadTrial ?? false
+            currentPeriodEnd: periodEnd
+                ? new Date(periodEnd * 1000).toISOString()
+                : null
         }, { headers: corsHeaders });
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
