@@ -18,12 +18,21 @@ export async function POST(req: NextRequest) {
     try {
         await connectDB();
         const user = await getUserFromRequest(req);
-        
-        if (!user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+
+        if (user.plan === 'pro') {
+            return NextResponse.json({ error: 'Already on Pro plan' }, { status: 400, headers: corsHeaders });
         }
 
+        // Create or verify Stripe customer
         let customerId = user.stripeCustomerId;
+        if (customerId) {
+            try {
+                await stripe.customers.retrieve(customerId);
+            } catch {
+                customerId = null;
+            }
+        }
 
         if (!customerId) {
             const customer = await stripe.customers.create({
@@ -31,37 +40,39 @@ export async function POST(req: NextRequest) {
                 metadata: { userId: user._id.toString() }
             });
             customerId = customer.id;
-            
             await User.findByIdAndUpdate(user._id, { stripeCustomerId: customer.id });
         }
 
-        const eligibleForTrial = !user.hasHadTrial;
+        const { hasHadTrial } = await req.json().catch(() => ({ hasHadTrial: false }));
 
-        const session = await stripe.checkout.sessions.create({
+        const sessionConfig: any = {
             customer: customerId,
-            payment_method_types: ['card'],
             line_items: [{
                 price: process.env.STRIPE_PRICE_ID!,
                 quantity: 1
             }],
             mode: 'subscription',
-            ...(eligibleForTrial ? {
-                subscription_data: {
-                    trial_period_days: 14,
-                    trial_settings: {
-                        end_behavior: {
-                            missing_payment_method: 'cancel' as const
-                        }
-                    }
-                },
-                payment_method_collection: 'if_required' as const,
-            } : {}),
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
-        });
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/problems`,
+        };
 
+        if (!hasHadTrial) {
+            sessionConfig.subscription_data = {
+                trial_period_days: 7,
+                trial_settings: {
+                    end_behavior: {
+                        missing_payment_method: 'cancel'
+                    }
+                }
+            };
+            sessionConfig.payment_method_collection = 'if_required';
+        }
+
+        const session = await stripe.checkout.sessions.create(sessionConfig);
         return NextResponse.json({ url: session.url }, { headers: corsHeaders });
+
     } catch (err: any) {
+        console.log('Checkout error:', err.message);
         return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
     }
 }
