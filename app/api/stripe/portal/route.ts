@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { connectDB } from '@/lib/mongodb';
 import { getUserFromRequest } from '@/lib/auth';
-import User from '@/models/User';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -17,17 +16,14 @@ export async function OPTIONS() {
 export async function POST(req: NextRequest) {
     try {
         await connectDB();
-
         const user = await getUserFromRequest(req);
-
-        if (!user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
-        }
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
 
         if (!user.stripeCustomerId) {
             return NextResponse.json({ error: 'No subscription found' }, { status: 400, headers: corsHeaders });
         }
 
+        // Check if user is on a trial — cancel immediately
         const subscriptions = await stripe.subscriptions.list({
             customer: user.stripeCustomerId,
             status: 'trialing',
@@ -38,27 +34,21 @@ export async function POST(req: NextRequest) {
             const sub = subscriptions.data[0];
             await stripe.subscriptions.cancel(sub.id);
 
+            const User = (await import('@/models/User')).default;
             await User.findByIdAndUpdate(user._id, {
                 plan: 'free',
                 cancelAtPeriodEnd: false,
-                trialEnd: null,
                 isTrialing: false,
-                hasHadTrial: true 
+                trialEnd: null
             });
 
-            return NextResponse.json({
-                cancelled: true,
-                message: 'Trial cancelled successfully',
-                url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`
-            }, { headers: corsHeaders });
+            return NextResponse.json({ cancelled: true }, { headers: corsHeaders });
         }
 
-        const authHeader = req.headers.get('authorization');
-        const token = authHeader?.split(' ')[1];
-
+        // Regular subscription — open portal
         const session = await stripe.billingPortal.sessions.create({
             customer: user.stripeCustomerId,
-            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/portal-return?token=${token}`
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
         });
 
         return NextResponse.json({ url: session.url }, { headers: corsHeaders });
