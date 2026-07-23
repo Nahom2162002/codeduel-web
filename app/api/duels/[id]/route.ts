@@ -26,7 +26,7 @@ export async function GET(
         const duel = await Duel.findById(id).populate('problemId', 'title difficulty category');
 
         if (!duel) return NextResponse.json({ error: 'Duel not found' }, { status: 404, headers: corsHeaders });
-        if (duel.userId !== user._id.toString()) {
+        if (duel.userId.toString() !== user._id.toString()) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
         }
 
