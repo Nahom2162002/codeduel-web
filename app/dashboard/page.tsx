@@ -2,12 +2,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {
-    BarChart, Bar, XAxis, YAxis, Tooltip,
-    ResponsiveContainer, LineChart, Line,
-    RadarChart, Radar, PolarGrid, PolarAngleAxis
-} from 'recharts';
-import Navbar from '../components/Navbar';
+import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
+const pressStart2P = Press_Start_2P({ subsets: ['latin'], weight: '400' });
+
+const BLUE = 'oklch(75% 0.15 220)';
+const ORANGE = 'oklch(75% 0.15 55)';
+const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
+const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
+const NEUTRAL_BG = 'oklch(40% 0.02 260 / 0.4)';
+const NEUTRAL = 'oklch(85% 0.02 260)';
 
 interface Stats {
     stats: {
@@ -36,9 +42,6 @@ interface Stats {
     }[];
 }
 
-const RESULT_COLORS = { win: '#00ff87', loss: '#ff4d4d', draw: '#ffd93d' };
-const RESULT_EMOJI = { win: '🏆', loss: '🤖', draw: '🤝' };
-
 const CATEGORY_LABELS: Record<string, string> = {
     arrays: 'Arrays',
     strings: 'Strings',
@@ -48,27 +51,14 @@ const CATEGORY_LABELS: Record<string, string> = {
     'system-design': 'System Design'
 };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-        return (
-            <div style={{
-                background: '#1a1a26',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 8,
-                padding: '8px 12px',
-                fontSize: 12
-            }}>
-                <p style={{ color: 'white', margin: '0 0 4px', fontWeight: 600 }}>{label}</p>
-                {payload.map((p: any, i: number) => (
-                    <p key={i} style={{ color: p.color, margin: '2px 0' }}>
-                        {p.name}: {p.value}
-                    </p>
-                ))}
-            </div>
-        );
-    }
-    return null;
-};
+function DuelIcon({ size = 28 }: { size?: number }) {
+    return (
+        <svg width={size} height={size * (24 / 32)} viewBox="0 0 32 24" fill="none">
+            <path d="M4 4L14 12L4 20" stroke={BLUE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M28 4L18 12L28 20" stroke={ORANGE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
 
 export default function DashboardPage() {
     const [stats, setStats] = useState<Stats | null>(null);
@@ -99,410 +89,230 @@ export default function DashboardPage() {
         });
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/');
+    };
+
     if (loading) return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ color: 'var(--text-muted)' }}>Loading dashboard...</div>
+        <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            Loading dashboard...
         </div>
     );
 
     if (error) return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ color: 'var(--loss)' }}>{error}</div>
+        <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: ORANGE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {error}
         </div>
     );
 
     if (!stats) return null;
 
-    const { wins, losses, draws, currentStreak, bestStreak, totalDuels, eloRating } = stats.stats;
+    const { wins, losses, draws, currentStreak, totalDuels, eloRating } = stats.stats;
     const winRate = totalDuels > 0 ? Math.round((wins / totalDuels) * 100) : 0;
 
-    // Radar chart data for categories
-    const radarData = Object.entries(stats.categoryStats).map(([cat, s]) => {
-        const total = s.wins + s.losses + s.draws;
-        return {
-            category: CATEGORY_LABELS[cat] || cat,
-            winRate: total > 0 ? Math.round((s.wins / total) * 100) : 0
-        };
-    });
+    const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const eloThisWeek = stats.recentDuels
+        .filter(d => new Date(d.completedAt).getTime() >= oneWeekAgo)
+        .reduce((sum, d) => sum + d.eloChange, 0);
 
-    // Difficulty win rates
-    const difficultyData = Object.entries(stats.difficultyStats).map(([diff, s]) => ({
-        difficulty: diff.charAt(0).toUpperCase() + diff.slice(1),
-        winRate: s.total > 0 ? Math.round((s.wins / s.total) * 100) : 0,
-        total: s.total
+    // Reconstruct recent ELO history from current rating + each duel's eloChange
+    const recentForChart = stats.recentDuels.slice(0, 8);
+    const eloAfterEachDuel: number[] = [];
+    let running = eloRating;
+    for (let i = 0; i < recentForChart.length; i++) {
+        eloAfterEachDuel.push(running);
+        running -= recentForChart[i].eloChange;
+    }
+    const chartPoints = eloAfterEachDuel.slice().reverse(); // oldest -> newest
+    const maxElo = Math.max(...chartPoints, 0);
+    const minElo = Math.min(...chartPoints, 0);
+    const chartBars = chartPoints.map((v, i) => ({
+        height: `${10 + ((v - minElo) / (maxElo - minElo || 1)) * 90}%`,
+        label: `D${i + 1}`
     }));
 
-    const DIFF_COLORS: Record<string, string> = {
-        Easy: '#00ff87',
-        Medium: '#ffd93d',
-        Hard: '#ff4d4d'
-    };
+    const weakSpots = stats.weakCategories
+        .map(cat => {
+            const s = stats.categoryStats[cat] || { wins: 0, losses: 0, draws: 0 };
+            const total = s.wins + s.losses + s.draws;
+            const lossRate = total > 0 ? Math.round((s.losses / total) * 100) : 0;
+            return { category: CATEGORY_LABELS[cat] || cat, lossRate };
+        })
+        .sort((a, b) => b.lossRate - a.lossRate)
+        .slice(0, 4);
+
+    const stat = (label: string, value: string | number, sub: string, accent: string) => ({ label, value, sub, accent });
+    const statCards = [
+        stat('ELO Rating', eloRating.toLocaleString(), `${eloThisWeek >= 0 ? '+' : ''}${eloThisWeek} this week`, BLUE),
+        stat('Win Rate', `${winRate}%`, `${wins}W – ${losses}L${draws > 0 ? ` – ${draws}D` : ''}`, ORANGE),
+        stat('Current Streak', String(currentStreak), currentStreak > 0 ? 'Wins in a row' : 'No active streak', BLUE),
+        stat('Duels Played', String(totalDuels), 'All time', ORANGE),
+    ];
+
+    const initials = username.slice(0, 2).toUpperCase() || '?';
 
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-            <Navbar />
-
-            <div style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px' }}>
-
-                {/* Header */}
-                <div style={{ marginBottom: 32 }}>
-                    <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 4px' }}>
-                        {username}'s Dashboard
-                    </h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: 15 }}>
-                        Your CodeDuel performance at a glance
-                    </p>
-                </div>
-
-                {/* ELO and key stats */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                    gap: 16,
-                    marginBottom: 32
-                }}>
-                    {/* ELO */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, rgba(0,255,135,0.1), rgba(0,204,106,0.05))',
-                        border: '1px solid rgba(0,255,135,0.2)',
-                        borderRadius: 16,
-                        padding: '20px',
-                        textAlign: 'center',
-                        gridColumn: 'span 2'
+        <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+            <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                    <Link href="/problems" style={{
+                        display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20,
+                        letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
                     }}>
-                        <p style={{ color: 'var(--green)', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 8px' }}>
-                            ELO Rating
-                        </p>
-                        <p style={{ fontSize: 48, fontWeight: 900, color: 'var(--green)', margin: '0 0 4px', lineHeight: 1 }}>
-                            {eloRating}
-                        </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: 12, margin: 0 }}>
-                            {eloRating >= 1200 ? '🔥 Expert' : eloRating >= 1100 ? '⚡ Advanced' : eloRating >= 1000 ? '💪 Intermediate' : '🌱 Beginner'}
+                        <DuelIcon />
+                        CodeDuel
+                    </Link>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                        <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
+                        <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
+                    </div>
+                </div>
+                <button
+                    onClick={handleLogout}
+                    title="Log out"
+                    className={jetbrainsMono.className}
+                    style={{
+                        width: 36, height: 36, borderRadius: '50%',
+                        background: BLUE_BG, border: `1px solid oklch(75% 0.15 220 / 0.5)`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 13, fontWeight: 700, color: BLUE, cursor: 'pointer'
+                    }}
+                >
+                    {initials}
+                </button>
+            </nav>
+
+            <main style={{ maxWidth: 1120, margin: '0 auto', padding: '32px 48px 100px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
+                    <div>
+                        <h1 style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 6px' }}>
+                            Welcome back, {username}
+                        </h1>
+                        <p style={{ fontSize: 15, color: 'oklch(65% 0.02 260)', margin: 0 }}>
+                            Here's how you've been stacking up against Claude.
                         </p>
                     </div>
+                    <Link href="/problems" style={{
+                        background: BLUE, color: 'oklch(16% 0.02 260)', padding: '12px 22px', borderRadius: 8,
+                        textDecoration: 'none', fontWeight: 700, fontSize: 15, whiteSpace: 'nowrap'
+                    }}>
+                        Start a Duel
+                    </Link>
+                </div>
 
-                    {[
-                        { label: 'Win Rate', value: `${winRate}%`, sub: `${wins}W ${losses}L ${draws}D` },
-                        { label: 'Total Duels', value: totalDuels, sub: 'vs Claude' },
-                        { label: 'Current Streak', value: `${currentStreak}🔥`, sub: `Best: ${bestStreak}` },
-                        { label: 'Wins', value: wins, color: 'var(--win)' },
-                        { label: 'Losses', value: losses, color: 'var(--loss)' },
-                        { label: 'Draws', value: draws, color: 'var(--draw)' },
-                    ].map((stat, i) => (
-                        <div key={i} style={{
-                            background: 'var(--surface)',
-                            border: '1px solid var(--border)',
-                            borderRadius: 12,
-                            padding: '16px',
-                            textAlign: 'center'
-                        }}>
-                            <p style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', margin: '0 0 8px' }}>
-                                {stat.label}
-                            </p>
-                            <p style={{ fontSize: 28, fontWeight: 800, color: stat.color || 'white', margin: '0 0 4px', lineHeight: 1 }}>
-                                {stat.value}
-                            </p>
-                            {stat.sub && (
-                                <p style={{ color: 'var(--text-subtle)', fontSize: 11, margin: 0 }}>
-                                    {stat.sub}
-                                </p>
-                            )}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 40 }}>
+                    {statCards.map((s, i) => (
+                        <div key={i} style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24, position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: 4, left: 4, width: 12, height: 12, borderTop: `2px solid ${s.accent}`, borderLeft: `2px solid ${s.accent}` }} />
+                            <div style={{ position: 'absolute', bottom: 4, right: 4, width: 12, height: 12, borderBottom: `2px solid ${s.accent}`, borderRight: `2px solid ${s.accent}` }} />
+                            <div className={jetbrainsMono.className} style={{ fontSize: 12, color: 'oklch(60% 0.02 260)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                {s.label}
+                            </div>
+                            <div className={pressStart2P.className} style={{ fontSize: 24, color: s.accent }}>
+                                {s.value}
+                            </div>
+                            <div style={{ fontSize: 13, color: 'oklch(60% 0.02 260)', marginTop: 8 }}>
+                                {s.sub}
+                            </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Weak and strong categories */}
-                {(stats.weakCategories.length > 0 || stats.strongCategories.length > 0) && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 32 }}>
-                        {stats.weakCategories.length > 0 && (
-                            <div style={{
-                                background: 'rgba(255,77,77,0.06)',
-                                border: '1px solid rgba(255,77,77,0.2)',
-                                borderRadius: 12,
-                                padding: '16px 20px'
-                            }}>
-                                <p style={{ color: 'var(--loss)', fontSize: 12, fontWeight: 700, margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                                    ⚠️ Needs Work
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                                    {stats.weakCategories.map(cat => (
-                                        <Link
-                                            key={cat}
-                                            href={`/problems?category=${cat}`}
-                                            style={{
-                                                padding: '4px 10px',
-                                                borderRadius: 20,
-                                                background: 'rgba(255,77,77,0.15)',
-                                                color: 'var(--loss)',
-                                                fontSize: 12,
-                                                fontWeight: 600
-                                            }}
-                                        >
-                                            {CATEGORY_LABELS[cat] || cat}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {stats.strongCategories.length > 0 && (
-                            <div style={{
-                                background: 'rgba(0,255,135,0.06)',
-                                border: '1px solid rgba(0,255,135,0.2)',
-                                borderRadius: 12,
-                                padding: '16px 20px'
-                            }}>
-                                <p style={{ color: 'var(--green)', fontSize: 12, fontWeight: 700, margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                                    ✅ Strong Areas
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                                    {stats.strongCategories.map(cat => (
-                                        <span
-                                            key={cat}
-                                            style={{
-                                                padding: '4px 10px',
-                                                borderRadius: 20,
-                                                background: 'rgba(0,255,135,0.15)',
-                                                color: 'var(--green)',
-                                                fontSize: 12,
-                                                fontWeight: 600
-                                            }}
-                                        >
-                                            {CATEGORY_LABELS[cat] || cat}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Charts row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 32 }}>
-
-                    {/* Last 7 days activity */}
-                    <div style={{
-                        background: 'var(--surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 16,
-                        padding: '20px'
-                    }}>
-                        <h3 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 20px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            Last 7 Days
-                        </h3>
-                        {stats.last7Days.every(d => d.duels === 0) ? (
-                            <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-subtle)', fontSize: 13 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 24, marginBottom: 40 }}>
+                    <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
+                        <h2 style={{ fontSize: 17, margin: '0 0 20px', fontWeight: 600 }}>ELO Progress</h2>
+                        {chartBars.length === 0 ? (
+                            <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '40px 0', color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
                                 No duels yet — start competing!
                             </div>
                         ) : (
-                            <ResponsiveContainer width="100%" height={180}>
-                                <BarChart data={stats.last7Days}>
-                                    <XAxis dataKey="date" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} />
-                                    <YAxis tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} allowDecimals={false} />
-                                    <Tooltip content={<CustomTooltip />} />
-                                    <Bar dataKey="wins" name="Wins" fill="#00ff87" radius={[4, 4, 0, 0]} stackId="a" />
-                                    <Bar dataKey="duels" name="Total" fill="rgba(255,255,255,0.1)" radius={[4, 4, 0, 0]} stackId="b" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, height: 140 }}>
+                                {chartBars.map((b, i) => (
+                                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, height: '100%', justifyContent: 'flex-end' }}>
+                                        <div style={{ width: '100%', height: b.height, background: BLUE_BG, borderTop: `2px solid ${BLUE}`, borderRadius: '3px 3px 0 0' }} />
+                                        <div className={jetbrainsMono.className} style={{ fontSize: 10, color: 'oklch(55% 0.02 260)' }}>{b.label}</div>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
 
-                    {/* Win rate by difficulty */}
-                    <div style={{
-                        background: 'var(--surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 16,
-                        padding: '20px'
-                    }}>
-                        <h3 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 20px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            Win Rate by Difficulty
-                        </h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 8 }}>
-                            {difficultyData.map(d => (
-                                <div key={d.difficulty}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                                        <span style={{ color: DIFF_COLORS[d.difficulty] || 'white', fontSize: 13, fontWeight: 600 }}>
-                                            {d.difficulty}
-                                        </span>
-                                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-                                            {d.winRate}% ({d.total} duels)
-                                        </span>
+                    <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
+                        <h2 style={{ fontSize: 17, margin: '0 0 4px', fontWeight: 600 }}>Weak Spot Detection</h2>
+                        <p style={{ fontSize: 13, color: 'oklch(60% 0.02 260)', margin: '0 0 20px' }}>
+                            Categories you lose in most often
+                        </p>
+                        {weakSpots.length === 0 ? (
+                            <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '20px 0', color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
+                                No weak spots detected yet — keep dueling!
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                {weakSpots.map((w, i) => (
+                                    <div key={i}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13.5, marginBottom: 6 }}>
+                                            <span>{w.category}</span>
+                                            <span className={jetbrainsMono.className} style={{ color: ORANGE }}>{w.lossRate}%</span>
+                                        </div>
+                                        <div style={{ height: 6, background: 'oklch(30% 0.02 260)', borderRadius: 999, overflow: 'hidden' }}>
+                                            <div style={{ height: '100%', width: `${w.lossRate}%`, background: ORANGE }} />
+                                        </div>
                                     </div>
-                                    <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4 }}>
-                                        <div style={{
-                                            height: '100%',
-                                            width: `${d.winRate}%`,
-                                            background: DIFF_COLORS[d.difficulty] || '#fff',
-                                            borderRadius: 4,
-                                            transition: 'width 0.5s ease'
-                                        }} />
-                                    </div>
-                                </div>
-                            ))}
-                            {difficultyData.every(d => d.total === 0) && (
-                                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-subtle)', fontSize: 13 }}>
-                                    Complete some duels to see your stats
-                                </div>
-                            )}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Category radar */}
-                {radarData.length > 0 && radarData.some(d => d.winRate > 0) && (
-                    <div style={{
-                        background: 'var(--surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 16,
-                        padding: '20px',
-                        marginBottom: 32
-                    }}>
-                        <h3 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 8px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            Category Win Rates
-                        </h3>
-                        <ResponsiveContainer width="100%" height={280}>
-                            <RadarChart data={radarData}>
-                                <PolarGrid stroke="rgba(255,255,255,0.08)" />
-                                <PolarAngleAxis
-                                    dataKey="category"
-                                    tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
-                                />
-                                <Radar
-                                    name="Win Rate"
-                                    dataKey="winRate"
-                                    stroke="#00ff87"
-                                    fill="#00ff87"
-                                    fillOpacity={0.15}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                            </RadarChart>
-                        </ResponsiveContainer>
-                    </div>
-                )}
-
-                {/* Recent duels */}
-                <div style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 16,
-                    padding: '20px',
-                    marginBottom: 32
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                        <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            Recent Duels
-                        </h3>
-                        <Link href="/problems" style={{ color: 'var(--green)', fontSize: 13 }}>
-                            New duel →
-                        </Link>
+                <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                        <h2 style={{ fontSize: 17, margin: 0, fontWeight: 600 }}>Recent Duels</h2>
+                        <Link href="/problems" style={{ color: BLUE, fontSize: 13, textDecoration: 'none' }}>New duel →</Link>
                     </div>
 
                     {stats.recentDuels.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '32px', color: 'var(--text-subtle)', fontSize: 13 }}>
-                            No duels yet — <Link href="/problems" style={{ color: 'var(--green)' }}>start your first duel</Link>
+                        <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '32px 0', color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
+                            No duels yet — <Link href="/problems" style={{ color: BLUE }}>start your first duel</Link>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                            {stats.recentDuels.map(duel => (
-                                <Link
-                                    key={duel._id}
-                                    href={`/results/${duel._id}`}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        padding: '12px 16px',
-                                        background: 'var(--surface2)',
-                                        border: '1px solid var(--border)',
-                                        borderRadius: 10,
-                                        textDecoration: 'none',
-                                        transition: 'border-color 0.15s'
-                                    }}
-                                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,255,135,0.2)')}
-                                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                        <span style={{ fontSize: 18 }}>
-                                            {RESULT_EMOJI[duel.result]}
-                                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            {stats.recentDuels.map(duel => {
+                                const resultBg = duel.result === 'win' ? BLUE_BG : duel.result === 'loss' ? ORANGE_BG : NEUTRAL_BG;
+                                const resultColor = duel.result === 'win' ? BLUE : duel.result === 'loss' ? ORANGE : NEUTRAL;
+                                return (
+                                    <Link
+                                        key={duel._id}
+                                        href={`/results/${duel._id}`}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                            padding: '14px 0', borderBottom: '1px solid oklch(28% 0.02 260)',
+                                            gap: 16, flexWrap: 'wrap', textDecoration: 'none', color: 'inherit'
+                                        }}
+                                    >
                                         <div>
-                                            <p style={{ color: 'white', fontSize: 13, fontWeight: 600, margin: '0 0 2px' }}>
+                                            <div style={{ fontSize: 15, marginBottom: 4 }}>
                                                 {duel.problemId?.title || 'Unknown Problem'}
-                                            </p>
-                                            <p style={{ color: 'var(--text-subtle)', fontSize: 11, margin: 0, textTransform: 'capitalize' }}>
-                                                {duel.language} · {duel.problemId?.difficulty} · {duel.problemId?.category?.replace('-', ' ')}
-                                            </p>
+                                            </div>
+                                            <div className={jetbrainsMono.className} style={{ fontSize: 12, color: 'oklch(55% 0.02 260)' }}>
+                                                {CATEGORY_LABELS[duel.problemId?.category] || duel.problemId?.category} · {new Date(duel.completedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 16, textAlign: 'right' }}>
-                                        <div>
-                                            <p style={{ color: 'white', fontSize: 13, fontWeight: 700, margin: '0 0 2px' }}>
-                                                {duel.userScore} vs {duel.aiScore}
-                                            </p>
-                                            <p style={{
-                                                fontSize: 11,
-                                                margin: 0,
-                                                color: duel.eloChange >= 0 ? 'var(--win)' : 'var(--loss)',
-                                                fontWeight: 600
-                                            }}>
-                                                {duel.eloChange >= 0 ? '+' : ''}{duel.eloChange} ELO
-                                            </p>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                                            <span className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(65% 0.02 260)' }}>
+                                                {duel.userScore} – {duel.aiScore}
+                                            </span>
+                                            <span className={pressStart2P.className} style={{ fontSize: 9, padding: '6px 10px', borderRadius: 4, background: resultBg, color: resultColor }}>
+                                                {duel.result.toUpperCase()}
+                                            </span>
                                         </div>
-                                        <span style={{
-                                            fontSize: 11,
-                                            fontWeight: 700,
-                                            color: RESULT_COLORS[duel.result],
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '0.06em'
-                                        }}>
-                                            {duel.result}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     )}
                 </div>
-
-                {/* Quick actions */}
-                <div style={{ display: 'flex', gap: 12 }}>
-                    <Link
-                        href="/problems"
-                        style={{
-                            flex: 1,
-                            padding: '14px',
-                            borderRadius: 10,
-                            border: 'none',
-                            background: 'linear-gradient(135deg, #00ff87, #00cc6a)',
-                            color: '#000',
-                            fontSize: 14,
-                            fontWeight: 700,
-                            textAlign: 'center'
-                        }}
-                    >
-                        ⚔️ Start New Duel
-                    </Link>
-                    {stats.weakCategories.length > 0 && (
-                        <Link
-                            href={`/problems?category=${stats.weakCategories[0]}`}
-                            style={{
-                                flex: 1,
-                                padding: '14px',
-                                borderRadius: 10,
-                                border: '1px solid rgba(255,77,77,0.3)',
-                                background: 'rgba(255,77,77,0.08)',
-                                color: 'var(--loss)',
-                                fontSize: 14,
-                                fontWeight: 700,
-                                textAlign: 'center'
-                            }}
-                        >
-                            🎯 Practice Weak Spots
-                        </Link>
-                    )}
-                </div>
-            </div>
+            </main>
         </div>
     );
 }
