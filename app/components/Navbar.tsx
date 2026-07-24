@@ -44,7 +44,7 @@ export default function Navbar() {
             top: 0,
             zIndex: 100
         }}>
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Link href={user ? '/problems' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 20 }}>⚔️</span>
                 <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--green)' }}>CodeDuel</span>
             </Link>

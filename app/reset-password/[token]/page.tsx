@@ -1,17 +1,25 @@
 'use client';
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const GREEN = 'oklch(0.75 0.15 155)';
 const RED = 'oklch(0.68 0.18 25)';
 
 export default function ResetPasswordPage() {
     const { token } = useParams();
+    const router = useRouter();
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!message) return;
+        const timer = setTimeout(() => router.push('/login'), 5000);
+        return () => clearTimeout(timer);
+    }, [message]);
 
     const requirements = [
         { text: 'At least 8 characters', met: password.length >= 8 },
@@ -46,7 +54,7 @@ export default function ResetPasswordPage() {
             });
             const data = await res.json();
             if (data.message) {
-                setMessage('Password reset successful! You can now log in to the extension.');
+                setMessage('Password reset successful! You can now log in with your new password.');
                 setError('');
             } else {
                 setError(data.error);
@@ -127,9 +135,30 @@ export default function ResetPasswordPage() {
                     gap: 16,
                 }}>
                     {message ? (
-                        <p style={{ color: GREEN, fontSize: 14, margin: 0, textAlign: 'center', lineHeight: 1.6 }}>
-                            {message}
-                        </p>
+                        <>
+                            <p style={{ color: GREEN, fontSize: 14, margin: 0, textAlign: 'center', lineHeight: 1.6 }}>
+                                {message}
+                            </p>
+                            <p style={{ color: dim, fontSize: 12, margin: 0, textAlign: 'center' }}>
+                                Redirecting to login in 5 seconds...
+                            </p>
+                            <Link
+                                href="/login"
+                                style={{
+                                    display: 'block',
+                                    textAlign: 'center',
+                                    padding: 14,
+                                    borderRadius: 12,
+                                    background: GREEN,
+                                    color: 'oklch(0.14 0.02 160)',
+                                    fontSize: 15,
+                                    fontWeight: 700,
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                Back to Login
+                            </Link>
+                        </>
                     ) : (
                         <>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
