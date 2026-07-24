@@ -100,7 +100,7 @@ export default function ProblemsPage() {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        router.push('/');
+        router.push('/login');
     };
 
     return (
