@@ -380,7 +380,7 @@ export default function LandingPage() {
                     Start Dueling
                 </Link>
                 <div className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(55% 0.02 260)' }}>
-                    No credit card required · 3 free duels per day
+                    7-day free trial · No credit card required · 3 free duels per day
                 </div>
             </section>
 
