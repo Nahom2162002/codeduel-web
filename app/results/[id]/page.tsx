@@ -102,7 +102,7 @@ export default function ResultsPage() {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        router.push('/');
+        router.push('/login');
     };
 
     const initials = username.slice(0, 2).toUpperCase() || '?';
