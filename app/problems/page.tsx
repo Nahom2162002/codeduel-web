@@ -2,7 +2,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '../components/Navbar';
+import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
+const pressStart2P = Press_Start_2P({ subsets: ['latin'], weight: '400' });
+
+const BLUE = 'oklch(75% 0.15 220)';
+const ORANGE = 'oklch(75% 0.15 55)';
+const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
+const BLUE_BORDER = 'oklch(75% 0.15 220 / 0.5)';
+const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
+const ORANGE_BORDER = 'oklch(75% 0.15 55 / 0.5)';
 
 interface Problem {
     _id: string;
@@ -12,15 +23,36 @@ interface Problem {
     isPremium: boolean;
 }
 
-const DIFFICULTY_COLORS = {
-    easy: '#00ff87',
-    medium: '#ffd93d',
-    hard: '#ff4d4d'
-};
+interface Me {
+    username: string;
+    plan: string;
+    hasHadTrial?: boolean;
+}
 
 const CATEGORIES = [
     'all', 'arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design'
 ];
+
+const DIFFICULTIES = ['all', 'easy', 'medium', 'hard'];
+
+function categoryLabel(cat: string) {
+    return cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ');
+}
+
+function diffColors(d: string) {
+    if (d === 'easy') return { bg: BLUE_BG, color: BLUE };
+    if (d === 'hard') return { bg: ORANGE_BG, color: ORANGE };
+    return { bg: 'oklch(40% 0.02 260 / 0.4)', color: 'oklch(85% 0.02 260)' };
+}
+
+function DuelIcon({ size = 28 }: { size?: number }) {
+    return (
+        <svg width={size} height={size * (24 / 32)} viewBox="0 0 32 24" fill="none">
+            <path d="M4 4L14 12L4 20" stroke={BLUE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M28 4L18 12L28 20" stroke={ORANGE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
 
 export default function ProblemsPage() {
     const [problems, setProblems] = useState<Problem[]>([]);
@@ -29,6 +61,7 @@ export default function ProblemsPage() {
     const [difficulty, setDifficulty] = useState('all');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [me, setMe] = useState<Me | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -49,6 +82,13 @@ export default function ProblemsPage() {
                 setLoading(false);
             })
             .catch(() => { setError('Failed to load problems'); setLoading(false); });
+
+        fetch('/api/user/me', {
+            headers: { authorization: `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => { if (data.username) setMe(data); })
+            .catch(() => {});
     }, []);
 
     useEffect(() => {
@@ -58,151 +98,245 @@ export default function ProblemsPage() {
         setFiltered(result);
     }, [category, difficulty, problems]);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/');
+    };
+
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-            <Navbar />
+        <div className={spaceGrotesk.className} style={{
+            background: 'oklch(16% 0.02 260)',
+            color: 'oklch(96% 0.01 260)',
+            minHeight: '100vh'
+        }}>
+            <nav style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '20px 48px',
+                maxWidth: 1280,
+                margin: '0 auto'
+            }}>
+                <Link href="/problems" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    fontWeight: 700,
+                    fontSize: 20,
+                    letterSpacing: '-0.02em',
+                    textDecoration: 'none',
+                    color: 'oklch(96% 0.01 260)'
+                }}>
+                    <DuelIcon />
+                    CodeDuel
+                </Link>
 
-            <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 24px' }}>
-                <div style={{ marginBottom: 32 }}>
-                    <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>Problems</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: 15 }}>
-                        Choose a problem and compete against Claude to keep your skills sharp.
-                    </p>
-                </div>
-
-                {/* Filters */}
-                <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                        {CATEGORIES.map(cat => (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                    <Link href="/dashboard" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
+                        Dashboard
+                    </Link>
+                    {me && (
+                        <>
+                            {me.plan === 'pro' && (
+                                <span className={jetbrainsMono.className} style={{
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                    padding: '3px 9px',
+                                    borderRadius: 20,
+                                    background: BLUE,
+                                    color: 'oklch(16% 0.02 260)'
+                                }}>
+                                    PRO
+                                </span>
+                            )}
+                            <span style={{ color: 'oklch(70% 0.02 260)', fontSize: 15 }}>{me.username}</span>
                             <button
+                                onClick={handleLogout}
+                                className={spaceGrotesk.className}
+                                style={{
+                                    padding: '8px 16px',
+                                    borderRadius: 6,
+                                    border: '1px solid oklch(32% 0.02 260)',
+                                    background: 'transparent',
+                                    color: 'oklch(85% 0.02 260)',
+                                    fontSize: 14,
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Log out
+                            </button>
+                        </>
+                    )}
+                </div>
+            </nav>
+
+            <main style={{ maxWidth: 1120, margin: '0 auto', padding: '40px 48px 100px' }}>
+                <h1 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>Problems</h1>
+                <p style={{ fontSize: 17, color: 'oklch(70% 0.02 260)', margin: '0 0 36px' }}>
+                    Choose a problem and compete against Claude to keep your skills sharp.
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
+                    {CATEGORIES.map(cat => {
+                        const active = cat === category;
+                        return (
+                            <div
                                 key={cat}
                                 onClick={() => setCategory(cat)}
                                 style={{
-                                    padding: '6px 12px',
-                                    borderRadius: 20,
-                                    border: '1px solid var(--border)',
-                                    background: category === cat ? 'rgba(0,255,135,0.15)' : 'transparent',
-                                    color: category === cat ? 'var(--green)' : 'var(--text-muted)',
-                                    fontSize: 12,
                                     cursor: 'pointer',
-                                    fontWeight: category === cat ? 600 : 400
+                                    padding: '9px 16px',
+                                    borderRadius: 999,
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    background: active ? BLUE_BG : 'oklch(21% 0.02 260)',
+                                    color: active ? BLUE : 'oklch(75% 0.02 260)',
+                                    border: `1px solid ${active ? BLUE_BORDER : 'oklch(32% 0.02 260)'}`
                                 }}
                             >
-                                {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ')}
-                            </button>
-                        ))}
-                    </div>
+                                {categoryLabel(cat)}
+                            </div>
+                        );
+                    })}
+                </div>
 
-                    <div style={{ display: 'flex', gap: 6 }}>
-                        {['all', 'easy', 'medium', 'hard'].map(diff => (
-                            <button
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}>
+                    {DIFFICULTIES.map(diff => {
+                        const active = diff === difficulty;
+                        return (
+                            <div
                                 key={diff}
                                 onClick={() => setDifficulty(diff)}
                                 style={{
-                                    padding: '6px 12px',
-                                    borderRadius: 20,
-                                    border: '1px solid var(--border)',
-                                    background: difficulty === diff ? 'rgba(255,255,255,0.08)' : 'transparent',
-                                    color: diff === 'all' ? 'var(--text-muted)' : DIFFICULTY_COLORS[diff as keyof typeof DIFFICULTY_COLORS] || 'var(--text-muted)',
-                                    fontSize: 12,
                                     cursor: 'pointer',
-                                    fontWeight: difficulty === diff ? 600 : 400
+                                    padding: '9px 16px',
+                                    borderRadius: 999,
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    background: active ? ORANGE_BG : 'oklch(21% 0.02 260)',
+                                    color: active ? ORANGE : 'oklch(75% 0.02 260)',
+                                    border: `1px solid ${active ? ORANGE_BORDER : 'oklch(32% 0.02 260)'}`
                                 }}
                             >
-                                {diff.charAt(0).toUpperCase() + diff.slice(1)}
-                            </button>
-                        ))}
-                    </div>
+                                {diff === 'all' ? 'All' : diff.charAt(0).toUpperCase() + diff.slice(1)}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {loading && (
-                    <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
+                    <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '60px 0', color: 'oklch(55% 0.02 260)', fontSize: 14 }}>
                         Loading problems...
                     </div>
                 )}
 
                 {error && (
-                    <div style={{ textAlign: 'center', padding: '60px', color: 'var(--loss)' }}>
+                    <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '60px 0', color: ORANGE, fontSize: 14 }}>
                         {error}
                     </div>
                 )}
 
-                {/* Problem list */}
                 {!loading && !error && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {filtered.map((problem, i) => (
-                            <Link
-                                key={problem._id}
-                                href={`/duel/${problem._id}`}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    padding: '16px 20px',
-                                    background: 'var(--surface)',
-                                    border: '1px solid var(--border)',
-                                    borderRadius: 12,
-                                    cursor: 'pointer',
-                                    transition: 'border-color 0.15s',
-                                    textDecoration: 'none'
-                                }}
-                                onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,255,135,0.3)')}
-                                onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
-                            >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                                    <span style={{ color: 'var(--text-subtle)', fontSize: 13, minWidth: 24 }}>
-                                        {i + 1}
-                                    </span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        {filtered.map(problem => {
+                            const c = diffColors(problem.difficulty);
+                            return (
+                                <Link
+                                    key={problem._id}
+                                    href={`/duel/${problem._id}`}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        background: 'oklch(21% 0.02 260)',
+                                        border: '1px solid oklch(30% 0.02 260)',
+                                        borderRadius: 10,
+                                        padding: '20px 24px',
+                                        gap: 20,
+                                        flexWrap: 'wrap',
+                                        textDecoration: 'none'
+                                    }}
+                                >
                                     <div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                            <span style={{ color: 'white', fontSize: 14, fontWeight: 600 }}>
-                                                {problem.title}
-                                            </span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                                            <h3 style={{ fontSize: 17, color: 'oklch(96% 0.01 260)', margin: 0 }}>{problem.title}</h3>
                                             {problem.isPremium && (
-                                                <span style={{
+                                                <span className={jetbrainsMono.className} style={{
                                                     fontSize: 9,
                                                     fontWeight: 700,
                                                     padding: '2px 6px',
                                                     borderRadius: 4,
-                                                    background: 'rgba(0,255,135,0.15)',
-                                                    color: 'var(--green)'
+                                                    background: BLUE_BG,
+                                                    color: BLUE
                                                 }}>
                                                     PRO
                                                 </span>
                                             )}
                                         </div>
-                                        <span style={{
-                                            fontSize: 11,
-                                            color: 'var(--text-subtle)',
-                                            textTransform: 'capitalize'
+                                        <div className={jetbrainsMono.className} style={{ fontSize: 12.5, color: 'oklch(60% 0.02 260)' }}>
+                                            {categoryLabel(problem.category)}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                        <span className={pressStart2P.className} style={{
+                                            fontSize: 8,
+                                            letterSpacing: '0.03em',
+                                            padding: '6px 10px',
+                                            borderRadius: 4,
+                                            background: c.bg,
+                                            color: c.color
                                         }}>
-                                            {problem.category.replace('-', ' ')}
+                                            {problem.difficulty.toUpperCase()}
+                                        </span>
+                                        <span style={{
+                                            background: BLUE,
+                                            color: 'oklch(16% 0.02 260)',
+                                            padding: '10px 18px',
+                                            borderRadius: 6,
+                                            fontWeight: 700,
+                                            fontSize: 14,
+                                            whiteSpace: 'nowrap'
+                                        }}>
+                                            Duel ▸
                                         </span>
                                     </div>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                                    <span style={{
-                                        fontSize: 12,
-                                        fontWeight: 600,
-                                        color: DIFFICULTY_COLORS[problem.difficulty],
-                                        textTransform: 'capitalize'
-                                    }}>
-                                        {problem.difficulty}
-                                    </span>
-                                    <span style={{ color: 'var(--text-subtle)', fontSize: 18 }}>→</span>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
 
                         {filtered.length === 0 && (
-                            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
-                                No problems found for these filters.
+                            <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '60px 0', color: 'oklch(55% 0.02 260)', fontSize: 14 }}>
+                                No problems match these filters.
                             </div>
                         )}
                     </div>
                 )}
-            </div>
+            </main>
+
+            <footer style={{
+                borderTop: '1px solid oklch(28% 0.02 260)',
+                padding: '32px 48px',
+                maxWidth: 1280,
+                margin: '0 auto',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 16
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
+                    <DuelIcon size={19} />
+                    CodeDuel
+                </div>
+                <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
+                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
+                </div>
+                <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
+                    <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
+                    <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
+                </div>
+            </footer>
         </div>
     );
 }
