@@ -150,8 +150,6 @@ export default function DashboardPage() {
         stat('Duels Played', String(totalDuels), 'All time', ORANGE),
     ];
 
-    const initials = username.slice(0, 2).toUpperCase() || '?';
-
     return (
         <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
@@ -170,16 +168,13 @@ export default function DashboardPage() {
                 </div>
                 <button
                     onClick={handleLogout}
-                    title="Log out"
-                    className={jetbrainsMono.className}
+                    className={spaceGrotesk.className}
                     style={{
-                        width: 36, height: 36, borderRadius: '50%',
-                        background: BLUE_BG, border: `1px solid oklch(75% 0.15 220 / 0.5)`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 13, fontWeight: 700, color: BLUE, cursor: 'pointer'
+                        padding: '8px 16px', borderRadius: 6, border: '1px solid oklch(32% 0.02 260)',
+                        background: 'transparent', color: 'oklch(85% 0.02 260)', fontSize: 14, cursor: 'pointer'
                     }}
                 >
-                    {initials}
+                    Log out
                 </button>
             </nav>
 
