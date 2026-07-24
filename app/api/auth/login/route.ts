@@ -17,16 +17,16 @@ export async function OPTIONS() {
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const { username, password } = await req.json();
+    const { email, password } = await req.json();
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: 'Invalid username or password' }, { status: 400, headers: corsHeaders });
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return NextResponse.json({ error: 'Invalid username or password' }, { status: 400, headers: corsHeaders });
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
     }
 
     const token = jwt.sign(
