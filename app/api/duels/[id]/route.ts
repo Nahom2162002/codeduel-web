@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { getUserFromRequest } from '@/lib/auth';
 import Duel from '@/models/Duel';
+import Problem from '@/models/Problem';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
