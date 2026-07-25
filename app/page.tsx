@@ -356,7 +356,7 @@ export default function LandingPage() {
                         <div className={pressStart2P.className} style={{ fontSize: 9, color: BLUE, marginBottom: 14 }}>PLAYER 2</div>
                         <h3 style={{ fontSize: 20, margin: '0 0 6px' }}>Pro</h3>
                         <div style={{ fontSize: 42, fontWeight: 700, marginBottom: 4 }}>
-                            $9<span style={{ fontSize: 16, color: 'oklch(65% 0.02 260)', fontWeight: 500 }}>/month</span>
+                            $6<span style={{ fontSize: 16, color: 'oklch(65% 0.02 260)', fontWeight: 500 }}>/month</span>
                         </div>
                         <div style={{ fontSize: 14, color: 'oklch(70% 0.05 220)', marginBottom: 28 }}>7-day free trial — no credit card required</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>

@@ -78,7 +78,7 @@ export default function TermsOfService() {
                     {H2('4. Free and Pro Plans')}
                     <p style={P_MB}>CodeDuel offers two plans:</p>
                     <p style={{ ...P, marginBottom: 8 }}><strong>Free Plan:</strong> 3 duels per day, Arrays and Strings categories only. Available at no cost.</p>
-                    <p style={P_MB}><strong>Pro Plan:</strong> $9 per month, billed monthly. Includes unlimited duels, all 6 problem categories, ELO rating system, progress dashboard, weak spot detection, and performance analytics.</p>
+                    <p style={P_MB}><strong>Pro Plan:</strong> $6 per month, billed monthly. Includes unlimited duels, all 6 problem categories, ELO rating system, progress dashboard, weak spot detection, and performance analytics.</p>
                     <p style={P}>We reserve the right to change pricing with 30 days notice to existing subscribers.</p>
                 </section>
 
