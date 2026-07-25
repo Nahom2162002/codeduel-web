@@ -5,6 +5,7 @@ import { anthropic } from '@/lib/anthropic';
 import Duel from '@/models/Duel';
 import Problem from '@/models/Problem';
 import User from '@/models/User';
+import DailyDuelCount from '@/models/DailyDuelCount';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -215,10 +216,15 @@ export async function OPTIONS() {
 }
 
 export async function POST(req: NextRequest) {
+    let reservedSlot = false;
+    let dayKey: Date | null = null;
+    let userId: string | null = null;
+
     try {
         await connectDB();
         const user = await getUserFromRequest(req);
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+        userId = user._id.toString();
 
         const { problemId, language, userCode, userTime } = await req.json();
 
@@ -235,19 +241,30 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Pro plan required' }, { status: 403, headers: corsHeaders });
         }
 
-        // Check free tier duel limit (3 per day)
+        // Check free tier duel limit (3 per day) — reserved atomically so concurrent
+        // submissions can't all read the count before any of them save (see
+        // models/DailyDuelCount.ts for how the unique index makes this race-safe).
         if (user.plan === 'free') {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const todayDuels = await Duel.countDocuments({
-                userId: user._id,
-                completedAt: { $gte: today }
-            });
-            if (todayDuels >= 3) {
-                return NextResponse.json({
-                    error: 'Free tier limit reached. Upgrade to Pro for unlimited duels.',
-                    limitReached: true
-                }, { status: 403, headers: corsHeaders });
+            dayKey = new Date();
+            dayKey.setHours(0, 0, 0, 0);
+
+            try {
+                await DailyDuelCount.findOneAndUpdate(
+                    { userId: user._id, date: dayKey, count: { $lt: 3 } },
+                    { $inc: { count: 1 } },
+                    { upsert: true, new: true }
+                );
+                reservedSlot = true;
+            } catch (reserveErr: any) {
+                // A duplicate-key error here means a counter for today already exists
+                // and its count wasn't < 3, i.e. the free tier limit is genuinely hit.
+                if (reserveErr.code === 11000) {
+                    return NextResponse.json({
+                        error: 'Free tier limit reached. Upgrade to Pro for unlimited duels.',
+                        limitReached: true
+                    }, { status: 403, headers: corsHeaders });
+                }
+                throw reserveErr;
             }
         }
 
@@ -374,6 +391,14 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
         }, { headers: corsHeaders });
 
     } catch (err: any) {
+        if (reservedSlot && dayKey && userId) {
+            try {
+                await DailyDuelCount.findOneAndUpdate(
+                    { userId, date: dayKey },
+                    { $inc: { count: -1 } }
+                );
+            } catch {}
+        }
         console.log('Duel error:', err.message);
         return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
     }
