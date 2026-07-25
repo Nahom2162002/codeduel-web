@@ -15,9 +15,10 @@ interface UserMenuProps {
     username: string;
     plan: string;
     hasHadTrial?: boolean;
+    isTrialing?: boolean;
 }
 
-export default function UserMenu({ username, plan, hasHadTrial = false }: UserMenuProps) {
+export default function UserMenu({ username, plan, hasHadTrial = false, isTrialing = false }: UserMenuProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -126,7 +127,7 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
                         boxShadow: '0 12px 32px oklch(0% 0 0 / 0.5)'
                     }}>
                         <button onClick={handleMenuClick} disabled={loading} className={spaceGrotesk.className} style={{ ...itemStyle, cursor: loading ? 'not-allowed' : 'pointer' }}>
-                            {loading ? 'Loading...' : isPro ? 'Manage Subscription' : 'Upgrade to Pro'}
+                            {loading ? 'Loading...' : isPro ? (isTrialing ? 'Cancel Trial' : 'Manage Subscription') : 'Upgrade to Pro'}
                         </button>
 
                         {error && (

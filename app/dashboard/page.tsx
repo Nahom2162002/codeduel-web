@@ -48,6 +48,7 @@ interface Me {
     username: string;
     plan: string;
     hasHadTrial?: boolean;
+    isTrialing?: boolean;
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -114,7 +115,7 @@ export default function DashboardPage() {
                     <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
                 </div>
             </div>
-            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} />}
+            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
         </nav>
     );
 
