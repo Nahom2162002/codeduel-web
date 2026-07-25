@@ -45,6 +45,7 @@ interface Me {
     username: string;
     plan: string;
     hasHadTrial?: boolean;
+    isTrialing?: boolean;
 }
 
 const RESULT_CONFIG = {
@@ -119,7 +120,7 @@ export default function ResultsPage() {
                     <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Dashboard</Link>
                 </div>
             </div>
-            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} />}
+            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
         </nav>
     );
 
