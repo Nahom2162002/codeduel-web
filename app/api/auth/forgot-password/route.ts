@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
 
     try {
       await transporter.sendMail({
-          from: `CodeDuel <${process.env.GMAIL_USER}>`,
+          from: `Beat Claude <${process.env.GMAIL_USER}>`,
           to: user.email,
-          subject: 'CodeDuel Password Reset',
+          subject: 'Beat Claude Password Reset',
           html: `
               <!DOCTYPE html>
               <html>
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
                                               Password Reset Request
                                           </h1>
                                           <p style="font-family: 'Space Grotesk', 'Segoe UI', Helvetica, Arial, sans-serif; color: #a8adb8; font-size: 15px; line-height: 1.7; margin: 0 0 28px;">
-                                              We received a request to reset your CodeDuel password. Click the button below to choose a new one. This link expires in 1 hour.
+                                              We received a request to reset your Beat Claude password. Click the button below to choose a new one. This link expires in 1 hour.
                                           </p>
                                           <table role="presentation" cellpadding="0" cellspacing="0">
                                               <tr>
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
                                   <tr>
                                       <td style="padding: 20px 36px; border-top: 1px solid #2a2e38;">
                                           <p style="font-family: 'Space Grotesk', 'Segoe UI', Helvetica, Arial, sans-serif; color: #4b5160; font-size: 12px; margin: 0;">
-                                              © ${new Date().getFullYear()} CodeDuel. All rights reserved.
+                                              © ${new Date().getFullYear()} Beat Claude. All rights reserved.
                                           </p>
                                       </td>
                                   </tr>
