@@ -8,6 +8,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', 
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
 
 const BLUE = 'oklch(75% 0.15 220)';
+const ORANGE = 'oklch(75% 0.15 55)';
 
 interface UserMenuProps {
     username: string;
@@ -18,6 +19,7 @@ interface UserMenuProps {
 export default function UserMenu({ username, plan, hasHadTrial = false }: UserMenuProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const router = useRouter();
     const isPro = plan === 'pro';
 
@@ -28,6 +30,7 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
 
     const handleBilling = async () => {
         setLoading(true);
+        setError('');
         const token = localStorage.getItem('token');
         const endpoint = isPro ? '/api/stripe/portal' : '/api/stripe/checkout';
 
@@ -43,10 +46,14 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
             const data = await res.json();
             if (data.url) {
                 window.location.href = data.url;
+            } else if (data.cancelled) {
+                window.location.reload();
             } else {
+                setError(data.error || 'Something went wrong. Please try again.');
                 setLoading(false);
             }
         } catch {
+            setError('Connection failed. Please try again.');
             setLoading(false);
         }
     };
@@ -102,6 +109,12 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
                         <button onClick={handleBilling} disabled={loading} className={spaceGrotesk.className} style={{ ...itemStyle, cursor: loading ? 'not-allowed' : 'pointer' }}>
                             {loading ? 'Loading...' : isPro ? 'Manage Subscription' : 'Upgrade to Pro'}
                         </button>
+
+                        {error && (
+                            <p style={{ color: ORANGE, fontSize: 12, lineHeight: 1.5, margin: '0 4px 6px', padding: '0 8px' }}>
+                                {error}
+                            </p>
+                        )}
 
                         {isPro && (
                             <Link href="/dashboard" onClick={() => setOpen(false)} className={spaceGrotesk.className} style={itemStyle}>

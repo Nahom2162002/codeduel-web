@@ -23,6 +23,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'No subscription found' }, { status: 400, headers: corsHeaders });
         }
 
+        // The stored customer may belong to a different Stripe mode (e.g. test vs
+        // live keys) or have been deleted — verify it still exists before using it.
+        try {
+            await stripe.customers.retrieve(user.stripeCustomerId);
+        } catch {
+            const User = (await import('@/models/User')).default;
+            await User.findByIdAndUpdate(user._id, {
+                plan: 'free',
+                stripeCustomerId: null,
+                cancelAtPeriodEnd: false,
+                isTrialing: false,
+                trialEnd: null
+            });
+            return NextResponse.json({ error: 'No active subscription found. Please upgrade to Pro again.' }, { status: 400, headers: corsHeaders });
+        }
+
         // Check if user is on a trial — cancel immediately
         const subscriptions = await stripe.subscriptions.list({
             customer: user.stripeCustomerId,
