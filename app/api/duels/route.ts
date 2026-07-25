@@ -292,6 +292,26 @@ export async function POST(req: NextRequest) {
         // Calculate ELO change
         const eloChange = calculateEloChange(result, problem.difficulty);
 
+        // Get Claude's explanation of its approach
+        const explanationMessage = await anthropic.messages.create({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 512,
+            messages: [{
+                role: 'user',
+                content: `You just solved "${problem.title}" in ${language}. Here's your solution:
+
+\`\`\`${language}
+${aiCode}
+\`\`\`
+
+In 2-3 sentences, explain your approach and the key insight that makes this solution efficient. Be direct and educational.`
+            }]
+        });
+
+        const approachExplanation = explanationMessage.content[0].type === 'text'
+            ? explanationMessage.content[0].text
+            : '';
+
         // Save duel
         const duel = new Duel({
             userId: user._id,
@@ -308,6 +328,7 @@ export async function POST(req: NextRequest) {
             aiScore: aiFinalScore,
             result,
             aiExplanation: explanation,
+            aiApproach: approachExplanation,
             eloChange
         });
         await duel.save();
@@ -334,26 +355,6 @@ export async function POST(req: NextRequest) {
         }
 
         await User.findByIdAndUpdate(user._id, { $set: statsUpdate });
-
-        // Get Claude's explanation of its approach
-        const explanationMessage = await anthropic.messages.create({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 512,
-            messages: [{
-                role: 'user',
-                content: `You just solved "${problem.title}" in ${language}. Here's your solution:
-
-\`\`\`${language}
-${aiCode}
-\`\`\`
-
-In 2-3 sentences, explain your approach and the key insight that makes this solution efficient. Be direct and educational.`
-            }]
-        });
-
-        const approachExplanation = explanationMessage.content[0].type === 'text'
-            ? explanationMessage.content[0].text
-            : '';
 
         return NextResponse.json({
             duelId: duel._id,
