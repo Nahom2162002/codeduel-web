@@ -7,15 +7,33 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500'
 const pressStart2P = Press_Start_2P({ subsets: ['latin'], weight: '400' });
 
 const BLUE = 'oklch(75% 0.15 220)';
+const ORANGE = 'oklch(75% 0.15 55)';
+
+type Reason = 'limit' | 'problem' | 'dashboard' | 'general';
+
+const BLOCKED_HEADING: Record<Reason, string> = {
+    limit: "You've hit your daily limit",
+    problem: 'This is a Pro problem',
+    dashboard: 'Dashboard is a Pro feature',
+    general: 'Upgrade to Pro'
+};
+
+const SUBTEXT: Record<Reason, string> = {
+    limit: "You've used your 3 free duels for today.",
+    problem: 'Unlock this problem and everything else Pro has to offer.',
+    dashboard: 'Unlock your dashboard and everything else Pro has to offer.',
+    general: 'Unlock unlimited duels and everything else Pro has to offer.'
+};
 
 interface UpgradeBannerProps {
     hasHadTrial?: boolean;
     onClose?: () => void;
-    reason?: 'limit' | 'problem';
+    reason?: Reason;
 }
 
 export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = 'limit' }: UpgradeBannerProps) {
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     // If the user navigates back from Stripe via the browser's back button, the
     // page can be restored from bfcache with `loading` frozen mid-request.
@@ -29,6 +47,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
 
     const handleUpgrade = async () => {
         setLoading(true);
+        setError('');
         const token = localStorage.getItem('token');
 
         try {
@@ -41,8 +60,14 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                 body: JSON.stringify({ hasHadTrial })
             });
             const data = await res.json();
-            if (data.url) window.location.href = data.url;
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                setError(data.error || 'Something went wrong. Please try again.');
+                setLoading(false);
+            }
         } catch {
+            setError('Connection failed. Please try again.');
             setLoading(false);
         }
     };
@@ -102,10 +127,10 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             </div>
 
             <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.02em' }}>
-                {hasHadTrial ? 'Upgrade to Pro' : reason === 'problem' ? 'This is a Pro problem' : "You've hit your daily limit"}
+                {hasHadTrial ? 'Upgrade to Pro' : BLOCKED_HEADING[reason]}
             </h2>
             <p style={{ color: 'oklch(70% 0.02 260)', fontSize: 14, lineHeight: 1.7, margin: '0 0 4px' }}>
-                {reason === 'problem' ? 'Unlock this problem and everything else Pro has to offer.' : "You've used your 3 free duels for today."}
+                {SUBTEXT[reason]}
             </p>
             <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 24px' }}>
                 $6<span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>/month</span>
@@ -132,6 +157,12 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                     </p>
                 ))}
             </div>
+
+            {error && (
+                <p style={{ color: ORANGE, fontSize: 13, lineHeight: 1.5, margin: '0 0 12px' }}>
+                    {error}
+                </p>
+            )}
 
             <button
                 onClick={handleUpgrade}
