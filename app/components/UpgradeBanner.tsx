@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
@@ -11,10 +11,21 @@ const BLUE = 'oklch(75% 0.15 220)';
 interface UpgradeBannerProps {
     hasHadTrial?: boolean;
     onClose?: () => void;
+    reason?: 'limit' | 'problem';
 }
 
-export default function UpgradeBanner({ hasHadTrial = false, onClose }: UpgradeBannerProps) {
+export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = 'limit' }: UpgradeBannerProps) {
     const [loading, setLoading] = useState(false);
+
+    // If the user navigates back from Stripe via the browser's back button, the
+    // page can be restored from bfcache with `loading` frozen mid-request.
+    useEffect(() => {
+        const handlePageShow = (e: PageTransitionEvent) => {
+            if (e.persisted) setLoading(false);
+        };
+        window.addEventListener('pageshow', handlePageShow);
+        return () => window.removeEventListener('pageshow', handlePageShow);
+    }, []);
 
     const handleUpgrade = async () => {
         setLoading(true);
@@ -91,10 +102,10 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose }: UpgradeB
             </div>
 
             <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.02em' }}>
-                {hasHadTrial ? 'Upgrade to Pro' : "You've hit your daily limit"}
+                {hasHadTrial ? 'Upgrade to Pro' : reason === 'problem' ? 'This is a Pro problem' : "You've hit your daily limit"}
             </h2>
             <p style={{ color: 'oklch(70% 0.02 260)', fontSize: 14, lineHeight: 1.7, margin: '0 0 4px' }}>
-                You've used your 3 free duels for today.
+                {reason === 'problem' ? 'Unlock this problem and everything else Pro has to offer.' : "You've used your 3 free duels for today."}
             </p>
             <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 24px' }}>
                 $6<span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>/month</span>
