@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+import UserMenu from '../components/UserMenu';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -98,11 +99,6 @@ export default function ProblemsPage() {
         setFiltered(result);
     }, [category, difficulty, problems]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        router.push('/login');
-    };
-
     return (
         <div className={spaceGrotesk.className} style={{
             background: 'oklch(16% 0.02 260)',
@@ -135,38 +131,7 @@ export default function ProblemsPage() {
                     <Link href="/dashboard" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
                         Dashboard
                     </Link>
-                    {me && (
-                        <>
-                            {me.plan === 'pro' && (
-                                <span className={jetbrainsMono.className} style={{
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    padding: '3px 9px',
-                                    borderRadius: 20,
-                                    background: BLUE,
-                                    color: 'oklch(16% 0.02 260)'
-                                }}>
-                                    PRO
-                                </span>
-                            )}
-                            <span style={{ color: 'oklch(70% 0.02 260)', fontSize: 15 }}>{me.username}</span>
-                            <button
-                                onClick={handleLogout}
-                                className={spaceGrotesk.className}
-                                style={{
-                                    padding: '8px 16px',
-                                    borderRadius: 6,
-                                    border: '1px solid oklch(32% 0.02 260)',
-                                    background: 'transparent',
-                                    color: 'oklch(85% 0.02 260)',
-                                    fontSize: 14,
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Log out
-                            </button>
-                        </>
-                    )}
+                    {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} />}
                 </div>
             </nav>
 

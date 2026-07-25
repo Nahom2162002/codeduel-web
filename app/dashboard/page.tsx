@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+import UserMenu from '../components/UserMenu';
+import UpgradeBanner from '../components/UpgradeBanner';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -42,6 +44,12 @@ interface Stats {
     }[];
 }
 
+interface Me {
+    username: string;
+    plan: string;
+    hasHadTrial?: boolean;
+}
+
 const CATEGORY_LABELS: Record<string, string> = {
     arrays: 'Arrays',
     strings: 'Strings',
@@ -64,7 +72,8 @@ export default function DashboardPage() {
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [username, setUsername] = useState('');
+    const [requiresPro, setRequiresPro] = useState(false);
+    const [me, setMe] = useState<Me | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -79,9 +88,10 @@ export default function DashboardPage() {
                 headers: { authorization: `Bearer ${token}` }
             }).then(res => res.json())
         ]).then(([statsData, userData]) => {
-            if (statsData.error) { setError(statsData.error); }
+            if (statsData.requiresPro) { setRequiresPro(true); }
+            else if (statsData.error) { setError(statsData.error); }
             else { setStats(statsData); }
-            if (userData.username) setUsername(userData.username);
+            if (userData.username) setMe(userData);
             setLoading(false);
         }).catch(() => {
             setError('Failed to load dashboard');
@@ -89,14 +99,37 @@ export default function DashboardPage() {
         });
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        router.push('/login');
-    };
+    const nav = (
+        <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                <Link href="/problems" style={{
+                    display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20,
+                    letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
+                }}>
+                    <DuelIcon />
+                    CodeDuel
+                </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                    <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
+                    <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
+                </div>
+            </div>
+            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} />}
+        </nav>
+    );
 
     if (loading) return (
         <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             Loading dashboard...
+        </div>
+    );
+
+    if (requiresPro) return (
+        <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)' }}>
+            {nav}
+            <main style={{ maxWidth: 1120, margin: '0 auto', padding: '80px 24px' }}>
+                <UpgradeBanner hasHadTrial={me?.hasHadTrial} />
+            </main>
         </div>
     );
 
@@ -152,37 +185,13 @@ export default function DashboardPage() {
 
     return (
         <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
-            <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
-                    <Link href="/problems" style={{
-                        display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20,
-                        letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
-                    }}>
-                        <DuelIcon />
-                        CodeDuel
-                    </Link>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
-                        <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
-                        <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
-                    </div>
-                </div>
-                <button
-                    onClick={handleLogout}
-                    className={spaceGrotesk.className}
-                    style={{
-                        padding: '8px 16px', borderRadius: 6, border: '1px solid oklch(32% 0.02 260)',
-                        background: 'transparent', color: 'oklch(85% 0.02 260)', fontSize: 14, cursor: 'pointer'
-                    }}
-                >
-                    Log out
-                </button>
-            </nav>
+            {nav}
 
             <main style={{ maxWidth: 1120, margin: '0 auto', padding: '32px 48px 100px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
                     <div>
                         <h1 style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 6px' }}>
-                            Welcome back, {username}
+                            Welcome back, {me?.username}
                         </h1>
                         <p style={{ fontSize: 15, color: 'oklch(65% 0.02 260)', margin: 0 }}>
                             Here's how you've been stacking up against Claude.

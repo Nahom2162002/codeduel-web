@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+import UserMenu from '../../components/UserMenu';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -40,6 +41,12 @@ interface DuelResult {
     language: string;
 }
 
+interface Me {
+    username: string;
+    plan: string;
+    hasHadTrial?: boolean;
+}
+
 const RESULT_CONFIG = {
     win: { emoji: '🏆', label: 'You Won!', color: BLUE, bg: BLUE_BG, border: BLUE_BORDER },
     loss: { emoji: '🤖', label: 'Claude Won', color: ORANGE, bg: ORANGE_BG, border: 'oklch(75% 0.15 55 / 0.5)' },
@@ -62,7 +69,7 @@ export default function ResultsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'overview' | 'code' | 'learn'>('overview');
-    const [username, setUsername] = useState('');
+    const [me, setMe] = useState<Me | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -96,16 +103,9 @@ export default function ResultsPage() {
             headers: { authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
-            .then(data => { if (data.username) setUsername(data.username); })
+            .then(data => { if (data.username) setMe(data); })
             .catch(() => {});
     }, [id]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        router.push('/login');
-    };
-
-    const initials = username.slice(0, 2).toUpperCase() || '?';
 
     const nav = (
         <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
@@ -119,19 +119,7 @@ export default function ResultsPage() {
                     <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Dashboard</Link>
                 </div>
             </div>
-            {username && (
-                <button
-                    onClick={handleLogout}
-                    title="Log out"
-                    className={jetbrainsMono.className}
-                    style={{
-                        width: 36, height: 36, borderRadius: '50%', background: BLUE_BG, border: `1px solid ${BLUE_BORDER}`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: BLUE, cursor: 'pointer'
-                    }}
-                >
-                    {initials}
-                </button>
-            )}
+            {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} />}
         </nav>
     );
 

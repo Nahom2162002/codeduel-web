@@ -20,6 +20,10 @@ export async function GET(req: NextRequest) {
         const user = await getUserFromRequest(req);
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
 
+        if (user.plan !== 'pro') {
+            return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
+        }
+
         // Get last 30 days of duels
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

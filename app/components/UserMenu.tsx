@@ -1,0 +1,122 @@
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
+
+const BLUE = 'oklch(75% 0.15 220)';
+
+interface UserMenuProps {
+    username: string;
+    plan: string;
+    hasHadTrial?: boolean;
+}
+
+export default function UserMenu({ username, plan, hasHadTrial = false }: UserMenuProps) {
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const isPro = plan === 'pro';
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/login');
+    };
+
+    const handleBilling = async () => {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        const endpoint = isPro ? '/api/stripe/portal' : '/api/stripe/checkout';
+
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`
+                },
+                body: isPro ? undefined : JSON.stringify({ hasHadTrial })
+            });
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                setLoading(false);
+            }
+        } catch {
+            setLoading(false);
+        }
+    };
+
+    const itemStyle: React.CSSProperties = {
+        display: 'block',
+        width: '100%',
+        boxSizing: 'border-box',
+        textAlign: 'left',
+        padding: '10px 12px',
+        borderRadius: 6,
+        border: 'none',
+        background: 'transparent',
+        color: 'oklch(88% 0.02 260)',
+        fontSize: 14,
+        textDecoration: 'none',
+        cursor: 'pointer'
+    };
+
+    return (
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
+            {isPro && (
+                <span className={jetbrainsMono.className} style={{
+                    fontSize: 10,
+                    fontWeight: 700,
+                    padding: '3px 9px',
+                    borderRadius: 20,
+                    background: BLUE,
+                    color: 'oklch(16% 0.02 260)'
+                }}>
+                    PRO
+                </span>
+            )}
+
+            <div
+                onClick={() => setOpen(o => !o)}
+                className={spaceGrotesk.className}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, color: 'oklch(85% 0.02 260)', userSelect: 'none' }}
+            >
+                {username}
+                <span style={{ fontSize: 11, color: 'oklch(55% 0.02 260)', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }}>▾</span>
+            </div>
+
+            {open && (
+                <>
+                    <div onClick={() => setOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 99 }} />
+                    <div style={{
+                        position: 'absolute', top: 32, right: 0, width: 220,
+                        background: 'oklch(21% 0.02 260)', border: '1px solid oklch(32% 0.02 260)',
+                        borderRadius: 10, padding: 8, zIndex: 100,
+                        boxShadow: '0 12px 32px oklch(0% 0 0 / 0.5)'
+                    }}>
+                        <button onClick={handleBilling} disabled={loading} className={spaceGrotesk.className} style={{ ...itemStyle, cursor: loading ? 'not-allowed' : 'pointer' }}>
+                            {loading ? 'Loading...' : isPro ? 'Manage Subscription' : 'Upgrade to Pro'}
+                        </button>
+
+                        {isPro && (
+                            <Link href="/dashboard" onClick={() => setOpen(false)} className={spaceGrotesk.className} style={itemStyle}>
+                                Dashboard
+                            </Link>
+                        )}
+
+                        <div style={{ height: 1, background: 'oklch(30% 0.02 260)', margin: '6px 4px' }} />
+
+                        <button onClick={handleLogout} className={spaceGrotesk.className} style={itemStyle}>
+                            Log out
+                        </button>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+}
