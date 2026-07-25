@@ -97,7 +97,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose }: UpgradeB
                 You've used your 3 free duels for today.
             </p>
             <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 24px' }}>
-                $9<span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>/month</span>
+                $6<span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>/month</span>
                 {!hasHadTrial && (
                     <span className={jetbrainsMono.className} style={{ display: 'block', fontSize: 13, color: 'oklch(70% 0.05 220)', marginTop: 4 }}>
                         7-day free trial — no credit card required
@@ -142,7 +142,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose }: UpgradeB
                 {loading
                     ? 'Loading...'
                     : hasHadTrial
-                        ? 'Upgrade to Pro — $9/month'
+                        ? 'Upgrade to Pro — $6/month'
                         : 'Start 7-Day Free Trial'
                 }
             </button>
