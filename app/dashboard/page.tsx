@@ -128,7 +128,7 @@ export default function DashboardPage() {
         <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)' }}>
             {nav}
             <main style={{ maxWidth: 1120, margin: '0 auto', padding: '80px 24px' }}>
-                <UpgradeBanner hasHadTrial={me?.hasHadTrial} />
+                <UpgradeBanner hasHadTrial={me?.hasHadTrial} reason="dashboard" />
             </main>
         </div>
     );

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import UpgradeBanner from './UpgradeBanner';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -20,6 +21,7 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showUpgrade, setShowUpgrade] = useState(false);
     const router = useRouter();
     const isPro = plan === 'pro';
 
@@ -38,20 +40,18 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
         router.push('/login');
     };
 
-    const handleBilling = async () => {
+    const handlePortal = async () => {
         setLoading(true);
         setError('');
         const token = localStorage.getItem('token');
-        const endpoint = isPro ? '/api/stripe/portal' : '/api/stripe/checkout';
 
         try {
-            const res = await fetch(endpoint, {
+            const res = await fetch('/api/stripe/portal', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     authorization: `Bearer ${token}`
-                },
-                body: isPro ? undefined : JSON.stringify({ hasHadTrial })
+                }
             });
             const data = await res.json();
             if (data.url) {
@@ -65,6 +65,15 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
         } catch {
             setError('Connection failed. Please try again.');
             setLoading(false);
+        }
+    };
+
+    const handleMenuClick = () => {
+        if (isPro) {
+            handlePortal();
+        } else {
+            setOpen(false);
+            setShowUpgrade(true);
         }
     };
 
@@ -116,7 +125,7 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
                         borderRadius: 10, padding: 8, zIndex: 100,
                         boxShadow: '0 12px 32px oklch(0% 0 0 / 0.5)'
                     }}>
-                        <button onClick={handleBilling} disabled={loading} className={spaceGrotesk.className} style={{ ...itemStyle, cursor: loading ? 'not-allowed' : 'pointer' }}>
+                        <button onClick={handleMenuClick} disabled={loading} className={spaceGrotesk.className} style={{ ...itemStyle, cursor: loading ? 'not-allowed' : 'pointer' }}>
                             {loading ? 'Loading...' : isPro ? 'Manage Subscription' : 'Upgrade to Pro'}
                         </button>
 
@@ -139,6 +148,21 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
                         </button>
                     </div>
                 </>
+            )}
+
+            {showUpgrade && (
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'rgba(0,0,0,0.85)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    padding: 24
+                }}>
+                    <UpgradeBanner hasHadTrial={hasHadTrial} reason="general" onClose={() => setShowUpgrade(false)} />
+                </div>
             )}
         </div>
     );
