@@ -149,7 +149,7 @@ export default function LandingPage() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 36, fontSize: 15, fontWeight: 500 }}>
                     <a href="#how-it-works" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>How it works</a>
@@ -175,7 +175,7 @@ export default function LandingPage() {
                     <span style={{ color: ORANGE }}>Claude?</span> Give it your best shot.
                 </h1>
                 <p style={{ fontSize: 20, color: 'oklch(78% 0.02 260)', maxWidth: 620, margin: '0 auto 12px', lineHeight: 1.5 }}>
-                    Beat Claude puts you head-to-head against Claude on real coding problems. Same problem. Same time. One winner.
+                    DuelAI puts you head-to-head against Claude on real coding problems. Same problem. Same time. One winner.
                 </p>
                 <p style={{ fontSize: 16, color: 'oklch(60% 0.02 260)', margin: '0 0 36px' }}>
                     Because the best way to stay sharp in the age of AI is to compete with it.
@@ -300,7 +300,7 @@ export default function LandingPage() {
             </section>
 
             <section style={{ maxWidth: 1120, margin: '0 auto', padding: '40px 48px 100px' }}>
-                <h2 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', textAlign: 'center', margin: '0 0 48px' }}>Why Beat Claude?</h2>
+                <h2 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', textAlign: 'center', margin: '0 0 48px' }}>Why DuelAI?</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 36 }}>
                     <div style={{ background: 'oklch(19% 0.015 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 32 }}>
                         <h3 style={{ fontSize: 20, margin: '0 0 10px', color: 'oklch(65% 0.02 260)' }}>LeetCode</h3>
@@ -311,13 +311,13 @@ export default function LandingPage() {
                             <svg width={18} height={18} viewBox="0 0 24 24" fill="none">
                                 <path d="M4 4L20 20M20 4L4 20" stroke={ORANGE} strokeWidth="2.5" strokeLinecap="round" />
                             </svg>
-                            Beat Claude
+                            DuelAI
                         </h3>
                         <p style={{ fontSize: 15, color: 'oklch(85% 0.02 260)', lineHeight: 1.6, margin: 0 }}>You vs. Claude. Designed for staying sharp. Real competition. Learn from every duel.</p>
                     </div>
                 </div>
                 <p style={{ textAlign: 'center', fontSize: 18, color: 'oklch(80% 0.02 260)', maxWidth: 680, margin: '0 auto', lineHeight: 1.6 }}>
-                    The best way to not be replaced by AI is to be better than it. Beat Claude gives you a way to measure that — and close the gap.
+                    The best way to not be replaced by AI is to be better than it. DuelAI gives you a way to measure that — and close the gap.
                 </p>
             </section>
 
@@ -374,7 +374,7 @@ export default function LandingPage() {
             <section style={{ maxWidth: 900, margin: '0 auto', padding: '20px 48px 110px', textAlign: 'center' }}>
                 <h2 style={{ fontSize: 42, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 18px' }}>Ready to find out?</h2>
                 <p style={{ fontSize: 18, color: 'oklch(72% 0.02 260)', maxWidth: 560, margin: '0 auto 36px', lineHeight: 1.6 }}>
-                    Every developer using AI tools wonders if their raw skills are slipping. Beat Claude gives you an honest answer — and a way to improve.
+                    Every developer using AI tools wonders if their raw skills are slipping. DuelAI gives you an honest answer — and a way to improve.
                 </p>
                 <Link href="/register" style={{ display: 'inline-block', background: BLUE, color: 'oklch(16% 0.02 260)', padding: '17px 36px', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 17, marginBottom: 16 }}>
                     Start Dueling
@@ -390,10 +390,10 @@ export default function LandingPage() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
+                    © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>

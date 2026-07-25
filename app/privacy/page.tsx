@@ -34,10 +34,10 @@ export default function PrivacyPolicy() {
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <Link href="/" className={jetbrainsMono.className} style={{ color: 'oklch(78% 0.02 260)', textDecoration: 'none', fontSize: 14.5 }}>
-                    ← Back to Beat Claude
+                    ← Back to DuelAI
                 </Link>
             </nav>
 
@@ -56,12 +56,12 @@ export default function PrivacyPolicy() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('1. Who We Are')}
-                    <p style={P}>Beat Claude is a web-based platform operated by Nahom Ashagrea that allows developers to practice coding by competing against Claude AI. You can contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
+                    <p style={P}>DuelAI is a web-based platform operated by Nahom Ashagrea that allows developers to practice coding by competing against Claude AI. You can contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('2. What Data We Collect')}
-                    <p style={P_MB}>We collect the following information when you use Beat Claude:</p>
+                    <p style={P_MB}>We collect the following information when you use DuelAI:</p>
                     <ul style={UL_LAST}>
                         <li>Account information: your username and email address when you create an account</li>
                         <li>Coding submissions: the code you write and submit during duels</li>
@@ -76,7 +76,7 @@ export default function PrivacyPolicy() {
                     {H2('3. How We Use Your Data')}
                     <p style={P_MB}>We use your data to:</p>
                     <ul style={UL}>
-                        <li>Provide and operate the Beat Claude platform</li>
+                        <li>Provide and operate the DuelAI platform</li>
                         <li>Calculate your ELO rating and track your performance over time</li>
                         <li>Show you your dashboard statistics and weak spot analysis</li>
                         <li>Process payments via Stripe</li>
@@ -129,12 +129,12 @@ export default function PrivacyPolicy() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2("9. Children's Privacy")}
-                    <p style={P}>Beat Claude is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us and we will delete it promptly.</p>
+                    <p style={P}>DuelAI is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us and we will delete it promptly.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('10. Changes to This Policy')}
-                    <p style={P}>We may update this privacy policy from time to time. We will notify users of significant changes via email. Continued use of Beat Claude after changes constitutes acceptance of the updated policy.</p>
+                    <p style={P}>We may update this privacy policy from time to time. We will notify users of significant changes via email. Continued use of DuelAI after changes constitutes acceptance of the updated policy.</p>
                 </section>
 
                 <section>
@@ -149,10 +149,10 @@ export default function PrivacyPolicy() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
+                    © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>

@@ -33,10 +33,10 @@ export default function TermsOfService() {
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <Link href="/" className={jetbrainsMono.className} style={{ color: 'oklch(78% 0.02 260)', textDecoration: 'none', fontSize: 14.5 }}>
-                    ← Back to Beat Claude
+                    ← Back to DuelAI
                 </Link>
             </nav>
 
@@ -55,17 +55,17 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('1. Acceptance of Terms')}
-                    <p style={P}>By creating an account or using Beat Claude, you agree to these Terms of Service. If you do not agree, do not use the service. These terms apply to all users of the Beat Claude platform.</p>
+                    <p style={P}>By creating an account or using DuelAI, you agree to these Terms of Service. If you do not agree, do not use the service. These terms apply to all users of the DuelAI platform.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('2. Description of Service')}
-                    <p style={P}>Beat Claude is a web platform where developers compete against Claude AI on coding problems to practice and maintain their programming skills. Beat Claude offers a free tier and a paid Pro tier with additional features. We reserve the right to modify, suspend, or discontinue any part of the service at any time.</p>
+                    <p style={P}>DuelAI is a web platform where developers compete against Claude AI on coding problems to practice and maintain their programming skills. DuelAI offers a free tier and a paid Pro tier with additional features. We reserve the right to modify, suspend, or discontinue any part of the service at any time.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('3. Account Registration')}
-                    <p style={P_MB}>To use Beat Claude you must create an account with a valid email address and password. You are responsible for:</p>
+                    <p style={P_MB}>To use DuelAI you must create an account with a valid email address and password. You are responsible for:</p>
                     <ul style={UL}>
                         <li>Maintaining the confidentiality of your account credentials</li>
                         <li>All activity that occurs under your account</li>
@@ -76,7 +76,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('4. Free and Pro Plans')}
-                    <p style={P_MB}>Beat Claude offers two plans:</p>
+                    <p style={P_MB}>DuelAI offers two plans:</p>
                     <p style={{ ...P, marginBottom: 8 }}><strong>Free Plan:</strong> 3 duels per day, Arrays and Strings categories only. Available at no cost.</p>
                     <p style={P_MB}><strong>Pro Plan:</strong> $6 per month, billed monthly. Includes unlimited duels, all 6 problem categories, ELO rating system, progress dashboard, weak spot detection, and performance analytics.</p>
                     <p style={P}>We reserve the right to change pricing with 30 days notice to existing subscribers.</p>
@@ -92,7 +92,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('6. Code Submissions')}
-                    <p style={P_MB}>By submitting code on Beat Claude you grant us a limited license to:</p>
+                    <p style={P_MB}>By submitting code on DuelAI you grant us a limited license to:</p>
                     <ul style={UL}>
                         <li>Execute your code against test cases via our sandboxed execution environment</li>
                         <li>Send your code to Claude AI for quality evaluation and comparison</li>
@@ -117,22 +117,22 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('8. AI-Generated Content')}
-                    <p style={P}>Beat Claude uses Anthropic's Claude AI to generate competing solutions and evaluate code quality. Claude's solutions are generated in real time and may vary between duels. We do not guarantee the accuracy or optimality of AI-generated solutions. The educational explanations provided by Claude are for learning purposes only and should not be taken as definitive best practices.</p>
+                    <p style={P}>DuelAI uses Anthropic's Claude AI to generate competing solutions and evaluate code quality. Claude's solutions are generated in real time and may vary between duels. We do not guarantee the accuracy or optimality of AI-generated solutions. The educational explanations provided by Claude are for learning purposes only and should not be taken as definitive best practices.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('9. Disclaimer of Warranties')}
-                    <p style={P}>Beat Claude is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service, accurate ELO calculations, or that our test cases cover all edge cases for every problem. Code execution results depend on third party services including Judge0 and may occasionally be inaccurate.</p>
+                    <p style={P}>DuelAI is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service, accurate ELO calculations, or that our test cases cover all edge cases for every problem. Code execution results depend on third party services including Judge0 and may occasionally be inaccurate.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('10. Limitation of Liability')}
-                    <p style={P}>To the maximum extent permitted by law, Nahom Ashagrea shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of Beat Claude. Our total liability for any claim shall not exceed the amount you paid us in the 3 months prior to the claim.</p>
+                    <p style={P}>To the maximum extent permitted by law, Nahom Ashagrea shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of DuelAI. Our total liability for any claim shall not exceed the amount you paid us in the 3 months prior to the claim.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('11. Intellectual Property')}
-                    <p style={P}>Beat Claude, its branding, problem descriptions, and platform code are the property of Nahom Ashagrea. You may not reproduce or distribute platform content without explicit written permission. Problem descriptions are original works created for Beat Claude and may not be republished elsewhere.</p>
+                    <p style={P}>DuelAI, its branding, problem descriptions, and platform code are the property of Nahom Ashagrea. You may not reproduce or distribute platform content without explicit written permission. Problem descriptions are original works created for DuelAI and may not be republished elsewhere.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -142,7 +142,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('13. Changes to Terms')}
-                    <p style={P}>We may update these terms from time to time. We will notify you of significant changes via email. Continued use of Beat Claude after changes constitutes acceptance of the updated terms.</p>
+                    <p style={P}>We may update these terms from time to time. We will notify you of significant changes via email. Continued use of DuelAI after changes constitutes acceptance of the updated terms.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -162,10 +162,10 @@ export default function TermsOfService() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    Beat Claude
+                    DuelAI
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
+                    © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
