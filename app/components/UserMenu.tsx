@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
@@ -22,6 +22,16 @@ export default function UserMenu({ username, plan, hasHadTrial = false }: UserMe
     const [error, setError] = useState('');
     const router = useRouter();
     const isPro = plan === 'pro';
+
+    // If the user navigates back from Stripe via the browser's back button, the
+    // page can be restored from bfcache with `loading` frozen mid-request.
+    useEffect(() => {
+        const handlePageShow = (e: PageTransitionEvent) => {
+            if (e.persisted) setLoading(false);
+        };
+        window.addEventListener('pageshow', handlePageShow);
+        return () => window.removeEventListener('pageshow', handlePageShow);
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('token');

@@ -27,11 +27,6 @@ export async function GET(req: NextRequest) {
         if (category) query.category = category;
         if (difficulty) query.difficulty = difficulty;
 
-        // Free users only get easy arrays and strings
-        if (user.plan === 'free') {
-            query.isPremium = false;
-        }
-
         const problems = await Problem.find(query, {
             title: 1,
             difficulty: 1,

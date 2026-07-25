@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
 import UserMenu from '../components/UserMenu';
+import UpgradeBanner from '../components/UpgradeBanner';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -63,6 +64,7 @@ export default function ProblemsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [me, setMe] = useState<Me | null>(null);
+    const [showUpgrade, setShowUpgrade] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -205,25 +207,28 @@ export default function ProblemsPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         {filtered.map(problem => {
                             const c = diffColors(problem.difficulty);
-                            return (
-                                <Link
-                                    key={problem._id}
-                                    href={`/duel/${problem._id}`}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        background: 'oklch(21% 0.02 260)',
-                                        border: '1px solid oklch(30% 0.02 260)',
-                                        borderRadius: 10,
-                                        padding: '20px 24px',
-                                        gap: 20,
-                                        flexWrap: 'wrap',
-                                        textDecoration: 'none'
-                                    }}
-                                >
+                            const locked = problem.isPremium && me?.plan !== 'pro';
+
+                            const cardStyle: React.CSSProperties = {
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                background: 'oklch(21% 0.02 260)',
+                                border: `1px solid ${locked ? BLUE_BORDER : 'oklch(30% 0.02 260)'}`,
+                                borderRadius: 10,
+                                padding: '20px 24px',
+                                gap: 20,
+                                flexWrap: 'wrap',
+                                textDecoration: 'none',
+                                opacity: locked ? 0.75 : 1,
+                                cursor: locked ? 'pointer' : undefined
+                            };
+
+                            const cardContent = (
+                                <>
                                     <div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                                            {locked && <span style={{ fontSize: 14 }}>🔒</span>}
                                             <h3 style={{ fontSize: 17, color: 'oklch(96% 0.01 260)', margin: 0 }}>{problem.title}</h3>
                                             {problem.isPremium && (
                                                 <span className={jetbrainsMono.className} style={{
@@ -255,17 +260,31 @@ export default function ProblemsPage() {
                                             {problem.difficulty.toUpperCase()}
                                         </span>
                                         <span style={{
-                                            background: BLUE,
-                                            color: 'oklch(16% 0.02 260)',
+                                            background: locked ? BLUE_BG : BLUE,
+                                            color: locked ? BLUE : 'oklch(16% 0.02 260)',
                                             padding: '10px 18px',
                                             borderRadius: 6,
                                             fontWeight: 700,
                                             fontSize: 14,
                                             whiteSpace: 'nowrap'
                                         }}>
-                                            Duel ▸
+                                            {locked ? '🔒 Unlock' : 'Duel ▸'}
                                         </span>
                                     </div>
+                                </>
+                            );
+
+                            if (locked) {
+                                return (
+                                    <div key={problem._id} onClick={() => setShowUpgrade(true)} style={cardStyle}>
+                                        {cardContent}
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                <Link key={problem._id} href={`/duel/${problem._id}`} style={cardStyle}>
+                                    {cardContent}
                                 </Link>
                             );
                         })}
@@ -302,6 +321,21 @@ export default function ProblemsPage() {
                     <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
                 </div>
             </footer>
+
+            {showUpgrade && (
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'rgba(0,0,0,0.85)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    padding: 24
+                }}>
+                    <UpgradeBanner hasHadTrial={me?.hasHadTrial} onClose={() => setShowUpgrade(false)} reason="problem" />
+                </div>
+            )}
         </div>
     );
 }
