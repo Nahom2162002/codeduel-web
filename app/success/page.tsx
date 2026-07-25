@@ -37,7 +37,7 @@ export default function SuccessPage() {
             <nav style={{ display: 'flex', alignItems: 'center', padding: '20px 48px', maxWidth: 1280, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
                 <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)' }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </Link>
             </nav>
 
@@ -51,7 +51,7 @@ export default function SuccessPage() {
 
                     <p style={{ fontSize: 56, margin: '0 0 16px' }}>🏆</p>
                     <h1 style={{ fontSize: 26, fontWeight: 700, color: BLUE, margin: '0 0 12px', letterSpacing: '-0.02em' }}>
-                        Welcome to Beat Claude Pro!
+                        Welcome to DuelAI Pro!
                     </h1>
                     <p style={{ color: 'oklch(80% 0.02 260)', fontSize: 15, lineHeight: 1.7, margin: '0 0 32px' }}>
                         Your Pro access is now active. You have unlimited duels, all problem categories, ELO tracking, and full dashboard access.
@@ -79,7 +79,7 @@ export default function SuccessPage() {
                 width: '100%', boxSizing: 'border-box', textAlign: 'center'
             }}>
                 <div style={{ fontSize: 13, color: 'oklch(50% 0.02 260)' }}>
-                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
+                    © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
             </footer>
         </div>

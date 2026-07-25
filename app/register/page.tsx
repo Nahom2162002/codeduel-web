@@ -103,7 +103,7 @@ export default function RegisterPage() {
                     color: 'oklch(96% 0.01 260)'
                 }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </Link>
             </nav>
 
@@ -124,7 +124,7 @@ export default function RegisterPage() {
                         <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 14 }}>
                             <DuelIcon size={30} />
                         </div>
-                        <h1 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 8px' }}>Join Beat Claude</h1>
+                        <h1 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 8px' }}>Join DuelAI</h1>
                         <p style={{ fontSize: 15, color: 'oklch(65% 0.02 260)', margin: 0 }}>Create your account and start dueling</p>
                     </div>
 
@@ -239,7 +239,7 @@ export default function RegisterPage() {
                 textAlign: 'center'
             }}>
                 <div style={{ fontSize: 13, color: 'oklch(50% 0.02 260)' }}>
-                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
+                    © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
             </footer>
         </div>

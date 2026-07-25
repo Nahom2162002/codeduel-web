@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Beat Claude — Compete Against AI to Stay Sharp',
+    title: 'DuelAI — Compete Against AI to Stay Sharp',
     description: 'Practice coding by competing against Claude AI. Keep your skills sharp in the age of AI.',
 };
 

@@ -112,7 +112,7 @@ export default function ResultsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                 <Link href="/problems" style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)' }}>
                     <DuelIcon />
-                    Beat Claude
+                    DuelAI
                 </Link>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
