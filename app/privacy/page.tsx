@@ -1,6 +1,7 @@
 'use client';
-import Link from 'next/link';
+import { Suspense } from 'react';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+import { BackLink, FooterLegalLinks } from '../components/LegalPageLinks';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -36,9 +37,9 @@ export default function PrivacyPolicy() {
                     <DuelIcon />
                     DuelAI
                 </div>
-                <Link href="/" className={jetbrainsMono.className} style={{ color: 'oklch(78% 0.02 260)', textDecoration: 'none', fontSize: 14.5 }}>
-                    ← Back to DuelAI
-                </Link>
+                <Suspense fallback={<span className={jetbrainsMono.className} style={{ color: 'oklch(78% 0.02 260)', fontSize: 14.5 }}>← Back to DuelAI</span>}>
+                    <BackLink className={jetbrainsMono.className} style={{ color: 'oklch(78% 0.02 260)', textDecoration: 'none', fontSize: 14.5 }} />
+                </Suspense>
             </nav>
 
             <main style={{ maxWidth: 760, margin: '0 auto', padding: '24px 48px 100px' }}>
@@ -154,10 +155,12 @@ export default function PrivacyPolicy() {
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
                     © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
-                <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
-                    <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
-                    <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
-                </div>
+                <Suspense fallback={<div style={{ display: 'flex', gap: 24, fontSize: 13.5 }} />}>
+                    <FooterLegalLinks
+                        style={{ display: 'flex', gap: 24, fontSize: 13.5 }}
+                        linkStyle={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}
+                    />
+                </Suspense>
             </footer>
         </div>
     );
