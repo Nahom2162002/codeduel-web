@@ -15,6 +15,7 @@ const duelSchema = new Schema({
     aiScore:          { type: Number, default: 0 },
     result:           { type: String, enum: ['win', 'loss', 'draw'], required: true },
     aiExplanation:    { type: String },
+    aiApproach:       { type: String },
     eloChange:        { type: Number, default: 0 },
     completedAt:      { type: Date, default: Date.now }
 });
