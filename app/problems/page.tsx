@@ -318,8 +318,8 @@ export default function ProblemsPage() {
                     © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
-                    <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
-                    <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
+                    <Link href="/privacy?from=problems" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
+                    <Link href="/terms?from=problems" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
                 </div>
             </footer>
 
