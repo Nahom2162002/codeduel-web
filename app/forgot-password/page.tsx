@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
                     color: 'oklch(96% 0.01 260)'
                 }}>
                     <DuelIcon />
-                    CodeDuel
+                    Beat Claude
                 </Link>
             </nav>
 
@@ -195,7 +195,7 @@ export default function ForgotPasswordPage() {
                 textAlign: 'center'
             }}>
                 <div style={{ fontSize: 13, color: 'oklch(50% 0.02 260)' }}>
-                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
+                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
                 </div>
             </footer>
         </div>

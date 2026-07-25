@@ -126,7 +126,7 @@ export default function ProblemsPage() {
                     color: 'oklch(96% 0.01 260)'
                 }}>
                     <DuelIcon />
-                    CodeDuel
+                    Beat Claude
                 </Link>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -311,10 +311,10 @@ export default function ProblemsPage() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    CodeDuel
+                    Beat Claude
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
+                    © {new Date().getFullYear()} Beat Claude. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
