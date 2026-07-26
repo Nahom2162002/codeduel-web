@@ -33,9 +33,14 @@ export async function GET(req: NextRequest) {
             completedAt: { $gte: thirtyDaysAgo }
         }).populate('problemId').sort({ completedAt: -1 });
 
+        // Practice duels (Claude's approach was revealed) carry no competitive
+        // result, so they're excluded from every win/loss-based aggregate below —
+        // they still appear in recentDuels so users have a record of them.
+        const competitiveDuels = duels.filter(d => d.result !== 'practice');
+
         // Win rate by category
         const categoryStats: Record<string, { wins: number; losses: number; draws: number }> = {};
-        for (const duel of duels) {
+        for (const duel of competitiveDuels) {
             const problem = await Problem.findById(duel.problemId);
             if (!problem) continue;
             const cat = problem.category;
@@ -51,7 +56,7 @@ export async function GET(req: NextRequest) {
             medium: { wins: 0, total: 0 },
             hard: { wins: 0, total: 0 }
         };
-        for (const duel of duels) {
+        for (const duel of competitiveDuels) {
             const problem = await Problem.findById(duel.problemId);
             if (!problem) continue;
             difficultyStats[problem.difficulty].total++;
@@ -63,7 +68,7 @@ export async function GET(req: NextRequest) {
             const d = new Date();
             d.setDate(d.getDate() - (6 - i));
             const dateStr = d.toISOString().split('T')[0];
-            const dayDuels = duels.filter(duel =>
+            const dayDuels = competitiveDuels.filter(duel =>
                 duel.completedAt.toISOString().split('T')[0] === dateStr
             );
             return {

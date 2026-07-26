@@ -102,8 +102,15 @@ export default function DuelPage() {
     const [timerActive, setTimerActive] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [limitReached, setLimitReached] = useState(false);
+    const [revealLimitReached, setRevealLimitReached] = useState(false);
     const [hasHadTrial, setHasHadTrial] = useState(false);
     const [claudeDots, setClaudeDots] = useState(1);
+    const [isPractice, setIsPractice] = useState(false);
+    const [revealConfirming, setRevealConfirming] = useState(false);
+    const [revealing, setRevealing] = useState(false);
+    const [revealComplete, setRevealComplete] = useState(false);
+    const [revealedCode, setRevealedCode] = useState('');
+    const [revealError, setRevealError] = useState('');
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const startTimeRef = useRef<number>(0);
 
@@ -177,6 +184,55 @@ export default function DuelPage() {
         }
     };
 
+    const handleReveal = async () => {
+        setRevealConfirming(false);
+        setRevealing(true);
+        setRevealError('');
+        setRevealedCode('');
+
+        const token = localStorage.getItem('token');
+
+        try {
+            const res = await fetch('/api/duels/reveal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ problemId: id, language })
+            });
+
+            if (!res.ok || !res.body) {
+                const data = await res.json().catch(() => ({}));
+                if (data.revealLimitReached) {
+                    setRevealLimitReached(true);
+                } else {
+                    setRevealError(data.error || 'Failed to reveal Claude\'s approach. Please try again.');
+                }
+                return;
+            }
+
+            // Reaching here means we're actually about to show Claude's solution —
+            // this is the point of no return for this duel's competitive integrity.
+            setIsPractice(true);
+
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                setRevealedCode(prev => prev + decoder.decode(value, { stream: true }));
+            }
+
+            setRevealComplete(true);
+        } catch {
+            setRevealError('Connection failed. Please try again.');
+        } finally {
+            setRevealing(false);
+        }
+    };
+
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
@@ -185,6 +241,7 @@ export default function DuelPage() {
 
     const handleSubmit = async () => {
         if (!code.trim()) { setError('Please write your solution first'); return; }
+        if (isPractice && !revealComplete) { setError('Waiting for Claude\'s approach to finish revealing...'); return; }
 
         // Stop timer
         if (timerRef.current) clearInterval(timerRef.current);
@@ -206,7 +263,8 @@ export default function DuelPage() {
                     problemId: id,
                     language,
                     userCode: code,
-                    userTime
+                    userTime,
+                    isPractice
                 })
             });
 
@@ -257,6 +315,9 @@ export default function DuelPage() {
             flexDirection: 'column',
             boxSizing: 'border-box'
         }}>
+            <style>{`
+                @keyframes revealBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+            `}</style>
             <nav style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -330,6 +391,14 @@ export default function DuelPage() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                    {isPractice && (
+                        <span className={pressStart2P.className} style={{
+                            fontSize: 8, padding: '7px 11px', borderRadius: 4,
+                            background: ORANGE_BG, color: ORANGE
+                        }}>
+                            🔍 PRACTICE
+                        </span>
+                    )}
                     <div className={pressStart2P.className} style={{
                         fontSize: 15, color: timerActive ? BLUE : 'oklch(65% 0.02 260)',
                         background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)',
@@ -339,16 +408,16 @@ export default function DuelPage() {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        disabled={submitting}
+                        disabled={submitting || (isPractice && !revealComplete)}
                         className={spaceGrotesk.className}
                         style={{
-                            background: submitting ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
+                            background: submitting || (isPractice && !revealComplete) ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
                             color: 'oklch(16% 0.02 260)', border: 'none',
                             padding: '10px 20px', borderRadius: 6, fontWeight: 700, fontSize: 14,
-                            cursor: submitting ? 'not-allowed' : 'pointer'
+                            cursor: submitting || (isPractice && !revealComplete) ? 'not-allowed' : 'pointer'
                         }}
                     >
-                        {submitting ? 'Dueling Claude...' : 'Submit ▸'}
+                        {submitting ? (isPractice ? 'Reviewing...' : 'Dueling Claude...') : isPractice ? 'Submit Practice ▸' : 'Submit ▸'}
                     </button>
                 </div>
             </nav>
@@ -407,6 +476,67 @@ export default function DuelPage() {
                         </div>
                     )}
 
+                    {!isPractice && !revealConfirming && (
+                        <button
+                            onClick={() => setRevealConfirming(true)}
+                            className={spaceGrotesk.className}
+                            style={{
+                                display: 'block', width: '100%', padding: '10px 12px', borderRadius: 8,
+                                border: `1px solid oklch(75% 0.15 55 / 0.35)`, background: ORANGE_BG, color: ORANGE,
+                                fontSize: 13, fontWeight: 600, cursor: 'pointer', marginBottom: 20, textAlign: 'center'
+                            }}
+                        >
+                            🔍 Stuck? Reveal Claude's Approach
+                        </button>
+                    )}
+
+                    {revealConfirming && (
+                        <div style={{
+                            background: ORANGE_BG, border: `1px solid oklch(75% 0.15 55 / 0.35)`,
+                            borderRadius: 10, padding: 16, marginBottom: 20
+                        }}>
+                            <p style={{ fontSize: 13, color: 'oklch(90% 0.02 260)', lineHeight: 1.6, margin: '0 0 12px' }}>
+                                Watching Claude solve this live turns the duel into a <strong>Practice Duel</strong> — no ELO change, win, or loss. This can't be undone.
+                            </p>
+                            <div style={{ display: 'flex', gap: 8 }}>
+                                <button
+                                    onClick={handleReveal}
+                                    className={spaceGrotesk.className}
+                                    style={{ flex: 1, padding: '8px', borderRadius: 6, border: 'none', background: ORANGE, color: 'oklch(16% 0.02 260)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                                >
+                                    Yes, reveal
+                                </button>
+                                <button
+                                    onClick={() => setRevealConfirming(false)}
+                                    className={spaceGrotesk.className}
+                                    style={{ flex: 1, padding: '8px', borderRadius: 6, border: '1px solid oklch(45% 0.02 260)', background: 'transparent', color: 'oklch(85% 0.02 260)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {revealError && (
+                        <p style={{ color: ORANGE, fontSize: 13, marginBottom: 20 }}>{revealError}</p>
+                    )}
+
+                    {(revealing || revealComplete) && (
+                        <div style={{ marginBottom: 20 }}>
+                            <div className={jetbrainsMono.className} style={{ fontSize: 12, color: ORANGE, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                🔍 Claude's Approach {revealing && '(live)'}
+                            </div>
+                            <pre className={jetbrainsMono.className} style={{
+                                margin: 0, background: 'oklch(21% 0.02 260)', border: `1px solid oklch(75% 0.15 55 / 0.35)`,
+                                borderRadius: 8, padding: 16, fontSize: 13, lineHeight: 1.6, color: 'oklch(88% 0.02 260)',
+                                whiteSpace: 'pre-wrap', maxHeight: 320, overflowY: 'auto'
+                            }}>
+                                {revealedCode}
+                                {revealing && <span style={{ animation: 'revealBlink 1s step-end infinite' }}>▍</span>}
+                            </pre>
+                        </div>
+                    )}
+
                     {submitting && (
                         <div style={{
                             background: 'oklch(24% 0.03 55 / 0.3)', border: '1px solid oklch(75% 0.15 55 / 0.35)',
@@ -414,7 +544,7 @@ export default function DuelPage() {
                         }}>
                             <span style={{ fontSize: 18 }}>🤖</span>
                             <div style={{ fontSize: 13.5, color: 'oklch(85% 0.02 260)' }}>
-                                Claude is coding<span className={jetbrainsMono.className}>{'.'.repeat(claudeDots)}</span>
+                                {isPractice ? 'Claude is reviewing your code' : 'Claude is coding'}<span className={jetbrainsMono.className}>{'.'.repeat(claudeDots)}</span>
                             </div>
                         </div>
                     )}
@@ -478,6 +608,15 @@ export default function DuelPage() {
                             display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24
                         }}>
                             <UpgradeBanner hasHadTrial={hasHadTrial} onClose={() => setLimitReached(false)} />
+                        </div>
+                    )}
+
+                    {revealLimitReached && (
+                        <div style={{
+                            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24
+                        }}>
+                            <UpgradeBanner hasHadTrial={hasHadTrial} reason="practiceLimit" onClose={() => setRevealLimitReached(false)} />
                         </div>
                     )}
                 </div>

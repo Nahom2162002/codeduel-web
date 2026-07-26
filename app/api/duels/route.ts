@@ -6,6 +6,8 @@ import Duel from '@/models/Duel';
 import Problem from '@/models/Problem';
 import User from '@/models/User';
 import DailyDuelCount from '@/models/DailyDuelCount';
+import RevealSession from '@/models/RevealSession';
+import { buildSolutionPrompt } from '@/lib/claudeSolutionPrompt';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -63,25 +65,7 @@ async function executeCode(code: string, language: string, testCases: any[]) {
 
 async function getClaudeSolution(problem: any, language: string): Promise<{ code: string; time: number }> {
     const startTime = Date.now();
-
-    const prompt = `You are an expert competitive programmer. Solve this coding problem in ${language}.
-
-Problem: ${problem.title}
-
-Description:
-${problem.description}
-
-Constraints:
-${problem.constraints.join('\n')}
-
-Examples:
-${problem.examples.map((e: any) => `Input: ${e.input}\nOutput: ${e.output}`).join('\n\n')}
-
-Write ONLY the solution function body in ${language}. No imports, no main function, no stdin/stdout handling — just the function implementation. Use this exact function signature:
-
-${problem.starterCode[language]}
-
-No explanation, no markdown, just the raw function code.`;
+    const prompt = buildSolutionPrompt(problem, language);
 
     const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
@@ -226,7 +210,7 @@ export async function POST(req: NextRequest) {
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
         userId = user._id.toString();
 
-        const { problemId, language, userCode, userTime } = await req.json();
+        const { problemId, language, userCode, userTime, isPractice: clientClaimsPractice } = await req.json();
 
         if (!problemId || !language || !userCode || userTime === undefined) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: corsHeaders });
@@ -241,10 +225,33 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Pro plan required' }, { status: 403, headers: corsHeaders });
         }
 
-        // Check free tier duel limit (3 per day) — reserved atomically so concurrent
-        // submissions can't all read the count before any of them save (see
-        // models/DailyDuelCount.ts for how the unique index makes this race-safe).
-        if (user.plan === 'free') {
+        // Never trust a client-supplied "isPractice" flag on its own — anyone could
+        // set it to bypass the daily duel limit for free. Only treat this as a
+        // practice duel if a matching reveal was actually recorded server-side.
+        let isPractice = false;
+        let revealedAiCode = '';
+        let revealedAiTime = 0;
+        if (clientClaimsPractice) {
+            const revealSession = await RevealSession.findOne({
+                userId: user._id,
+                problemId: problem._id,
+                language
+            }).sort({ createdAt: -1 });
+
+            if (!revealSession) {
+                return NextResponse.json({
+                    error: 'No revealed solution found for this problem. Please reveal Claude\'s approach again before submitting.'
+                }, { status: 400, headers: corsHeaders });
+            }
+
+            isPractice = true;
+            revealedAiCode = revealSession.aiCode;
+            revealedAiTime = revealSession.aiTime;
+        }
+
+        // Practice duels (Claude's approach was revealed mid-solve) have no competitive
+        // stakes — they don't consume a free-tier slot and don't affect ELO or stats.
+        if (user.plan === 'free' && !isPractice) {
             dayKey = new Date();
             dayKey.setHours(0, 0, 0, 0);
 
@@ -277,8 +284,12 @@ export async function POST(req: NextRequest) {
         const userResults = await executeCode(wrappedUserCode, language, problem.testCases);
         const userTestsPassed = userResults.filter(r => r.passed).length;
 
-        // Get Claude's solution
-        const { code: aiCode, time: aiTime } = await getClaudeSolution(problem, language);
+        // Get Claude's solution — for practice duels, reuse the solution that was
+        // already streamed to the user during reveal instead of generating a new
+        // one, so the code they watched matches the code shown in the results.
+        const { code: aiCode, time: aiTime } = isPractice && revealedAiCode
+            ? { code: wrapWithIO(revealedAiCode, language, problem), time: Number(revealedAiTime) || 0 }
+            : await getClaudeSolution(problem, language);
 
         // Run AI code against test cases
         const aiResults = await executeCode(aiCode, language, problem.testCases);
@@ -302,12 +313,15 @@ export async function POST(req: NextRequest) {
         const userFinalScore = Math.round(userCorrectnessScore + userSpeedScore + (qualityScore / 100 * 20));
         const aiFinalScore = Math.round(aiCorrectnessScore + aiSpeedScore + (aiQualityScore / 100 * 20));
 
-        // Determine result
+        // Determine result — practice duels never win/lose/draw, since the user
+        // had access to Claude's solution while writing their own.
         const diff = userFinalScore - aiFinalScore;
-        const result: 'win' | 'loss' | 'draw' = diff > 5 ? 'win' : diff < -5 ? 'loss' : 'draw';
+        const result: 'win' | 'loss' | 'draw' | 'practice' = isPractice
+            ? 'practice'
+            : diff > 5 ? 'win' : diff < -5 ? 'loss' : 'draw';
 
-        // Calculate ELO change
-        const eloChange = calculateEloChange(result, problem.difficulty);
+        // Calculate ELO change — none for practice duels
+        const eloChange = isPractice ? 0 : calculateEloChange(result as 'win' | 'loss' | 'draw', problem.difficulty);
 
         // Get Claude's explanation of its approach
         const explanationMessage = await anthropic.messages.create({
@@ -346,32 +360,36 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
             result,
             aiExplanation: explanation,
             aiApproach: approachExplanation,
-            eloChange
+            eloChange,
+            isPractice: !!isPractice
         });
         await duel.save();
 
-        // Update user stats
-        const statsUpdate: any = {
-            'stats.totalDuels': user.stats.totalDuels + 1,
-            'stats.eloRating': Math.max(0, user.stats.eloRating + eloChange)
-        };
+        // Practice duels don't touch ELO, win/loss/draw counts, or the streak —
+        // there's nothing competitive to record.
+        if (!isPractice) {
+            const statsUpdate: any = {
+                'stats.totalDuels': user.stats.totalDuels + 1,
+                'stats.eloRating': Math.max(0, user.stats.eloRating + eloChange)
+            };
 
-        if (result === 'win') {
-            statsUpdate['stats.wins'] = user.stats.wins + 1;
-            statsUpdate['stats.currentStreak'] = user.stats.currentStreak + 1;
-            statsUpdate['stats.bestStreak'] = Math.max(
-                user.stats.bestStreak,
-                user.stats.currentStreak + 1
-            );
-        } else if (result === 'loss') {
-            statsUpdate['stats.losses'] = user.stats.losses + 1;
-            statsUpdate['stats.currentStreak'] = 0;
-        } else {
-            statsUpdate['stats.draws'] = user.stats.draws + 1;
-            statsUpdate['stats.currentStreak'] = user.stats.currentStreak + 1;
+            if (result === 'win') {
+                statsUpdate['stats.wins'] = user.stats.wins + 1;
+                statsUpdate['stats.currentStreak'] = user.stats.currentStreak + 1;
+                statsUpdate['stats.bestStreak'] = Math.max(
+                    user.stats.bestStreak,
+                    user.stats.currentStreak + 1
+                );
+            } else if (result === 'loss') {
+                statsUpdate['stats.losses'] = user.stats.losses + 1;
+                statsUpdate['stats.currentStreak'] = 0;
+            } else {
+                statsUpdate['stats.draws'] = user.stats.draws + 1;
+                statsUpdate['stats.currentStreak'] = user.stats.currentStreak + 1;
+            }
+
+            await User.findByIdAndUpdate(user._id, { $set: statsUpdate });
         }
-
-        await User.findByIdAndUpdate(user._id, { $set: statsUpdate });
 
         return NextResponse.json({
             duelId: duel._id,
@@ -387,7 +405,7 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
             aiExplanation: explanation,
             aiApproach: approachExplanation,
             eloChange,
-            newElo: Math.max(0, user.stats.eloRating + eloChange)
+            newElo: isPractice ? user.stats.eloRating : Math.max(0, user.stats.eloRating + eloChange)
         }, { headers: corsHeaders });
 
     } catch (err: any) {
