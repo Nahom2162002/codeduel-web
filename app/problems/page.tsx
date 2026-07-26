@@ -134,6 +134,9 @@ export default function ProblemsPage() {
                     <Link href="/dashboard" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
                         Dashboard
                     </Link>
+                    <Link href="/rules" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
+                        Rules
+                    </Link>
                     {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
                 </div>
             </nav>
