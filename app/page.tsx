@@ -48,7 +48,7 @@ const FEATURES = [
     { icon: '⚡', title: 'Unlimited Duels', desc: 'Free tier is limited to 3 duels per day. Pro unlocks unlimited.', pro: true },
 ];
 
-const FREE_FEATURES = ['3 duels per day', 'Arrays and Strings problems', 'Full Monaco editor', 'Claude solution comparison', 'Learn from every duel'];
+const FREE_FEATURES = ['3 duels per day', 'Full Monaco editor', 'Claude solution comparison', 'Learn from every duel'];
 const PRO_FEATURES = ['Everything in Free', 'Unlimited duels', 'All 6 problem categories', 'ELO rating system', 'Progress dashboard', 'Weak spot detection', 'Performance analytics', 'New problems added weekly'];
 
 function DuelIcon({ size = 28 }: { size?: number }) {
