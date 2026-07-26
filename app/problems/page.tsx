@@ -116,29 +116,33 @@ export default function ProblemsPage() {
                 maxWidth: 1280,
                 margin: '0 auto'
             }}>
-                <Link href="/problems" style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    fontWeight: 700,
-                    fontSize: 20,
-                    letterSpacing: '-0.02em',
-                    textDecoration: 'none',
-                    color: 'oklch(96% 0.01 260)'
-                }}>
-                    <DuelIcon />
-                    DuelAI
-                </Link>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                    <Link href="/dashboard" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
-                        Dashboard
+                <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                    <Link href="/problems" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        fontWeight: 700,
+                        fontSize: 20,
+                        letterSpacing: '-0.02em',
+                        textDecoration: 'none',
+                        color: 'oklch(96% 0.01 260)'
+                    }}>
+                        <DuelIcon />
+                        DuelAI
                     </Link>
-                    <Link href="/rules" style={{ color: 'oklch(85% 0.02 260)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
-                        Rules
-                    </Link>
-                    {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                        <Link href="/problems" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>
+                            Problems
+                        </Link>
+                        <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
+                            Dashboard
+                        </Link>
+                        <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
+                            Rules
+                        </Link>
+                    </div>
                 </div>
+                {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
             </nav>
 
             <main style={{ maxWidth: 1120, margin: '0 auto', padding: '40px 48px 100px' }}>
