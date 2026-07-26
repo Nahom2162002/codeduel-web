@@ -2,6 +2,11 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
+const ORIGINS: Record<string, { href: string; label: string }> = {
+    problems: { href: '/problems', label: '← Back to Problems' },
+    rules: { href: '/rules', label: '← Back to Rules' }
+};
+
 function useFromParam() {
     const searchParams = useSearchParams();
     return searchParams.get('from');
@@ -14,8 +19,9 @@ interface BackLinkProps {
 
 export function BackLink({ className, style }: BackLinkProps) {
     const from = useFromParam();
-    const href = from === 'problems' ? '/problems' : '/';
-    const label = from === 'problems' ? '← Back to Problems' : '← Back to DuelAI';
+    const origin = from ? ORIGINS[from] : undefined;
+    const href = origin?.href ?? '/';
+    const label = origin?.label ?? '← Back to DuelAI';
 
     return (
         <Link href={href} className={className} style={style}>
@@ -31,7 +37,7 @@ interface FooterLegalLinksProps {
 
 export function FooterLegalLinks({ style, linkStyle }: FooterLegalLinksProps) {
     const from = useFromParam();
-    const suffix = from === 'problems' ? '?from=problems' : '';
+    const suffix = from && ORIGINS[from] ? `?from=${from}` : '';
 
     return (
         <div style={style}>
