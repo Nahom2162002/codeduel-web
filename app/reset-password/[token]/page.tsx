@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
                     color: 'oklch(96% 0.01 260)'
                 }}>
                     <DuelIcon />
-                    DuelAI
+                    CodeDuel
                 </Link>
             </nav>
 
@@ -133,7 +133,7 @@ export default function ResetPasswordPage() {
                         </div>
                         <h1 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 8px' }}>Reset Password</h1>
                         <p style={{ fontSize: 15, color: 'oklch(65% 0.02 260)', margin: 0 }}>
-                            Choose a new password for your DuelAI account.
+                            Choose a new password for your CodeDuel account.
                         </p>
                     </div>
 
@@ -249,7 +249,7 @@ export default function ResetPasswordPage() {
                 textAlign: 'center'
             }}>
                 <div style={{ fontSize: 13, color: 'oklch(50% 0.02 260)' }}>
-                    © {new Date().getFullYear()} DuelAI. All rights reserved.
+                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
                 </div>
             </footer>
         </div>

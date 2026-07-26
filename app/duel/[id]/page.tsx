@@ -268,7 +268,7 @@ export default function DuelPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     <Link href="/problems" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'oklch(96% 0.01 260)', fontWeight: 700, fontSize: 17 }}>
                         <DuelIcon />
-                        DuelAI
+                        CodeDuel
                     </Link>
                     <div style={{ width: 1, height: 22, background: 'oklch(30% 0.02 260)' }} />
 

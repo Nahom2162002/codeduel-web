@@ -108,7 +108,7 @@ export default function DashboardPage() {
                     letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
                 }}>
                     <DuelIcon />
-                    DuelAI
+                    CodeDuel
                 </Link>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
