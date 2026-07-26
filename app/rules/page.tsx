@@ -164,7 +164,7 @@ export default function RulesPage() {
                 </section>
 
                 <p className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(55% 0.02 260)', marginTop: 32 }}>
-                    For the full legal terms, see the <Link href="/terms?from=problems" style={{ color: BLUE }}>Terms of Service</Link>.
+                    For the full legal terms, see the <Link href="/terms?from=rules" style={{ color: BLUE }}>Terms of Service</Link>.
                 </p>
             </main>
 
@@ -180,8 +180,8 @@ export default function RulesPage() {
                     © {new Date().getFullYear()} DuelAI. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
-                    <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
-                    <Link href="/terms?from=problems" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
+                    <Link href="/privacy?from=rules" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
+                    <Link href="/terms?from=rules" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
                 </div>
             </footer>
         </div>
