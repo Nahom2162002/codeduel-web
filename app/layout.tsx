@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
     title: 'DuelAI — Compete Against AI to Stay Sharp',
     description: 'Practice coding by competing against Claude AI. Keep your skills sharp in the age of AI.',
+    verification: {
+        google: 'Kr3bEF23xev5Jk7PTQNamMlUovmkOtl52JACxVul1VQ'
+    }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
