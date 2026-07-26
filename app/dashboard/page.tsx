@@ -34,7 +34,7 @@ interface Stats {
     strongCategories: string[];
     recentDuels: {
         _id: string;
-        result: 'win' | 'loss' | 'draw';
+        result: 'win' | 'loss' | 'draw' | 'practice';
         userScore: number;
         aiScore: number;
         eloChange: number;
@@ -146,13 +146,17 @@ export default function DashboardPage() {
     const { wins, losses, draws, currentStreak, totalDuels, eloRating } = stats.stats;
     const winRate = totalDuels > 0 ? Math.round((wins / totalDuels) * 100) : 0;
 
+    // Practice duels always carry eloChange: 0, so they're excluded here rather
+    // than diluting the "last 8 duels" chart with flat, non-competitive entries.
+    const competitiveRecent = stats.recentDuels.filter(d => d.result !== 'practice');
+
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const eloThisWeek = stats.recentDuels
+    const eloThisWeek = competitiveRecent
         .filter(d => new Date(d.completedAt).getTime() >= oneWeekAgo)
         .reduce((sum, d) => sum + d.eloChange, 0);
 
     // Reconstruct recent ELO history from current rating + each duel's eloChange
-    const recentForChart = stats.recentDuels.slice(0, 8);
+    const recentForChart = competitiveRecent.slice(0, 8);
     const eloAfterEachDuel: number[] = [];
     let running = eloRating;
     for (let i = 0; i < recentForChart.length; i++) {
