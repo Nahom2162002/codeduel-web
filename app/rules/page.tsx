@@ -74,7 +74,7 @@ export default function RulesPage() {
                         letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
                     }}>
                         <DuelIcon />
-                        DuelAI
+                        CodeDuel
                     </Link>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                         <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
@@ -140,7 +140,7 @@ export default function RulesPage() {
                 <section style={{ marginBottom: 40 }}>
                     {H2('Fair play')}
                     <p style={P_MB}>
-                        DuelAI only works as a way to measure your own skills if the code you submit is actually yours. Pasting in a
+                        CodeDuel only works as a way to measure your own skills if the code you submit is actually yours. Pasting in a
                         solution from another AI tool or copying one from the internet defeats the point — there's no way for us to
                         detect that, so this one's on the honor system.
                     </p>
@@ -174,10 +174,10 @@ export default function RulesPage() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    DuelAI
+                    CodeDuel
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} DuelAI. All rights reserved.
+                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy?from=rules" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>

@@ -21,7 +21,7 @@ export function BackLink({ className, style }: BackLinkProps) {
     const from = useFromParam();
     const origin = from ? ORIGINS[from] : undefined;
     const href = origin?.href ?? '/';
-    const label = origin?.label ?? '← Back to DuelAI';
+    const label = origin?.label ?? '← Back to CodeDuel';
 
     return (
         <Link href={href} className={className} style={style}>

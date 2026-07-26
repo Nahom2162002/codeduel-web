@@ -128,7 +128,7 @@ export default function ProblemsPage() {
                         color: 'oklch(96% 0.01 260)'
                     }}>
                         <DuelIcon />
-                        DuelAI
+                        CodeDuel
                     </Link>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                         <Link href="/problems" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>
@@ -319,10 +319,10 @@ export default function ProblemsPage() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 15 }}>
                     <DuelIcon size={19} />
-                    DuelAI
+                    CodeDuel
                 </div>
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
-                    © {new Date().getFullYear()} DuelAI. All rights reserved.
+                    © {new Date().getFullYear()} CodeDuel. All rights reserved.
                 </div>
                 <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
                     <Link href="/privacy?from=problems" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
