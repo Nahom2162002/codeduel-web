@@ -61,7 +61,6 @@ export default function BlogPage() {
                         <a href="/#features" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
                         <a href="/#pricing" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
                         <Link href="/blog" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Blog</Link>
-                        <Link href="/login" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none' }}>Log in</Link>
                         <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 20px', borderRadius: 6, textDecoration: 'none', fontWeight: 700 }}>
                             Start Dueling
                         </Link>
