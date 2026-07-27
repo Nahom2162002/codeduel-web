@@ -42,7 +42,9 @@ export default function BlogPage() {
                 .blog-post-card { transition: border-color 0.15s; }
                 .blog-post-card:hover { border-color: ${BLUE_BORDER}; }
                 @media (max-width: 768px) {
-                    .blog-page nav { padding: 16px 20px !important; }
+                    .blog-page nav { padding: 16px 20px !important; flex-wrap: wrap !important; row-gap: 12px !important; }
+                    .blog-page .nav-links { gap: 14px !important; }
+                    .blog-page .nav-anchor { display: none !important; }
                     .blog-page main { padding-left: 20px !important; padding-right: 20px !important; }
                     .blog-page h1 { font-size: 30px !important; }
                     .blog-page footer { padding-left: 20px !important; padding-right: 20px !important; justify-content: center !important; text-align: center !important; }
@@ -54,7 +56,11 @@ export default function BlogPage() {
                         <DuelIcon />
                         CodeDuel
                     </Link>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 15, fontWeight: 500 }}>
+                    <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 36, fontSize: 15, fontWeight: 500 }}>
+                        <a href="/#how-it-works" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>How it works</a>
+                        <a href="/#features" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
+                        <a href="/#pricing" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
+                        <Link href="/blog" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Blog</Link>
                         <Link href="/login" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none' }}>Log in</Link>
                         <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 20px', borderRadius: 6, textDecoration: 'none', fontWeight: 700 }}>
                             Start Dueling
