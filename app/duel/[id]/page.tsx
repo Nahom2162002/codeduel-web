@@ -166,6 +166,19 @@ class Solution {
 `
 };
 
+// Turns the decorative placeholder into unreadable symbol-soup while keeping
+// whitespace, punctuation and brackets intact — so it still reads as "code
+// shaped" (indentation, line breaks) without ever showing real words.
+const SYMBOL_POOL = ['#', '$', '%', '&', '*', '+', '=', '~', '^', '?', '!', '@'];
+
+function obfuscateCode(template: string): string {
+    let out = '';
+    for (const ch of template) {
+        out += /[A-Za-z0-9]/.test(ch) ? SYMBOL_POOL[Math.floor(Math.random() * SYMBOL_POOL.length)] : ch;
+    }
+    return out;
+}
+
 function diffColors(d: string) {
     if (d === 'easy') return { bg: BLUE_BG, color: BLUE };
     if (d === 'hard') return { bg: ORANGE_BG, color: ORANGE };
@@ -217,6 +230,7 @@ export default function DuelPage() {
     const [hasHadTrial, setHasHadTrial] = useState(false);
     const [claudeDots, setClaudeDots] = useState(1);
     const [claudeChars, setClaudeChars] = useState(0);
+    const [claudeCipher, setClaudeCipher] = useState('');
     const [claudeSolving, setClaudeSolving] = useState(false);
     const [claudeDone, setClaudeDone] = useState(false);
     const [claudeElapsed, setClaudeElapsed] = useState(0);
@@ -287,6 +301,7 @@ export default function DuelPage() {
     // the solution before the user submits their own.
     const startLiveSolve = async (lang: string) => {
         setClaudeSolving(true);
+        setClaudeCipher(obfuscateCode(CLAUDE_PLACEHOLDER[lang] || CLAUDE_PLACEHOLDER.python));
         claudeStartRef.current = Date.now();
         claudeTimerRef.current = setInterval(() => {
             setClaudeElapsed(Math.floor((Date.now() - claudeStartRef.current) / 1000));
@@ -421,8 +436,7 @@ export default function DuelPage() {
     if (!problem) return null;
 
     const diffBadge = diffColors(problem.difficulty);
-    const claudePlaceholder = CLAUDE_PLACEHOLDER[language] || CLAUDE_PLACEHOLDER.python;
-    const claudeDisplayCode = claudePlaceholder.slice(0, claudeChars);
+    const claudeDisplayCode = claudeCipher.slice(0, claudeChars);
 
     return (
         <div className={spaceGrotesk.className} style={{
