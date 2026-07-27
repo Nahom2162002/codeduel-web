@@ -101,8 +101,8 @@ export default function DashboardPage() {
     }, []);
 
     const nav = (
-        <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+        <nav className="app-nav" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
+            <div className="app-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                 <Link href="/problems" style={{
                     display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20,
                     letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                     <DuelIcon />
                     CodeDuel
                 </Link>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                <div className="app-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
                     <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
                     <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Rules</Link>
@@ -187,7 +187,20 @@ export default function DashboardPage() {
     ];
 
     return (
-        <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+        <div className={`${spaceGrotesk.className} app-page`} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .app-page nav { padding: 16px 20px !important; flex-wrap: wrap !important; row-gap: 12px !important; }
+                    .app-page .app-nav-left { gap: 20px !important; row-gap: 10px !important; flex-wrap: wrap !important; }
+                    .app-page .app-nav-links { gap: 16px !important; font-size: 13.5px !important; }
+                    .app-page main { padding-left: 20px !important; padding-right: 20px !important; }
+                    .app-page .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .app-page .chart-grid { grid-template-columns: 1fr !important; }
+                }
+                @media (max-width: 420px) {
+                    .app-page .stat-grid { grid-template-columns: 1fr !important; }
+                }
+            `}</style>
             {nav}
 
             <main style={{ maxWidth: 1120, margin: '0 auto', padding: '32px 48px 100px' }}>
@@ -208,7 +221,7 @@ export default function DashboardPage() {
                     </Link>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 40 }}>
+                <div className="stat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 40 }}>
                     {statCards.map((s, i) => (
                         <div key={i} style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24, position: 'relative' }}>
                             <div style={{ position: 'absolute', top: 4, left: 4, width: 12, height: 12, borderTop: `2px solid ${s.accent}`, borderLeft: `2px solid ${s.accent}` }} />
@@ -226,7 +239,7 @@ export default function DashboardPage() {
                     ))}
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 24, marginBottom: 40 }}>
+                <div className="chart-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 24, marginBottom: 40 }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
                         <h2 style={{ fontSize: 17, margin: '0 0 20px', fontWeight: 600 }}>ELO Progress</h2>
                         {chartBars.length === 0 ? (

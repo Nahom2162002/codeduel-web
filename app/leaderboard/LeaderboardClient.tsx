@@ -93,9 +93,20 @@ export default function LeaderboardClient() {
     const inTop100 = you && leaderboard.some(e => e.username === you.username);
 
     return (
-        <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+        <div className={`${spaceGrotesk.className} app-page`} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .app-page nav { padding: 16px 20px !important; flex-wrap: wrap !important; row-gap: 12px !important; }
+                    .app-page .app-nav-left { gap: 20px !important; row-gap: 10px !important; flex-wrap: wrap !important; }
+                    .app-page .app-nav-links { gap: 16px !important; font-size: 13.5px !important; }
+                    .app-page main { padding-left: 20px !important; padding-right: 20px !important; }
+                    .app-page h1 { font-size: 30px !important; }
+                    .app-page .lb-row { grid-template-columns: 40px 1fr 70px !important; }
+                    .app-page .lb-hide-mobile { display: none !important; }
+                }
+            `}</style>
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                <div className="app-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                     <Link href={me ? '/problems' : '/'} style={{
                         display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20,
                         letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)'
@@ -104,7 +115,7 @@ export default function LeaderboardClient() {
                         CodeDuel
                     </Link>
                     {me && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                        <div className="app-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                             <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
                             <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Dashboard</Link>
                             <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Rules</Link>
@@ -207,7 +218,7 @@ export default function LeaderboardClient() {
                         <div style={{ position: 'absolute', top: 6, left: 6, width: 16, height: 16, borderTop: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, zIndex: 1 }} />
                         <div style={{ position: 'absolute', bottom: 6, right: 6, width: 16, height: 16, borderBottom: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, zIndex: 1 }} />
 
-                        <div className={jetbrainsMono.className} style={{
+                        <div className={`${jetbrainsMono.className} lb-row`} style={{
                             display: 'grid', gridTemplateColumns: '56px 1fr 100px 140px 90px', gap: 8,
                             padding: '12px 20px', fontSize: 11.5, color: 'oklch(55% 0.02 260)',
                             textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid oklch(30% 0.02 260)'
@@ -215,8 +226,8 @@ export default function LeaderboardClient() {
                             <span>Rank</span>
                             <span>Player</span>
                             <span style={{ textAlign: 'right' }}>ELO</span>
-                            <span style={{ textAlign: 'right' }}>Record</span>
-                            <span style={{ textAlign: 'right' }}>Win %</span>
+                            <span className="lb-hide-mobile" style={{ textAlign: 'right' }}>Record</span>
+                            <span className="lb-hide-mobile" style={{ textAlign: 'right' }}>Win %</span>
                         </div>
 
                         {leaderboard.map(entry => {
@@ -227,6 +238,7 @@ export default function LeaderboardClient() {
                             return (
                                 <div
                                     key={entry.username}
+                                    className="lb-row"
                                     style={{
                                         display: 'grid', gridTemplateColumns: '56px 1fr 100px 140px 90px', gap: 8,
                                         padding: '13px 20px', alignItems: 'center', fontSize: 14.5,
@@ -249,10 +261,10 @@ export default function LeaderboardClient() {
                                     <span className={jetbrainsMono.className} style={{ textAlign: 'right', fontWeight: 700, color: BLUE }}>
                                         {entry.eloRating}
                                     </span>
-                                    <span className={jetbrainsMono.className} style={{ textAlign: 'right', fontSize: 13, color: 'oklch(70% 0.02 260)' }}>
+                                    <span className={`${jetbrainsMono.className} lb-hide-mobile`} style={{ textAlign: 'right', fontSize: 13, color: 'oklch(70% 0.02 260)' }}>
                                         {entry.wins}-{entry.losses}-{entry.draws}
                                     </span>
-                                    <span className={jetbrainsMono.className} style={{ textAlign: 'right', fontSize: 13, color: 'oklch(70% 0.02 260)' }}>
+                                    <span className={`${jetbrainsMono.className} lb-hide-mobile`} style={{ textAlign: 'right', fontSize: 13, color: 'oklch(70% 0.02 260)' }}>
                                         {winRate}%
                                     </span>
                                 </div>

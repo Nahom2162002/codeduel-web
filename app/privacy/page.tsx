@@ -31,7 +31,14 @@ function DuelIcon({ size = 28 }: { size?: number }) {
 
 export default function PrivacyPolicy() {
     return (
-        <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+        <div className={`${spaceGrotesk.className} app-page`} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh' }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .app-page nav { padding: 16px 20px !important; }
+                    .app-page main { padding-left: 20px !important; padding-right: 20px !important; }
+                    .app-page h1 { font-size: 30px !important; }
+                }
+            `}</style>
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
                     <DuelIcon />

@@ -129,11 +129,26 @@ export default function LandingPage() {
     const winnerText = scoreYou >= scoreClaude ? '🏆 YOU WIN — 87 to 82' : '🏆 CLAUDE WINS — 82 to 87';
 
     return (
-        <div className={spaceGrotesk.className} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh', overflowX: 'hidden', position: 'relative' }}>
+        <div className={`${spaceGrotesk.className} landing-page`} style={{ background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh', overflowX: 'hidden', position: 'relative' }}>
             <style>{`
                 @keyframes pulseVs { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.08); } }
                 @keyframes floatBadge { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
                 @keyframes scanroll { 0% { background-position: 0 0; } 100% { background-position: 0 8px; } }
+
+                @media (max-width: 768px) {
+                    .landing-page nav { padding-left: 20px !important; padding-right: 20px !important; }
+                    .landing-page .nav-links { gap: 14px !important; }
+                    .landing-page .nav-anchor { display: none !important; }
+                    .landing-page header { padding: 40px 20px 24px !important; }
+                    .landing-page h1 { font-size: 34px !important; }
+                    .landing-page section { padding-left: 20px !important; padding-right: 20px !important; }
+                    .landing-page .duel-demo-grid { grid-template-columns: 1fr !important; }
+                    .landing-page .duel-vs-badge { display: none !important; }
+                    .landing-page .level-row { padding: 16px !important; gap: 12px !important; }
+                    .landing-page .compare-grid { grid-template-columns: 1fr !important; }
+                    .landing-page .pricing-grid { grid-template-columns: 1fr !important; }
+                    .landing-page footer { padding-left: 20px !important; padding-right: 20px !important; justify-content: center !important; text-align: center !important; }
+                }
             `}</style>
 
             <div style={{
@@ -151,10 +166,10 @@ export default function LandingPage() {
                     <DuelIcon />
                     CodeDuel
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 36, fontSize: 15, fontWeight: 500 }}>
-                    <a href="#how-it-works" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>How it works</a>
-                    <a href="#features" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
-                    <a href="#pricing" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
+                <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 36, fontSize: 15, fontWeight: 500 }}>
+                    <a href="#how-it-works" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>How it works</a>
+                    <a href="#features" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
+                    <a href="#pricing" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
                     <Link href="/login" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none' }}>Log in</Link>
                     <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 20px', borderRadius: 6, textDecoration: 'none', fontWeight: 700 }}>
                         Start Dueling
@@ -194,7 +209,7 @@ export default function LandingPage() {
             </header>
 
             <section style={{ maxWidth: 1120, margin: '40px auto 100px', padding: '0 48px', position: 'relative' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, position: 'relative' }}>
+                <div className="duel-demo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, position: 'relative' }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: `1px solid oklch(75% 0.15 220 / 0.35)`, borderRadius: 12, overflow: 'hidden', position: 'relative' }}>
                         <div style={{ position: 'absolute', top: 2, left: 2, width: 14, height: 14, borderTop: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, zIndex: 2 }} />
                         <div style={{ position: 'absolute', bottom: 2, right: 2, width: 14, height: 14, borderBottom: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, zIndex: 2 }} />
@@ -227,7 +242,7 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    <div className={pressStart2P.className} style={{
+                    <div className={`${pressStart2P.className} duel-vs-badge`} style={{
                         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
                         width: 68, height: 68, borderRadius: '50%', background: 'oklch(16% 0.02 260)',
                         border: '2px solid oklch(50% 0.02 260)', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -256,7 +271,7 @@ export default function LandingPage() {
                     {LEVELS.map((lv, i) => {
                         const active = i === currentLevel;
                         return (
-                            <div key={i} style={{
+                            <div key={i} className="level-row" style={{
                                 display: 'flex', alignItems: 'center', gap: 20, padding: '20px 24px', borderRadius: 6,
                                 background: active ? BLUE_BG : 'transparent', borderLeft: `3px solid ${active ? BLUE : 'transparent'}`,
                                 transition: 'background 0.3s'
@@ -301,7 +316,7 @@ export default function LandingPage() {
 
             <section style={{ maxWidth: 1120, margin: '0 auto', padding: '40px 48px 100px' }}>
                 <h2 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', textAlign: 'center', margin: '0 0 48px' }}>Why CodeDuel?</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 36 }}>
+                <div className="compare-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 36 }}>
                     <div style={{ background: 'oklch(19% 0.015 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 32 }}>
                         <h3 style={{ fontSize: 20, margin: '0 0 10px', color: 'oklch(65% 0.02 260)' }}>LeetCode</h3>
                         <p style={{ fontSize: 15, color: 'oklch(60% 0.02 260)', lineHeight: 1.6, margin: 0 }}>You vs. a timer. Designed for interview prep. No AI opponent. No learning from comparison.</p>
@@ -326,7 +341,7 @@ export default function LandingPage() {
                     <h2 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>Simple pricing</h2>
                     <p style={{ fontSize: 18, color: 'oklch(70% 0.02 260)', margin: 0 }}>Start free. Upgrade when you want the full experience.</p>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, alignItems: 'start' }}>
+                <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, alignItems: 'start' }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 14, padding: 36, position: 'relative' }}>
                         <div style={{ position: 'absolute', top: 4, left: 4, width: 14, height: 14, borderTop: '2px solid oklch(45% 0.02 260)', borderLeft: '2px solid oklch(45% 0.02 260)' }} />
                         <div style={{ position: 'absolute', bottom: 4, right: 4, width: 14, height: 14, borderBottom: '2px solid oklch(45% 0.02 260)', borderRight: '2px solid oklch(45% 0.02 260)' }} />

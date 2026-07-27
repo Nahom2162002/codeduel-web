@@ -103,12 +103,21 @@ export default function ProblemsPage() {
     }, [category, difficulty, problems]);
 
     return (
-        <div className={spaceGrotesk.className} style={{
+        <div className={`${spaceGrotesk.className} app-page`} style={{
             background: 'oklch(16% 0.02 260)',
             color: 'oklch(96% 0.01 260)',
             minHeight: '100vh'
         }}>
-            <nav style={{
+            <style>{`
+                @media (max-width: 768px) {
+                    .app-page nav { padding: 16px 20px !important; flex-wrap: wrap !important; row-gap: 12px !important; }
+                    .app-page .app-nav-left { gap: 20px !important; row-gap: 10px !important; flex-wrap: wrap !important; }
+                    .app-page .app-nav-links { gap: 16px !important; font-size: 13.5px !important; }
+                    .app-page main { padding-left: 20px !important; padding-right: 20px !important; }
+                    .app-page footer { padding-left: 20px !important; padding-right: 20px !important; justify-content: center !important; text-align: center !important; }
+                }
+            `}</style>
+            <nav className="app-nav" style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -116,7 +125,7 @@ export default function ProblemsPage() {
                 maxWidth: 1280,
                 margin: '0 auto'
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                <div className="app-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                     <Link href="/problems" style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -130,7 +139,7 @@ export default function ProblemsPage() {
                         <DuelIcon />
                         CodeDuel
                     </Link>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                    <div className="app-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                         <Link href="/problems" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>
                             Problems
                         </Link>
