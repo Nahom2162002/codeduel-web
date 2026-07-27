@@ -5,6 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
 import UpgradeBanner from '../../components/UpgradeBanner';
+import posthog from 'posthog-js';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -354,6 +355,14 @@ export default function DuelPage() {
             timerRef.current = setInterval(() => {
                 setTimer(Math.floor((Date.now() - startTimeRef.current) / 1000));
             }, 1000);
+            if (problem) {
+                posthog.capture('duel_started', {
+                    problemId: id,
+                    language,
+                    difficulty: problem.difficulty,
+                    category: problem.category
+                });
+            }
             startLiveSolve(language);
         }
     };
@@ -412,6 +421,12 @@ export default function DuelPage() {
                 setSubmitting(false);
                 return;
             }
+
+            posthog.capture('duel_submitted', {
+                problemId: id,
+                language,
+                userTime: timer
+            });
 
             // Navigate to results page
             router.push(`/results/${data.duelId}`);

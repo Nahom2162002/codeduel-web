@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import UpgradeBanner from './UpgradeBanner';
+import posthog from 'posthog-js';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -38,6 +39,7 @@ export default function UserMenu({ username, plan, hasHadTrial = false, isTriali
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        posthog.reset();
         router.push('/login');
     };
 
@@ -75,6 +77,9 @@ export default function UserMenu({ username, plan, hasHadTrial = false, isTriali
         } else {
             setOpen(false);
             setShowUpgrade(true);
+            posthog.capture('upgrade_clicked', {
+                source: 'navbar'
+            });
         }
     };
 
