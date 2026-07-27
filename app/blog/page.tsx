@@ -19,6 +19,10 @@ export default function BlogPage() {
             color: 'white',
             padding: '60px 24px'
         }}>
+            <style>{`
+                .blog-post-card { transition: border-color 0.15s; }
+                .blog-post-card:hover { border-color: rgba(0,255,135,0.3); }
+            `}</style>
             <div style={{ maxWidth: 680, margin: '0 auto' }}>
                 <Link href="/" style={{ color: '#00ff87', fontSize: 14, textDecoration: 'none' }}>
                     ← Back to CodeDuel
@@ -34,17 +38,15 @@ export default function BlogPage() {
                         <Link
                             key={post.slug}
                             href={`/blog/${post.slug}`}
+                            className="blog-post-card"
                             style={{
                                 display: 'block',
                                 background: 'rgba(255,255,255,0.03)',
                                 border: '1px solid rgba(255,255,255,0.08)',
                                 borderRadius: 12,
                                 padding: '24px',
-                                textDecoration: 'none',
-                                transition: 'border-color 0.15s'
+                                textDecoration: 'none'
                             }}
-                            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,255,135,0.3)')}
-                            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
                         >
                             <div style={{ display: 'flex', gap: 12, marginBottom: 8, fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>
                                 <span>{post.date}</span>
