@@ -171,7 +171,6 @@ export default function LandingPage() {
                     <a href="#features" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
                     <a href="#pricing" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
                     <Link href="/blog" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Blog</Link>
-                    <Link href="/login" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none' }}>Log in</Link>
                     <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 20px', borderRadius: 6, textDecoration: 'none', fontWeight: 700 }}>
                         Start Dueling
                     </Link>
@@ -197,9 +196,6 @@ export default function LandingPage() {
                     Because the best way to stay sharp in the age of AI is to compete with it.
                 </p>
                 <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
-                    <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '16px 32px', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 17 }}>
-                        Start Dueling
-                    </Link>
                     <a href="#how-it-works" style={{ border: '1px solid oklch(40% 0.02 260)', color: 'oklch(96% 0.01 260)', padding: '16px 32px', borderRadius: 8, textDecoration: 'none', fontWeight: 600, fontSize: 17 }}>
                         See how it works
                     </a>
@@ -354,9 +350,6 @@ export default function LandingPage() {
                                 <div key={i} style={{ fontSize: 14.5, color: 'oklch(85% 0.02 260)' }}>✓ {f}</div>
                             ))}
                         </div>
-                        <Link href="/register" style={{ display: 'block', textAlign: 'center', border: '1px solid oklch(45% 0.02 260)', color: 'oklch(96% 0.01 260)', padding: 13, borderRadius: 8, textDecoration: 'none', fontWeight: 600 }}>
-                            Get started free
-                        </Link>
                     </div>
 
                     <div style={{ background: 'oklch(24% 0.04 220 / 0.2)', border: `1.5px solid ${BLUE}`, borderRadius: 14, padding: 36, position: 'relative' }}>
@@ -378,9 +371,6 @@ export default function LandingPage() {
                                 <div key={i} style={{ fontSize: 14.5, color: 'oklch(90% 0.02 260)' }}>✓ {f}</div>
                             ))}
                         </div>
-                        <Link href="/register" style={{ display: 'block', textAlign: 'center', background: BLUE, color: 'oklch(16% 0.02 260)', padding: 13, borderRadius: 8, textDecoration: 'none', fontWeight: 700 }}>
-                            Start Free Trial
-                        </Link>
                     </div>
                 </div>
             </section>
