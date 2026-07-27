@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
+import posthog from 'posthog-js';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -66,6 +67,10 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                 setError(data.error || 'Something went wrong. Please try again.');
                 setLoading(false);
             }
+            posthog.capture('upgrade_clicked', {
+                hasHadTrial,
+                source: 'duel_limit'
+            });
         } catch {
             setError('Connection failed. Please try again.');
             setLoading(false);

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import posthog from 'posthog-js';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -64,6 +65,7 @@ export default function RegisterPage() {
             const data = await res.json();
             if (data.message) {
                 router.push('/login');
+                posthog.capture('user_registered');
             } else {
                 setError(data.error || 'Registration failed');
             }

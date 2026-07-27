@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono, Press_Start_2P } from 'next/font/google';
 import UserMenu from '../../components/UserMenu';
+import posthog from 'posthog-js';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -92,7 +93,16 @@ export default function ResultsPage() {
                 return data;
             })
             .then(data => {
-                if (data) setDuel(data);
+                if (data) { 
+                    setDuel(data);
+                    posthog.capture('duel_completed', {
+                        result: data.result,
+                        userScore: data.userScore,
+                        aiScore: data.aiScore,
+                        language: data.language,
+                        eloChange: data.eloChange
+                    });
+                }
                 setLoading(false);
             })
             .catch((err: Error) => {
