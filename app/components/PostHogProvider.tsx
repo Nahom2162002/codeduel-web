@@ -13,5 +13,26 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         });
     }, []);
 
+    // Identify once per app load rather than in every page that fetches
+    // /api/user/me — this wrapper already mounts once for the whole session.
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        fetch('/api/user/me', {
+            headers: { authorization: `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.username) {
+                    posthog.identify(data.username, {
+                        plan: data.plan,
+                        hasHadTrial: data.hasHadTrial
+                    });
+                }
+            })
+            .catch(() => {});
+    }, []);
+
     return <PHProvider client={posthog}>{children}</PHProvider>;
 }

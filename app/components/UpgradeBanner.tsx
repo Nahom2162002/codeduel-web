@@ -69,7 +69,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             }
             posthog.capture('upgrade_clicked', {
                 hasHadTrial,
-                source: 'duel_limit'
+                source: reason
             });
         } catch {
             setError('Connection failed. Please try again.');
