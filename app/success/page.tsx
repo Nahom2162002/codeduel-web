@@ -30,10 +30,18 @@ export default function SuccessPage() {
     }, []);
 
     return (
-        <div className={spaceGrotesk.className} style={{
+        <div className={`${spaceGrotesk.className} auth-page`} style={{
             background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', minHeight: '100vh',
             display: 'flex', flexDirection: 'column'
         }}>
+            <style>{`
+                @media (max-width: 480px) {
+                    .auth-page nav { padding-left: 20px !important; padding-right: 20px !important; }
+                    .auth-page main { padding: 24px 16px !important; }
+                    .auth-page .auth-card { padding: 28px 22px !important; }
+                    .auth-page footer { padding-left: 20px !important; padding-right: 20px !important; }
+                }
+            `}</style>
             <nav style={{ display: 'flex', alignItems: 'center', padding: '20px 48px', maxWidth: 1280, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
                 <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)' }}>
                     <DuelIcon />
@@ -42,7 +50,7 @@ export default function SuccessPage() {
             </nav>
 
             <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
-                <div style={{
+                <div className="auth-card" style={{
                     width: '100%', maxWidth: 440, background: BLUE_BG, border: `1px solid ${BLUE_BORDER}`,
                     borderRadius: 14, padding: 40, textAlign: 'center', position: 'relative'
                 }}>

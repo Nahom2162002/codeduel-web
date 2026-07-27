@@ -109,13 +109,13 @@ export default function ResultsPage() {
     }, [id]);
 
     const nav = (
-        <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+        <nav className="app-nav" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', maxWidth: 1280, margin: '0 auto' }}>
+            <div className="app-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                 <Link href="/problems" style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none', color: 'oklch(96% 0.01 260)' }}>
                     <DuelIcon />
                     CodeDuel
                 </Link>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
+                <div className="app-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
                     <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Dashboard</Link>
                     <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Rules</Link>
@@ -143,7 +143,16 @@ export default function ResultsPage() {
     const formatTime = (s: number) => s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`;
 
     return (
-        <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)' }}>
+        <div className={`${spaceGrotesk.className} app-page`} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)' }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .app-page nav { padding: 16px 20px !important; flex-wrap: wrap !important; row-gap: 12px !important; }
+                    .app-page .app-nav-left { gap: 20px !important; row-gap: 10px !important; flex-wrap: wrap !important; }
+                    .app-page .app-nav-links { gap: 16px !important; font-size: 13.5px !important; }
+                    .app-page .score-grid { grid-template-columns: 1fr !important; }
+                    .app-page .score-grid > div:nth-child(2) { padding: 4px 0 !important; }
+                }
+            `}</style>
             {nav}
 
             <div style={{ maxWidth: 900, margin: '0 auto', padding: '20px 24px 100px' }}>
@@ -168,7 +177,7 @@ export default function ResultsPage() {
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 16, marginBottom: 32, alignItems: 'center' }}>
+                <div className="score-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 16, marginBottom: 32, alignItems: 'center' }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 20, textAlign: 'center' }}>
                         <p className={jetbrainsMono.className} style={{ color: 'oklch(60% 0.02 260)', fontSize: 12, margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>You</p>
                         <p className={pressStart2P.className} style={{ fontSize: 32, color: BLUE, margin: '0 0 12px' }}>{duel.userScore}</p>

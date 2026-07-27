@@ -50,13 +50,21 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className={spaceGrotesk.className} style={{
+        <div className={`${spaceGrotesk.className} auth-page`} style={{
             background: 'oklch(16% 0.02 260)',
             color: 'oklch(96% 0.01 260)',
             minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column'
         }}>
+            <style>{`
+                @media (max-width: 480px) {
+                    .auth-page nav { padding-left: 20px !important; padding-right: 20px !important; }
+                    .auth-page main { padding: 24px 16px !important; }
+                    .auth-page .auth-card { padding: 28px 22px !important; }
+                    .auth-page footer { padding-left: 20px !important; padding-right: 20px !important; }
+                }
+            `}</style>
             <nav style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -83,7 +91,7 @@ export default function ForgotPasswordPage() {
             </nav>
 
             <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
-                <div style={{
+                <div className="auth-card" style={{
                     width: '100%',
                     maxWidth: 400,
                     background: 'oklch(21% 0.02 260)',

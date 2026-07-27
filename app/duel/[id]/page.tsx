@@ -439,7 +439,7 @@ export default function DuelPage() {
     const claudeDisplayCode = claudeCipher.slice(0, claudeChars);
 
     return (
-        <div className={spaceGrotesk.className} style={{
+        <div className={`${spaceGrotesk.className} duel-page`} style={{
             background: 'oklch(16% 0.02 260)',
             color: 'oklch(96% 0.01 260)',
             height: '100vh',
@@ -447,7 +447,22 @@ export default function DuelPage() {
             flexDirection: 'column',
             boxSizing: 'border-box'
         }}>
-            <nav style={{
+            <style>{`
+                @media (max-width: 1024px) {
+                    .duel-page .duel-nav { flex-wrap: wrap !important; height: auto !important; padding: 10px 16px !important; row-gap: 8px !important; }
+                    .duel-page .duel-nav-left { gap: 10px !important; flex-wrap: wrap !important; row-gap: 6px !important; }
+                    .duel-page .duel-nav-right { gap: 10px !important; }
+                    .duel-page .duel-divider { display: none !important; }
+                    .duel-page .duel-category { display: none !important; }
+                    .duel-page .duel-columns { flex-direction: column !important; overflow-y: auto !important; }
+                    .duel-page .duel-problem-panel { width: 100% !important; border-right: none !important; border-bottom: 1px solid oklch(28% 0.02 260) !important; }
+                    .duel-page .duel-editor-panel { width: 100% !important; flex: none !important; border-right: none !important; border-bottom: 1px solid oklch(28% 0.02 260) !important; }
+                    .duel-page .duel-claude-panel { width: 100% !important; flex: none !important; }
+                    .duel-page .duel-editor-mount { flex: none !important; height: 420px !important; min-height: 420px !important; }
+                    .duel-page .duel-claude-mount { flex: none !important; height: 360px !important; min-height: 360px !important; }
+                }
+            `}</style>
+            <nav className="duel-nav" style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -455,12 +470,12 @@ export default function DuelPage() {
                 borderBottom: '1px solid oklch(28% 0.02 260)',
                 flexShrink: 0
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                <div className="duel-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     <Link href="/problems" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'oklch(96% 0.01 260)', fontWeight: 700, fontSize: 17 }}>
                         <DuelIcon />
                         CodeDuel
                     </Link>
-                    <div style={{ width: 1, height: 22, background: 'oklch(30% 0.02 260)' }} />
+                    <div className="duel-divider" style={{ width: 1, height: 22, background: 'oklch(30% 0.02 260)' }} />
 
                     <div style={{ position: 'relative' }}>
                         <div
@@ -514,12 +529,12 @@ export default function DuelPage() {
                     <span className={pressStart2P.className} style={{ fontSize: 8, padding: '5px 9px', borderRadius: 4, background: diffBadge.bg, color: diffBadge.color }}>
                         {problem.difficulty.toUpperCase()}
                     </span>
-                    <span className={jetbrainsMono.className} style={{ fontSize: 12, color: 'oklch(55% 0.02 260)' }}>
+                    <span className={`${jetbrainsMono.className} duel-category`} style={{ fontSize: 12, color: 'oklch(55% 0.02 260)' }}>
                         {CATEGORY_LABELS[problem.category] || problem.category}
                     </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                <div className="duel-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     <div className={pressStart2P.className} style={{
                         fontSize: 15, color: timerActive ? BLUE : 'oklch(65% 0.02 260)',
                         background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)',
@@ -543,8 +558,8 @@ export default function DuelPage() {
                 </div>
             </nav>
 
-            <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-                <div style={{ width: '28%', overflowY: 'auto', padding: '28px 28px', borderRight: '1px solid oklch(28% 0.02 260)', boxSizing: 'border-box' }}>
+            <div className="duel-columns" style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+                <div className="duel-problem-panel" style={{ width: '28%', overflowY: 'auto', padding: '28px 28px', borderRight: '1px solid oklch(28% 0.02 260)', boxSizing: 'border-box' }}>
                     <h1 style={{ fontSize: 22, margin: '0 0 16px', fontWeight: 700 }}>{problem.title}</h1>
                     <p style={{ fontSize: 15, lineHeight: 1.7, color: 'oklch(82% 0.02 260)', margin: '0 0 24px', whiteSpace: 'pre-wrap' }}>
                         {problem.description}
@@ -610,7 +625,7 @@ export default function DuelPage() {
                     )}
                 </div>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid oklch(28% 0.02 260)' }}>
+                <div className="duel-editor-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid oklch(28% 0.02 260)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0 }}>
                         <div style={{ display: 'flex', gap: 8 }}>
                             {LANGUAGES.map(lang => (
@@ -630,7 +645,7 @@ export default function DuelPage() {
                         </div>
                     </div>
 
-                    <div style={{ flex: 1, minHeight: 0 }}>
+                    <div className="duel-editor-mount" style={{ flex: 1, minHeight: 0 }}>
                         <MonacoEditor
                             height="100%"
                             language={language === 'cpp' ? 'cpp' : language}
@@ -672,7 +687,7 @@ export default function DuelPage() {
                     )}
                 </div>
 
-                <div style={{ width: '28%', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <div className="duel-claude-panel" style={{ width: '28%', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <span style={{ fontSize: 15 }}>🤖</span>
@@ -686,7 +701,7 @@ export default function DuelPage() {
                         </span>
                     </div>
 
-                    <div style={{ flex: 1, minHeight: 0 }}>
+                    <div className="duel-claude-mount" style={{ flex: 1, minHeight: 0 }}>
                         <MonacoEditor
                             height="100%"
                             language={language === 'cpp' ? 'cpp' : language}
