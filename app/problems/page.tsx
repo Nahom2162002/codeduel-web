@@ -140,6 +140,9 @@ export default function ProblemsPage() {
                         <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
                             Rules
                         </Link>
+                        <Link href="/leaderboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
+                            Leaderboard
+                        </Link>
                     </div>
                 </div>
                 {me && <UserMenu username={me.username} plan={me.plan} hasHadTrial={me.hasHadTrial} isTrialing={me.isTrialing} />}
