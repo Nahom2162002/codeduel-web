@@ -13,11 +13,10 @@ const duelSchema = new Schema({
     totalTests:       { type: Number, default: 0 },
     userScore:        { type: Number, default: 0 },
     aiScore:          { type: Number, default: 0 },
-    result:           { type: String, enum: ['win', 'loss', 'draw', 'practice'], required: true },
+    result:           { type: String, enum: ['win', 'loss', 'draw'], required: true },
     aiExplanation:    { type: String },
     aiApproach:       { type: String },
     eloChange:        { type: Number, default: 0 },
-    isPractice:       { type: Boolean, default: false },
     completedAt:      { type: Date, default: Date.now }
 });
 

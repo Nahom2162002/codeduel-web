@@ -54,6 +54,118 @@ const CATEGORY_LABELS: Record<string, string> = {
     'system-design': 'System Design'
 };
 
+// Purely decorative scaffold text revealed character-by-character in sync with
+// Claude's real typing pace (see startLiveSolve) — never Claude's actual
+// solution, so there's nothing to read or copy mid-duel.
+const CLAUDE_PLACEHOLDER: Record<string, string> = {
+    python: `import json
+import sys
+from collections import defaultdict
+
+def solve(data):
+    seen = {}
+    left = 0
+    best = 0
+
+    for right, value in enumerate(data):
+        if value in seen and seen[value] >= left:
+            left = seen[value] + 1
+        seen[value] = right
+        best = max(best, right - left + 1)
+
+    stack = []
+    for item in data:
+        while stack and stack[-1] > item:
+            stack.pop()
+        stack.append(item)
+
+    memo = {}
+    def helper(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i >= j:
+            return 0
+        best_val = float('inf')
+        for k in range(i, j):
+            cost = helper(i, k) + helper(k + 1, j)
+            best_val = min(best_val, cost)
+        memo[(i, j)] = best_val
+        return best_val
+
+    return best
+`,
+    javascript: `function solve(data) {
+    const seen = new Map();
+    let left = 0;
+    let best = 0;
+
+    for (let right = 0; right < data.length; right++) {
+        const value = data[right];
+        if (seen.has(value) && seen.get(value) >= left) {
+            left = seen.get(value) + 1;
+        }
+        seen.set(value, right);
+        best = Math.max(best, right - left + 1);
+    }
+
+    const stack = [];
+    for (const item of data) {
+        while (stack.length && stack[stack.length - 1] > item) {
+            stack.pop();
+        }
+        stack.push(item);
+    }
+
+    const memo = new Map();
+    function helper(i, j) {
+        const key = i + ',' + j;
+        if (memo.has(key)) return memo.get(key);
+        if (i >= j) return 0;
+        let bestVal = Infinity;
+        for (let k = i; k < j; k++) {
+            bestVal = Math.min(bestVal, helper(i, k) + helper(k + 1, j));
+        }
+        memo.set(key, bestVal);
+        return bestVal;
+    }
+
+    return best;
+}
+`,
+    java: `import java.util.*;
+
+class Solution {
+    public int solve(int[] data) {
+        Map<Integer, Integer> seen = new HashMap<>();
+        int left = 0;
+        int best = 0;
+
+        for (int right = 0; right < data.length; right++) {
+            int value = data[right];
+            if (seen.containsKey(value) && seen.get(value) >= left) {
+                left = seen.get(value) + 1;
+            }
+            seen.put(value, right);
+            best = Math.max(best, right - left + 1);
+        }
+
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int item : data) {
+            while (!stack.isEmpty() && stack.peek() > item) {
+                stack.pop();
+            }
+            stack.push(item);
+        }
+
+        int[][] memo = new int[data.length + 1][data.length + 1];
+        for (int[] row : memo) Arrays.fill(row, -1);
+
+        return best;
+    }
+}
+`
+};
+
 function diffColors(d: string) {
     if (d === 'easy') return { bg: BLUE_BG, color: BLUE };
     if (d === 'hard') return { bg: ORANGE_BG, color: ORANGE };
@@ -102,17 +214,16 @@ export default function DuelPage() {
     const [timerActive, setTimerActive] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [limitReached, setLimitReached] = useState(false);
-    const [revealLimitReached, setRevealLimitReached] = useState(false);
     const [hasHadTrial, setHasHadTrial] = useState(false);
     const [claudeDots, setClaudeDots] = useState(1);
-    const [isPractice, setIsPractice] = useState(false);
-    const [revealConfirming, setRevealConfirming] = useState(false);
-    const [revealing, setRevealing] = useState(false);
-    const [revealComplete, setRevealComplete] = useState(false);
-    const [revealedCode, setRevealedCode] = useState('');
-    const [revealError, setRevealError] = useState('');
+    const [claudeChars, setClaudeChars] = useState(0);
+    const [claudeSolving, setClaudeSolving] = useState(false);
+    const [claudeDone, setClaudeDone] = useState(false);
+    const [claudeElapsed, setClaudeElapsed] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const startTimeRef = useRef<number>(0);
+    const claudeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const claudeStartRef = useRef<number>(0);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -164,6 +275,61 @@ export default function DuelPage() {
         return () => clearInterval(dotTimer);
     }, [submitting]);
 
+    useEffect(() => {
+        return () => {
+            if (claudeTimerRef.current) clearInterval(claudeTimerRef.current);
+        };
+    }, []);
+
+    // Kicks off Claude solving the same problem live, in sync with the user's own
+    // timer. Only ever receives how many characters landed per chunk — never the
+    // actual text — so the pane can mirror Claude's real pace without leaking
+    // the solution before the user submits their own.
+    const startLiveSolve = async (lang: string) => {
+        setClaudeSolving(true);
+        claudeStartRef.current = Date.now();
+        claudeTimerRef.current = setInterval(() => {
+            setClaudeElapsed(Math.floor((Date.now() - claudeStartRef.current) / 1000));
+        }, 1000);
+
+        const token = localStorage.getItem('token');
+
+        try {
+            const res = await fetch('/api/duels/live-solve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ problemId: id, language: lang })
+            });
+
+            if (!res.ok || !res.body) return;
+
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+                for (const line of lines) {
+                    const n = parseInt(line, 10);
+                    if (!Number.isNaN(n)) setClaudeChars(c => c + n);
+                }
+            }
+        } catch {
+            // Decorative only — submission still works via the server-side fallback.
+        } finally {
+            if (claudeTimerRef.current) clearInterval(claudeTimerRef.current);
+            setClaudeSolving(false);
+            setClaudeDone(true);
+        }
+    };
+
     // Start timer when user first types
     const handleCodeChange = (value: string | undefined) => {
         setCode(value || '');
@@ -173,6 +339,7 @@ export default function DuelPage() {
             timerRef.current = setInterval(() => {
                 setTimer(Math.floor((Date.now() - startTimeRef.current) / 1000));
             }, 1000);
+            startLiveSolve(language);
         }
     };
 
@@ -184,55 +351,6 @@ export default function DuelPage() {
         }
     };
 
-    const handleReveal = async () => {
-        setRevealConfirming(false);
-        setRevealing(true);
-        setRevealError('');
-        setRevealedCode('');
-
-        const token = localStorage.getItem('token');
-
-        try {
-            const res = await fetch('/api/duels/reveal', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({ problemId: id, language })
-            });
-
-            if (!res.ok || !res.body) {
-                const data = await res.json().catch(() => ({}));
-                if (data.revealLimitReached) {
-                    setRevealLimitReached(true);
-                } else {
-                    setRevealError(data.error || 'Failed to reveal Claude\'s approach. Please try again.');
-                }
-                return;
-            }
-
-            // Reaching here means we're actually about to show Claude's solution —
-            // this is the point of no return for this duel's competitive integrity.
-            setIsPractice(true);
-
-            const reader = res.body.getReader();
-            const decoder = new TextDecoder();
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                setRevealedCode(prev => prev + decoder.decode(value, { stream: true }));
-            }
-
-            setRevealComplete(true);
-        } catch {
-            setRevealError('Connection failed. Please try again.');
-        } finally {
-            setRevealing(false);
-        }
-    };
-
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
@@ -241,7 +359,6 @@ export default function DuelPage() {
 
     const handleSubmit = async () => {
         if (!code.trim()) { setError('Please write your solution first'); return; }
-        if (isPractice && !revealComplete) { setError('Waiting for Claude\'s approach to finish revealing...'); return; }
 
         // Stop timer
         if (timerRef.current) clearInterval(timerRef.current);
@@ -263,8 +380,7 @@ export default function DuelPage() {
                     problemId: id,
                     language,
                     userCode: code,
-                    userTime,
-                    isPractice
+                    userTime
                 })
             });
 
@@ -305,6 +421,8 @@ export default function DuelPage() {
     if (!problem) return null;
 
     const diffBadge = diffColors(problem.difficulty);
+    const claudePlaceholder = CLAUDE_PLACEHOLDER[language] || CLAUDE_PLACEHOLDER.python;
+    const claudeDisplayCode = claudePlaceholder.slice(0, claudeChars);
 
     return (
         <div className={spaceGrotesk.className} style={{
@@ -315,9 +433,6 @@ export default function DuelPage() {
             flexDirection: 'column',
             boxSizing: 'border-box'
         }}>
-            <style>{`
-                @keyframes revealBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-            `}</style>
             <nav style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -391,14 +506,6 @@ export default function DuelPage() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                    {isPractice && (
-                        <span className={pressStart2P.className} style={{
-                            fontSize: 8, padding: '7px 11px', borderRadius: 4,
-                            background: ORANGE_BG, color: ORANGE
-                        }}>
-                            🔍 PRACTICE
-                        </span>
-                    )}
                     <div className={pressStart2P.className} style={{
                         fontSize: 15, color: timerActive ? BLUE : 'oklch(65% 0.02 260)',
                         background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)',
@@ -408,22 +515,22 @@ export default function DuelPage() {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        disabled={submitting || (isPractice && !revealComplete)}
+                        disabled={submitting}
                         className={spaceGrotesk.className}
                         style={{
-                            background: submitting || (isPractice && !revealComplete) ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
+                            background: submitting ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
                             color: 'oklch(16% 0.02 260)', border: 'none',
                             padding: '10px 20px', borderRadius: 6, fontWeight: 700, fontSize: 14,
-                            cursor: submitting || (isPractice && !revealComplete) ? 'not-allowed' : 'pointer'
+                            cursor: submitting ? 'not-allowed' : 'pointer'
                         }}
                     >
-                        {submitting ? (isPractice ? 'Reviewing...' : 'Dueling Claude...') : isPractice ? 'Submit Practice ▸' : 'Submit ▸'}
+                        {submitting ? 'Dueling Claude...' : 'Submit ▸'}
                     </button>
                 </div>
             </nav>
 
             <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-                <div style={{ width: '42%', overflowY: 'auto', padding: '28px 32px', borderRight: '1px solid oklch(28% 0.02 260)', boxSizing: 'border-box' }}>
+                <div style={{ width: '28%', overflowY: 'auto', padding: '28px 28px', borderRight: '1px solid oklch(28% 0.02 260)', boxSizing: 'border-box' }}>
                     <h1 style={{ fontSize: 22, margin: '0 0 16px', fontWeight: 700 }}>{problem.title}</h1>
                     <p style={{ fontSize: 15, lineHeight: 1.7, color: 'oklch(82% 0.02 260)', margin: '0 0 24px', whiteSpace: 'pre-wrap' }}>
                         {problem.description}
@@ -476,67 +583,6 @@ export default function DuelPage() {
                         </div>
                     )}
 
-                    {!isPractice && !revealConfirming && (
-                        <button
-                            onClick={() => setRevealConfirming(true)}
-                            className={spaceGrotesk.className}
-                            style={{
-                                display: 'block', width: '100%', padding: '10px 12px', borderRadius: 8,
-                                border: `1px solid oklch(75% 0.15 55 / 0.35)`, background: ORANGE_BG, color: ORANGE,
-                                fontSize: 13, fontWeight: 600, cursor: 'pointer', marginBottom: 20, textAlign: 'center'
-                            }}
-                        >
-                            🔍 Stuck? Reveal Claude's Approach
-                        </button>
-                    )}
-
-                    {revealConfirming && (
-                        <div style={{
-                            background: ORANGE_BG, border: `1px solid oklch(75% 0.15 55 / 0.35)`,
-                            borderRadius: 10, padding: 16, marginBottom: 20
-                        }}>
-                            <p style={{ fontSize: 13, color: 'oklch(90% 0.02 260)', lineHeight: 1.6, margin: '0 0 12px' }}>
-                                Watching Claude solve this live turns the duel into a <strong>Practice Duel</strong> — no ELO change, win, or loss. This can't be undone.
-                            </p>
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                <button
-                                    onClick={handleReveal}
-                                    className={spaceGrotesk.className}
-                                    style={{ flex: 1, padding: '8px', borderRadius: 6, border: 'none', background: ORANGE, color: 'oklch(16% 0.02 260)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
-                                >
-                                    Yes, reveal
-                                </button>
-                                <button
-                                    onClick={() => setRevealConfirming(false)}
-                                    className={spaceGrotesk.className}
-                                    style={{ flex: 1, padding: '8px', borderRadius: 6, border: '1px solid oklch(45% 0.02 260)', background: 'transparent', color: 'oklch(85% 0.02 260)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {revealError && (
-                        <p style={{ color: ORANGE, fontSize: 13, marginBottom: 20 }}>{revealError}</p>
-                    )}
-
-                    {(revealing || revealComplete) && (
-                        <div style={{ marginBottom: 20 }}>
-                            <div className={jetbrainsMono.className} style={{ fontSize: 12, color: ORANGE, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                🔍 Claude's Approach {revealing && '(live)'}
-                            </div>
-                            <pre className={jetbrainsMono.className} style={{
-                                margin: 0, background: 'oklch(21% 0.02 260)', border: `1px solid oklch(75% 0.15 55 / 0.35)`,
-                                borderRadius: 8, padding: 16, fontSize: 13, lineHeight: 1.6, color: 'oklch(88% 0.02 260)',
-                                whiteSpace: 'pre-wrap', maxHeight: 320, overflowY: 'auto'
-                            }}>
-                                {revealedCode}
-                                {revealing && <span style={{ animation: 'revealBlink 1s step-end infinite' }}>▍</span>}
-                            </pre>
-                        </div>
-                    )}
-
                     {submitting && (
                         <div style={{
                             background: 'oklch(24% 0.03 55 / 0.3)', border: '1px solid oklch(75% 0.15 55 / 0.35)',
@@ -544,13 +590,13 @@ export default function DuelPage() {
                         }}>
                             <span style={{ fontSize: 18 }}>🤖</span>
                             <div style={{ fontSize: 13.5, color: 'oklch(85% 0.02 260)' }}>
-                                {isPractice ? 'Claude is reviewing your code' : 'Claude is coding'}<span className={jetbrainsMono.className}>{'.'.repeat(claudeDots)}</span>
+                                Claude is coding<span className={jetbrainsMono.className}>{'.'.repeat(claudeDots)}</span>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid oklch(28% 0.02 260)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0 }}>
                         <div style={{ display: 'flex', gap: 8 }}>
                             {LANGUAGES.map(lang => (
@@ -610,15 +656,45 @@ export default function DuelPage() {
                             <UpgradeBanner hasHadTrial={hasHadTrial} onClose={() => setLimitReached(false)} />
                         </div>
                     )}
+                </div>
 
-                    {revealLimitReached && (
-                        <div style={{
-                            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24
-                        }}>
-                            <UpgradeBanner hasHadTrial={hasHadTrial} reason="practiceLimit" onClose={() => setRevealLimitReached(false)} />
+                <div style={{ width: '28%', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 15 }}>🤖</span>
+                            <span className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(80% 0.02 260)', fontWeight: 600 }}>Claude</span>
                         </div>
-                    )}
+                        <span className={jetbrainsMono.className} style={{
+                            fontSize: 11.5,
+                            color: claudeDone ? BLUE : claudeSolving ? ORANGE : 'oklch(50% 0.02 260)'
+                        }}>
+                            {claudeDone ? `Finished · ${formatTime(claudeElapsed)}` : claudeSolving ? `Coding · ${formatTime(claudeElapsed)}` : 'Waiting for you to start'}
+                        </span>
+                    </div>
+
+                    <div style={{ flex: 1, minHeight: 0 }}>
+                        <MonacoEditor
+                            height="100%"
+                            language={language === 'cpp' ? 'cpp' : language}
+                            value={claudeDisplayCode}
+                            theme="codeduel-dark"
+                            beforeMount={defineMonacoTheme}
+                            options={{
+                                readOnly: true,
+                                domReadOnly: true,
+                                fontSize: 14,
+                                minimap: { enabled: false },
+                                scrollBeyondLastLine: false,
+                                padding: { top: 16, bottom: 16 },
+                                lineNumbers: 'on',
+                                renderLineHighlight: 'none',
+                                cursorBlinking: 'phase',
+                                smoothScrolling: true,
+                                fontLigatures: true,
+                                fontFamily: 'JetBrains Mono, Fira Code, monospace'
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

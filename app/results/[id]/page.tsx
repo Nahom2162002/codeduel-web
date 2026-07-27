@@ -18,7 +18,7 @@ const NEUTRAL_BG = 'oklch(40% 0.02 260 / 0.4)';
 const NEUTRAL = 'oklch(85% 0.02 260)';
 
 interface DuelResult {
-    result: 'win' | 'loss' | 'draw' | 'practice';
+    result: 'win' | 'loss' | 'draw';
     userScore: number;
     aiScore: number;
     userTestsPassed: number;
@@ -51,8 +51,7 @@ interface Me {
 const RESULT_CONFIG = {
     win: { emoji: '🏆', label: 'You Won!', color: BLUE, bg: BLUE_BG, border: BLUE_BORDER },
     loss: { emoji: '🤖', label: 'Claude Won', color: ORANGE, bg: ORANGE_BG, border: 'oklch(75% 0.15 55 / 0.5)' },
-    draw: { emoji: '🤝', label: "It's a Draw!", color: NEUTRAL, bg: NEUTRAL_BG, border: 'oklch(50% 0.02 260 / 0.5)' },
-    practice: { emoji: '🔍', label: 'Practice Session', color: NEUTRAL, bg: NEUTRAL_BG, border: 'oklch(50% 0.02 260 / 0.5)' }
+    draw: { emoji: '🤝', label: "It's a Draw!", color: NEUTRAL, bg: NEUTRAL_BG, border: 'oklch(50% 0.02 260 / 0.5)' }
 };
 
 function DuelIcon({ size = 22 }: { size?: number }) {
@@ -158,20 +157,14 @@ export default function ResultsPage() {
                     <p style={{ color: 'oklch(65% 0.02 260)', fontSize: 15, margin: '0 0 16px' }}>
                         {duel.problemId?.title} — <span style={{ textTransform: 'capitalize' }}>{duel.problemId?.difficulty}</span>
                     </p>
-                    {duel.result === 'practice' ? (
-                        <p className={jetbrainsMono.className} style={{ color: 'oklch(55% 0.02 260)', fontSize: 13, margin: 0 }}>
-                            No ELO change — Claude's approach was revealed
-                        </p>
-                    ) : (
-                        <div className={jetbrainsMono.className} style={{ display: 'flex', gap: 8, justifyContent: 'center', alignItems: 'center' }}>
-                            <span style={{ fontSize: 13, color: duel.eloChange >= 0 ? BLUE : ORANGE, fontWeight: 700 }}>
-                                {duel.eloChange >= 0 ? '+' : ''}{duel.eloChange} ELO
-                            </span>
-                            <span style={{ color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
-                                → {duel.newElo} ELO
-                            </span>
-                        </div>
-                    )}
+                    <div className={jetbrainsMono.className} style={{ display: 'flex', gap: 8, justifyContent: 'center', alignItems: 'center' }}>
+                        <span style={{ fontSize: 13, color: duel.eloChange >= 0 ? BLUE : ORANGE, fontWeight: 700 }}>
+                            {duel.eloChange >= 0 ? '+' : ''}{duel.eloChange} ELO
+                        </span>
+                        <span style={{ color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
+                            → {duel.newElo} ELO
+                        </span>
+                    </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 16, marginBottom: 32, alignItems: 'center' }}>
