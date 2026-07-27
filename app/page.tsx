@@ -330,7 +330,6 @@ export default function LandingPage() {
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 14, padding: 36, position: 'relative' }}>
                         <div style={{ position: 'absolute', top: 4, left: 4, width: 14, height: 14, borderTop: '2px solid oklch(45% 0.02 260)', borderLeft: '2px solid oklch(45% 0.02 260)' }} />
                         <div style={{ position: 'absolute', bottom: 4, right: 4, width: 14, height: 14, borderBottom: '2px solid oklch(45% 0.02 260)', borderRight: '2px solid oklch(45% 0.02 260)' }} />
-                        <div className={pressStart2P.className} style={{ fontSize: 9, color: 'oklch(55% 0.02 260)', marginBottom: 14 }}>PLAYER 1</div>
                         <h3 style={{ fontSize: 20, margin: '0 0 6px' }}>Free</h3>
                         <div style={{ fontSize: 42, fontWeight: 700, marginBottom: 4 }}>$0</div>
                         <div style={{ fontSize: 14, color: 'oklch(60% 0.02 260)', marginBottom: 28 }}>Forever free</div>
@@ -353,7 +352,6 @@ export default function LandingPage() {
                         }}>
                             MOST POPULAR
                         </div>
-                        <div className={pressStart2P.className} style={{ fontSize: 9, color: BLUE, marginBottom: 14 }}>PLAYER 2</div>
                         <h3 style={{ fontSize: 20, margin: '0 0 6px' }}>Pro</h3>
                         <div style={{ fontSize: 42, fontWeight: 700, marginBottom: 4 }}>
                             $6<span style={{ fontSize: 16, color: 'oklch(65% 0.02 260)', fontWeight: 500 }}>/month</span>
