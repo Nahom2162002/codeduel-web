@@ -68,6 +68,7 @@ export default function LandingPage() {
     const [scoreClaude, setScoreClaude] = useState(0);
     const [showWinner, setShowWinner] = useState(false);
     const [currentLevel, setCurrentLevel] = useState(0);
+    const [billing, setBilling] = useState<'month' | 'year'>('month');
 
     // Blinking cursor
     useEffect(() => {
@@ -334,10 +335,47 @@ export default function LandingPage() {
             </section>
 
             <section id="pricing" style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 48px 100px' }}>
-                <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                <div style={{ textAlign: 'center', marginBottom: 32 }}>
                     <h2 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>Simple pricing</h2>
                     <p style={{ fontSize: 18, color: 'oklch(70% 0.02 260)', margin: 0 }}>Start free. Upgrade when you want the full experience.</p>
                 </div>
+
+                <div className={spaceGrotesk.className} style={{
+                    display: 'flex', gap: 4, background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)',
+                    borderRadius: 10, padding: 4, width: 'fit-content', margin: '0 auto 40px'
+                }}>
+                    <button
+                        onClick={() => setBilling('month')}
+                        style={{
+                            padding: '9px 18px', borderRadius: 7, border: 'none', cursor: 'pointer',
+                            background: billing === 'month' ? BLUE : 'transparent',
+                            color: billing === 'month' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                            fontSize: 14, fontWeight: 600
+                        }}
+                    >
+                        Monthly
+                    </button>
+                    <button
+                        onClick={() => setBilling('year')}
+                        style={{
+                            padding: '9px 18px', borderRadius: 7, border: 'none', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: 8,
+                            background: billing === 'year' ? BLUE : 'transparent',
+                            color: billing === 'year' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                            fontSize: 14, fontWeight: 600
+                        }}
+                    >
+                        Annual
+                        <span className={jetbrainsMono.className} style={{
+                            fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 4,
+                            background: billing === 'year' ? 'oklch(16% 0.02 260 / 0.2)' : BLUE_BG,
+                            color: billing === 'year' ? 'oklch(16% 0.02 260)' : BLUE
+                        }}>
+                            SAVE $13
+                        </span>
+                    </button>
+                </div>
+
                 <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, alignItems: 'start' }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 14, padding: 36, position: 'relative' }}>
                         <div style={{ position: 'absolute', top: 4, left: 4, width: 14, height: 14, borderTop: '2px solid oklch(45% 0.02 260)', borderLeft: '2px solid oklch(45% 0.02 260)' }} />
@@ -363,8 +401,16 @@ export default function LandingPage() {
                         </div>
                         <h3 style={{ fontSize: 20, margin: '0 0 6px' }}>Pro</h3>
                         <div style={{ fontSize: 42, fontWeight: 700, marginBottom: 4 }}>
-                            $6<span style={{ fontSize: 16, color: 'oklch(65% 0.02 260)', fontWeight: 500 }}>/month</span>
+                            {billing === 'year' ? '$59' : '$6'}
+                            <span style={{ fontSize: 16, color: 'oklch(65% 0.02 260)', fontWeight: 500 }}>
+                                {billing === 'year' ? '/year' : '/month'}
+                            </span>
                         </div>
+                        {billing === 'year' && (
+                            <div className={jetbrainsMono.className} style={{ fontSize: 13, color: BLUE, marginBottom: 6 }}>
+                                That's $4.92/mo — save $13/year vs. paying monthly
+                            </div>
+                        )}
                         <div style={{ fontSize: 14, color: 'oklch(70% 0.05 220)', marginBottom: 28 }}>7-day free trial — no credit card required</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
                             {PRO_FEATURES.map((f, i) => (
