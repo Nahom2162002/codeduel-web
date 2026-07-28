@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Already on Pro plan' }, { status: 400, headers: corsHeaders });
         }
 
-        // Create or verify Stripe customer
         let customerId = user.stripeCustomerId;
         if (customerId) {
             try {
@@ -43,14 +42,19 @@ export async function POST(req: NextRequest) {
             await User.findByIdAndUpdate(user._id, { stripeCustomerId: customer.id });
         }
 
-        const { hasHadTrial } = await req.json().catch(() => ({ hasHadTrial: false }));
+        const { hasHadTrial, interval } = await req.json().catch(() => ({
+            hasHadTrial: false,
+            interval: 'month'
+        }));
+
+        // Pick the right price based on interval
+        const priceId = interval === 'year'
+            ? process.env.STRIPE_ANNUAL_PRICE_ID!
+            : process.env.STRIPE_PRICE_ID!;
 
         const sessionConfig: any = {
             customer: customerId,
-            line_items: [{
-                price: process.env.STRIPE_PRICE_ID!,
-                quantity: 1
-            }],
+            line_items: [{ price: priceId, quantity: 1 }],
             mode: 'subscription',
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/problems`,
