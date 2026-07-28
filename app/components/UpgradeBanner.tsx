@@ -36,7 +36,7 @@ interface UpgradeBannerProps {
 export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = 'limit' }: UpgradeBannerProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
+    const [interval, setBillingInterval] = useState<'month' | 'year'>('month');
 
     // If the user navigates back from Stripe via the browser's back button, the
     // page can be restored from bfcache with `loading` frozen mid-request.
@@ -60,7 +60,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                     'Content-Type': 'application/json',
                     authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ hasHadTrial, billingPeriod })
+                body: JSON.stringify({ hasHadTrial, interval })
             });
             const data = await res.json();
             if (data.url) {
@@ -71,7 +71,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             }
             posthog.capture('upgrade_clicked', {
                 hasHadTrial,
-                billingPeriod,
+                interval,
                 source: reason
             });
         } catch {
@@ -146,31 +146,31 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                 borderRadius: 8, padding: 4, margin: '16px 0 4px'
             }}>
                 <button
-                    onClick={() => setBillingPeriod('monthly')}
+                    onClick={() => setBillingInterval('month')}
                     style={{
                         flex: 1, padding: '8px', borderRadius: 6, border: 'none', cursor: 'pointer',
-                        background: billingPeriod === 'monthly' ? BLUE : 'transparent',
-                        color: billingPeriod === 'monthly' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                        background: interval === 'month' ? BLUE : 'transparent',
+                        color: interval === 'month' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
                         fontSize: 13, fontWeight: 600
                     }}
                 >
                     Monthly
                 </button>
                 <button
-                    onClick={() => setBillingPeriod('annual')}
+                    onClick={() => setBillingInterval('year')}
                     style={{
                         flex: 1, padding: '8px', borderRadius: 6, border: 'none', cursor: 'pointer',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                        background: billingPeriod === 'annual' ? BLUE : 'transparent',
-                        color: billingPeriod === 'annual' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                        background: interval === 'year' ? BLUE : 'transparent',
+                        color: interval === 'year' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
                         fontSize: 13, fontWeight: 600
                     }}
                 >
                     Annual
                     <span className={jetbrainsMono.className} style={{
                         fontSize: 9.5, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
-                        background: billingPeriod === 'annual' ? 'oklch(16% 0.02 260 / 0.2)' : BLUE_BG,
-                        color: billingPeriod === 'annual' ? 'oklch(16% 0.02 260)' : BLUE
+                        background: interval === 'year' ? 'oklch(16% 0.02 260 / 0.2)' : BLUE_BG,
+                        color: interval === 'year' ? 'oklch(16% 0.02 260)' : BLUE
                     }}>
                         SAVE $13
                     </span>
@@ -178,12 +178,12 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             </div>
 
             <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 4px' }}>
-                {billingPeriod === 'annual' ? '$59' : '$6'}
+                {interval === 'year' ? '$59' : '$6'}
                 <span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>
-                    {billingPeriod === 'annual' ? '/year' : '/month'}
+                    {interval === 'year' ? '/year' : '/month'}
                 </span>
             </p>
-            {billingPeriod === 'annual' && (
+            {interval === 'year' && (
                 <p className={jetbrainsMono.className} style={{ fontSize: 12.5, color: BLUE, margin: '0 0 4px' }}>
                     That's $4.92/mo — save $13/year vs. paying monthly
                 </p>
@@ -237,7 +237,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                 {loading
                     ? 'Loading...'
                     : hasHadTrial
-                        ? `Upgrade to Pro — ${billingPeriod === 'annual' ? '$59/year' : '$6/month'}`
+                        ? `Upgrade to Pro — ${interval === 'year' ? '$59/year' : '$6/month'}`
                         : 'Start 7-Day Free Trial'
                 }
             </button>
