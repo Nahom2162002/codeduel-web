@@ -11,9 +11,9 @@ const BLUE = 'oklch(75% 0.15 220)';
 const ORANGE = 'oklch(75% 0.15 55)';
 const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
-// Pixels of the demo video's top edge to crop off (video is 1920x1080) — hides
-// the purple recording-toolbar line. Adjust if it's too much or not enough.
-const VIDEO_TOP_CROP_PX = 40;
+// Pixels of the demo video's top edge to crop off (video is 1920x1080), via
+// object-fit: cover + object-position: bottom. Adjust to taste.
+const VIDEO_TOP_CROP_PX = 16;
 
 const YOU_CODE = `def two_sum(nums, target):
     seen = {}
@@ -264,11 +264,10 @@ export default function LandingPage() {
                     <h2 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>See it in action</h2>
                     <p style={{ fontSize: 17, color: 'oklch(70% 0.02 260)', margin: 0 }}>Watch a full duel against Claude, start to finish.</p>
                 </div>
-                {/* Video is 1920x1080. Container is sized a bit shorter than the true
-                    16:9 ratio and the video is shifted up by the same amount, so the
-                    top strip (the purple recording-toolbar line) gets clipped by
-                    overflow:hidden instead of shrinking the whole frame. VIDEO_TOP_CROP_PX
-                    is a guess — adjust it up/down if it doesn't fully cover the line. */}
+                {/* Video is 1920x1080. Container is locked to a slightly shorter ratio
+                    and the video uses object-fit: cover + object-position: bottom, so
+                    it always fills the box completely (no gap) while cropping a sliver
+                    off the top. VIDEO_TOP_CROP_PX controls how much. */}
                 <div style={{
                     position: 'relative', borderRadius: 14, overflow: 'hidden',
                     border: `1px solid oklch(75% 0.15 220 / 0.35)`,
@@ -277,8 +276,8 @@ export default function LandingPage() {
                     <div style={{ position: 'absolute', top: 8, left: 8, width: 16, height: 16, borderTop: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, zIndex: 2, pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: 8, right: 8, width: 16, height: 16, borderBottom: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, zIndex: 2, pointerEvents: 'none' }} />
                     <video controls preload="metadata" style={{
-                        display: 'block', width: '100%', height: 'auto',
-                        marginTop: `-${(VIDEO_TOP_CROP_PX / 1920 * 100).toFixed(3)}%`,
+                        display: 'block', width: '100%', height: '100%',
+                        objectFit: 'cover', objectPosition: 'center bottom',
                         background: '#000'
                     }}>
                         <source src="/CodeDuelDemo.mp4" type="video/mp4" />
