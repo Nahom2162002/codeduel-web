@@ -13,7 +13,7 @@ const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
 // Pixels of the demo video's top edge to crop off (video is 1920x1080), via
 // object-fit: cover + object-position: bottom. Adjust to taste.
-const VIDEO_TOP_CROP_PX = 16;
+const VIDEO_TOP_CROP_PX = 60;
 
 const YOU_CODE = `def two_sum(nums, target):
     seen = {}
