@@ -43,12 +43,14 @@ export async function POST(req: NextRequest) {
             await User.findByIdAndUpdate(user._id, { stripeCustomerId: customer.id });
         }
 
-        const { hasHadTrial } = await req.json().catch(() => ({ hasHadTrial: false }));
+        const { hasHadTrial, billingPeriod } = await req.json().catch(() => ({ hasHadTrial: false, billingPeriod: 'monthly' }));
+
+        const priceId = billingPeriod === 'annual' ? process.env.STRIPE_ANNUAL_PRICE_ID! : process.env.STRIPE_PRICE_ID!;
 
         const sessionConfig: any = {
             customer: customerId,
             line_items: [{
-                price: process.env.STRIPE_PRICE_ID!,
+                price: priceId,
                 quantity: 1
             }],
             mode: 'subscription',

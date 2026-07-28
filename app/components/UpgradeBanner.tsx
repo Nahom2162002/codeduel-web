@@ -9,6 +9,7 @@ const pressStart2P = Press_Start_2P({ subsets: ['latin'], weight: '400' });
 
 const BLUE = 'oklch(75% 0.15 220)';
 const ORANGE = 'oklch(75% 0.15 55)';
+const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 
 type Reason = 'limit' | 'problem' | 'dashboard' | 'general';
 
@@ -35,6 +36,7 @@ interface UpgradeBannerProps {
 export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = 'limit' }: UpgradeBannerProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
 
     // If the user navigates back from Stripe via the browser's back button, the
     // page can be restored from bfcache with `loading` frozen mid-request.
@@ -58,7 +60,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                     'Content-Type': 'application/json',
                     authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ hasHadTrial })
+                body: JSON.stringify({ hasHadTrial, billingPeriod })
             });
             const data = await res.json();
             if (data.url) {
@@ -69,6 +71,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             }
             posthog.capture('upgrade_clicked', {
                 hasHadTrial,
+                billingPeriod,
                 source: reason
             });
         } catch {
@@ -137,14 +140,59 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
             <p style={{ color: 'oklch(70% 0.02 260)', fontSize: 14, lineHeight: 1.7, margin: '0 0 4px' }}>
                 {SUBTEXT[reason]}
             </p>
-            <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 24px' }}>
-                $6<span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>/month</span>
-                {!hasHadTrial && (
-                    <span className={jetbrainsMono.className} style={{ display: 'block', fontSize: 13, color: 'oklch(70% 0.05 220)', marginTop: 4 }}>
-                        7-day free trial — no credit card required
+
+            <div className={spaceGrotesk.className} style={{
+                display: 'flex', gap: 4, background: 'oklch(18% 0.02 260)', border: '1px solid oklch(32% 0.02 260)',
+                borderRadius: 8, padding: 4, margin: '16px 0 4px'
+            }}>
+                <button
+                    onClick={() => setBillingPeriod('monthly')}
+                    style={{
+                        flex: 1, padding: '8px', borderRadius: 6, border: 'none', cursor: 'pointer',
+                        background: billingPeriod === 'monthly' ? BLUE : 'transparent',
+                        color: billingPeriod === 'monthly' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                        fontSize: 13, fontWeight: 600
+                    }}
+                >
+                    Monthly
+                </button>
+                <button
+                    onClick={() => setBillingPeriod('annual')}
+                    style={{
+                        flex: 1, padding: '8px', borderRadius: 6, border: 'none', cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                        background: billingPeriod === 'annual' ? BLUE : 'transparent',
+                        color: billingPeriod === 'annual' ? 'oklch(16% 0.02 260)' : 'oklch(75% 0.02 260)',
+                        fontSize: 13, fontWeight: 600
+                    }}
+                >
+                    Annual
+                    <span className={jetbrainsMono.className} style={{
+                        fontSize: 9.5, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                        background: billingPeriod === 'annual' ? 'oklch(16% 0.02 260 / 0.2)' : BLUE_BG,
+                        color: billingPeriod === 'annual' ? 'oklch(16% 0.02 260)' : BLUE
+                    }}>
+                        SAVE $13
                     </span>
-                )}
+                </button>
+            </div>
+
+            <p style={{ fontSize: 32, fontWeight: 700, margin: '12px 0 4px' }}>
+                {billingPeriod === 'annual' ? '$59' : '$6'}
+                <span style={{ fontSize: 15, fontWeight: 400, color: 'oklch(65% 0.02 260)' }}>
+                    {billingPeriod === 'annual' ? '/year' : '/month'}
+                </span>
             </p>
+            {billingPeriod === 'annual' && (
+                <p className={jetbrainsMono.className} style={{ fontSize: 12.5, color: BLUE, margin: '0 0 4px' }}>
+                    That's $4.92/mo — save $13/year vs. paying monthly
+                </p>
+            )}
+            {!hasHadTrial && (
+                <p className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(70% 0.05 220)', margin: '4px 0 20px' }}>
+                    7-day free trial — no credit card required
+                </p>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24, textAlign: 'left' }}>
                 {[
@@ -189,7 +237,7 @@ export default function UpgradeBanner({ hasHadTrial = false, onClose, reason = '
                 {loading
                     ? 'Loading...'
                     : hasHadTrial
-                        ? 'Upgrade to Pro — $6/month'
+                        ? `Upgrade to Pro — ${billingPeriod === 'annual' ? '$59/year' : '$6/month'}`
                         : 'Start 7-Day Free Trial'
                 }
             </button>
