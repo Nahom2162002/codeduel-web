@@ -12,8 +12,9 @@ const ORANGE = 'oklch(75% 0.15 55)';
 const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
 // Pixels of the demo video's top edge to crop off (video is 1920x1080), via
-// object-fit: cover + object-position: bottom. Adjust to taste.
-const VIDEO_TOP_CROP_PX = 60;
+// object-fit: cover + object-position: bottom. There's a solid black
+// recording-chrome bar measured at ~178px — this crops just past it.
+const VIDEO_TOP_CROP_PX = 182;
 
 const YOU_CODE = `def two_sum(nums, target):
     seen = {}
