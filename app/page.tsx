@@ -256,6 +256,24 @@ export default function LandingPage() {
                 )}
             </section>
 
+            <section style={{ maxWidth: 900, margin: '0 auto', padding: '20px 48px 90px' }}>
+                <div style={{ textAlign: 'center', marginBottom: 32 }}>
+                    <h2 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>See it in action</h2>
+                    <p style={{ fontSize: 17, color: 'oklch(70% 0.02 260)', margin: 0 }}>Watch a full duel against Claude, start to finish.</p>
+                </div>
+                <div style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', border: `1px solid oklch(75% 0.15 220 / 0.35)` }}>
+                    <div style={{ position: 'absolute', top: 8, left: 8, width: 16, height: 16, borderTop: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, zIndex: 2, pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', bottom: 8, right: 8, width: 16, height: 16, borderBottom: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, zIndex: 2, pointerEvents: 'none' }} />
+                    <video controls preload="metadata" style={{ display: 'block', width: '100%', height: 'auto', background: '#000' }}>
+                        <source src="/CodeDuelDemo.mp4" type="video/mp4" />
+                        Your browser doesn't support embedded video.
+                    </video>
+                </div>
+                <p className={jetbrainsMono.className} style={{ textAlign: 'center', fontSize: 13, color: 'oklch(55% 0.02 260)', marginTop: 16 }}>
+                    A real duel against Claude — same problem, same time, scored side by side on correctness, speed, and code quality.
+                </p>
+            </section>
+
             <section id="how-it-works" style={{ maxWidth: 880, margin: '0 auto', padding: '80px 48px' }}>
                 <div style={{ textAlign: 'center', marginBottom: 40 }}>
                     <h2 className={pressStart2P.className} style={{ fontSize: 22, letterSpacing: '0.02em', margin: '0 0 16px', color: BLUE }}>
