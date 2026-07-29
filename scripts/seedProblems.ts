@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Problem from '../models/Problem';
+
+dotenv.config({ path: '.env.local' });
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
