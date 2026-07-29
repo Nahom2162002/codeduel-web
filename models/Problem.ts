@@ -23,7 +23,7 @@ const problemSchema = new Schema({
     title:        { type: String, required: true },
     description:  { type: String, required: true },
     difficulty:   { type: String, enum: ['easy', 'medium', 'hard'], required: true },
-    category:     { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design'], required: true },
+    category:     { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design', 'binary-search', 'stacks'], required: true },
     functionName: { type: String, required: true },
     testCases:   [testCaseSchema],
     examples:    [exampleSchema],
