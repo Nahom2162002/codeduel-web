@@ -73,7 +73,12 @@ const CATEGORY_LABELS: Record<string, string> = {
     recursion: 'Recursion',
     geometry: 'Geometry',
     'divide-and-conquer': 'Divide and Conquer',
-    'game-theory': 'Game Theory'
+    'game-theory': 'Game Theory',
+    'linked-list': 'Linked List',
+    trie: 'Trie',
+    iterator: 'Iterator',
+    interactive: 'Interactive',
+    concurrency: 'Concurrency'
 };
 
 // Purely decorative scaffold text revealed character-by-character in sync with
