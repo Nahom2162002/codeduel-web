@@ -1184,6 +1184,285 @@ Valid operators are \`'+'\`, \`'-'\`, \`'*'\`, and \`'/'\`. Division between two
     }
 }`
         }
+    },
+
+    // GREEDY
+    {
+        title: 'Best Time to Buy and Sell Stock',
+        description: `You are given an array \`prices\` where \`prices[i]\` is the price of a given stock on the \`ith\` day.
+
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return \`0\`.`,
+        difficulty: 'easy',
+        category: 'greedy',
+        isPremium: false,
+        functionName: 'max_profit',
+        examples: [
+            { input: 'prices = [7,1,5,3,6,4]', output: '5', explanation: 'Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5.' },
+            { input: 'prices = [7,6,4,3,1]', output: '0', explanation: 'Prices only go down, no transactions are done and the max profit is 0.' },
+        ],
+        constraints: ['1 <= prices.length <= 10^5', '0 <= prices[i] <= 10^4'],
+        testCases: [
+            { input: { prices: [7, 1, 5, 3, 6, 4] }, expectedOutput: 5 },
+            { input: { prices: [7, 6, 4, 3, 1] }, expectedOutput: 0 },
+            { input: { prices: [2, 4, 1] }, expectedOutput: 2 },
+            { input: { prices: [3, 2, 6, 5, 0, 3] }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def max_profit(prices: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function maxProfit(prices) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int maxProfit(int[] prices) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Jump Game',
+        description: `You are given an integer array \`nums\`. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+
+Return \`true\` if you can reach the last index, or \`false\` otherwise.`,
+        difficulty: 'medium',
+        category: 'greedy',
+        isPremium: false,
+        functionName: 'can_jump',
+        examples: [
+            { input: 'nums = [2,3,1,1,4]', output: 'true', explanation: 'Jump 1 step from index 0 to 1, then 3 steps to the last index.' },
+            { input: 'nums = [3,2,1,0,4]', output: 'false', explanation: 'You will always arrive at index 3 no matter what. Its maximum jump length is 0, so you can never reach the last index.' },
+        ],
+        constraints: ['1 <= nums.length <= 10^4', '0 <= nums[i] <= 10^5'],
+        testCases: [
+            { input: { nums: [2, 3, 1, 1, 4] }, expectedOutput: true },
+            { input: { nums: [3, 2, 1, 0, 4] }, expectedOutput: false },
+            { input: { nums: [0] }, expectedOutput: true },
+            { input: { nums: [2, 0, 0] }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_jump(nums: list[int]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canJump(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canJump(int[] nums) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Gas Station',
+        description: `There are \`n\` gas stations along a circular route, where the amount of gas at the \`ith\` station is \`gas[i]\`.
+
+You have a car with an unlimited gas tank and it costs \`cost[i]\` of gas to travel from the \`ith\` station to its next \`(i + 1)th\` station. You begin the journey with an empty tank at one of the gas stations.
+
+Given two integer arrays \`gas\` and \`cost\`, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return \`-1\`. If there exists a solution, it is guaranteed to be unique.`,
+        difficulty: 'medium',
+        category: 'greedy',
+        isPremium: true,
+        functionName: 'can_complete_circuit',
+        examples: [
+            { input: 'gas = [1,2,3,4,5], cost = [3,4,5,1,2]', output: '3', explanation: 'Starting at station 3, you can travel around the circuit once.' },
+            { input: 'gas = [2,3,4], cost = [3,4,3]', output: '-1', explanation: 'You cannot travel around the circuit once no matter where you start.' },
+        ],
+        constraints: ['n == gas.length == cost.length', '1 <= n <= 10^5', '0 <= gas[i], cost[i] <= 10^4'],
+        testCases: [
+            { input: { gas: [1, 2, 3, 4, 5], cost: [3, 4, 5, 1, 2] }, expectedOutput: 3 },
+            { input: { gas: [2, 3, 4], cost: [3, 4, 3] }, expectedOutput: -1 },
+            { input: { gas: [5, 1, 2, 3, 4], cost: [4, 4, 1, 5, 1] }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function canCompleteCircuit(gas, cost) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        // Write your solution here
+        return -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'Task Scheduler',
+        description: `You are given an array of CPU \`tasks\`, each labeled with a letter from A to Z, and a number \`n\`. Each CPU interval can be idle or allow completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least \`n\` intervals between two tasks with the same label.
+
+Return the minimum number of CPU intervals required to complete all tasks.`,
+        difficulty: 'hard',
+        category: 'greedy',
+        isPremium: true,
+        functionName: 'least_interval',
+        examples: [
+            { input: 'tasks = ["A","A","A","B","B","B"], n = 2', output: '8', explanation: 'A -> B -> idle -> A -> B -> idle -> A -> B' },
+            { input: 'tasks = ["A","C","A","B","D","B"], n = 1', output: '6', explanation: 'A -> B -> C -> A -> D -> B' },
+        ],
+        constraints: ['1 <= tasks.length <= 10^4', 'tasks[i] is an uppercase English letter.', '0 <= n <= 100'],
+        testCases: [
+            { input: { tasks: ['A', 'A', 'A', 'B', 'B', 'B'], n: 2 }, expectedOutput: 8 },
+            { input: { tasks: ['A', 'C', 'A', 'B', 'D', 'B'], n: 1 }, expectedOutput: 6 },
+            { input: { tasks: ['A', 'A', 'A', 'B', 'B', 'B'], n: 0 }, expectedOutput: 6 },
+            { input: { tasks: ['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'], n: 2 }, expectedOutput: 16, isHidden: true },
+        ],
+        starterCode: {
+            python: `def least_interval(tasks: list[str], n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function leastInterval(tasks, n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int leastInterval(String[] tasks, int n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // BIT MANIPULATION
+    {
+        title: 'Single Number',
+        description: `Given a non-empty array of integers \`nums\`, every element appears twice except for one. Find that single one.
+
+You must implement a solution with a linear runtime complexity and use only constant extra space.`,
+        difficulty: 'easy',
+        category: 'bit-manipulation',
+        isPremium: false,
+        functionName: 'single_number',
+        examples: [
+            { input: 'nums = [2,2,1]', output: '1', explanation: '' },
+            { input: 'nums = [4,1,2,1,2]', output: '4', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 3 * 10^4', '-3 * 10^4 <= nums[i] <= 3 * 10^4', 'Each element in the array appears twice except for one element which appears only once.'],
+        testCases: [
+            { input: { nums: [2, 2, 1] }, expectedOutput: 1 },
+            { input: { nums: [4, 1, 2, 1, 2] }, expectedOutput: 4 },
+            { input: { nums: [1] }, expectedOutput: 1 },
+            { input: { nums: [7, 3, 7] }, expectedOutput: 3, isHidden: true },
+        ],
+        starterCode: {
+            python: `def single_number(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function singleNumber(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int singleNumber(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Counting Bits',
+        description: `Given an integer \`n\`, return an array \`ans\` of length \`n + 1\` such that for each \`i\` (\`0 <= i <= n\`), \`ans[i]\` is the number of \`1\`'s in the binary representation of \`i\`.`,
+        difficulty: 'medium',
+        category: 'bit-manipulation',
+        isPremium: false,
+        functionName: 'count_bits',
+        examples: [
+            { input: 'n = 2', output: '[0,1,1]', explanation: '0 --> 0, 1 --> 1, 2 --> 10' },
+            { input: 'n = 5', output: '[0,1,1,2,1,2]', explanation: '' },
+        ],
+        constraints: ['0 <= n <= 10^5'],
+        testCases: [
+            { input: { n: 2 }, expectedOutput: [0, 1, 1] },
+            { input: { n: 5 }, expectedOutput: [0, 1, 1, 2, 1, 2] },
+            { input: { n: 0 }, expectedOutput: [0] },
+            { input: { n: 8 }, expectedOutput: [0, 1, 1, 2, 1, 2, 2, 3, 1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def count_bits(n: int) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function countBits(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] countBits(int n) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Reverse Bits',
+        description: `Reverse bits of a given 32-bit unsigned integer \`n\`.`,
+        difficulty: 'medium',
+        category: 'bit-manipulation',
+        isPremium: true,
+        functionName: 'reverse_bits',
+        examples: [
+            { input: 'n = 43261596 (00000010100101000001111010011100)', output: '964176192 (00111001011110000010100101000000)', explanation: '' },
+            { input: 'n = 4294967293 (11111111111111111111111111111101)', output: '3221225471 (10111111111111111111111111111111)', explanation: '' },
+        ],
+        constraints: ['0 <= n <= 2^32 - 1'],
+        testCases: [
+            { input: { n: 43261596 }, expectedOutput: 964176192 },
+            { input: { n: 4294967293 }, expectedOutput: 3221225471 },
+            { input: { n: 0 }, expectedOutput: 0 },
+            { input: { n: 1 }, expectedOutput: 2147483648, isHidden: true },
+        ],
+        starterCode: {
+            python: `def reverse_bits(n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function reverseBits(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public long reverseBits(long n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Sum of Two Integers',
+        description: `Given two integers \`a\` and \`b\`, return the sum of the two integers without using the operators \`+\` and \`-\`.`,
+        difficulty: 'hard',
+        category: 'bit-manipulation',
+        isPremium: true,
+        functionName: 'get_sum',
+        examples: [
+            { input: 'a = 1, b = 2', output: '3', explanation: '' },
+            { input: 'a = 2, b = 3', output: '5', explanation: '' },
+        ],
+        constraints: ['-1000 <= a, b <= 1000'],
+        testCases: [
+            { input: { a: 1, b: 2 }, expectedOutput: 3 },
+            { input: { a: 2, b: 3 }, expectedOutput: 5 },
+            { input: { a: -5, b: 7 }, expectedOutput: 2 },
+            { input: { a: -10, b: -20 }, expectedOutput: -30, isHidden: true },
+        ],
+        starterCode: {
+            python: `def get_sum(a: int, b: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function getSum(a, b) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int getSum(int a, int b) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
     }
 ];
 

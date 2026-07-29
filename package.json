@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seedProblems.ts",
-    "seed:add": "tsx scripts/addProblems.ts"
+    "seed:add": "tsx scripts/addProblems.ts",
+    "seed:dedupe": "tsx scripts/dedupeProblems.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.5",
