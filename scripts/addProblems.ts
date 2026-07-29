@@ -10,7 +10,7 @@ const MONGODB_URI = process.env.MONGODB_URI!;
 // Unlike seedProblems.ts (which wipes the whole collection and reassigns every
 // _id — breaking problemId references on any existing Duel documents), this
 // only adds the newer categories, upserting by title so it's safe to re-run.
-const NEW_CATEGORIES = ['binary-search', 'stacks', 'greedy', 'bit-manipulation'];
+const NEW_CATEGORIES = ['binary-search', 'stacks', 'greedy', 'bit-manipulation', 'hash-table', 'two-pointers', 'heap', 'sliding-window', 'matrix', 'sorting', 'union-find', 'topological-sort', 'simulation', 'counting', 'shortest-path', 'number-theory', 'bitmask', 'recursion', 'geometry', 'divide-and-conquer', 'game-theory'];
 
 async function addProblems() {
     await mongoose.connect(MONGODB_URI);

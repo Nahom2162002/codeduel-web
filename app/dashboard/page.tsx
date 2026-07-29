@@ -61,7 +61,24 @@ const CATEGORY_LABELS: Record<string, string> = {
     'binary-search': 'Binary Search',
     stacks: 'Stacks & Queues',
     greedy: 'Greedy',
-    'bit-manipulation': 'Bit Manipulation'
+    'bit-manipulation': 'Bit Manipulation',
+    'hash-table': 'Hash Table',
+    'two-pointers': 'Two Pointers',
+    heap: 'Heap (Priority Queue)',
+    'sliding-window': 'Sliding Window',
+    matrix: 'Matrix',
+    sorting: 'Sorting',
+    'union-find': 'Union-Find',
+    'topological-sort': 'Topological Sort',
+    simulation: 'Simulation',
+    counting: 'Counting',
+    'shortest-path': 'Shortest Path',
+    'number-theory': 'Number Theory',
+    bitmask: 'Bitmask',
+    recursion: 'Recursion',
+    geometry: 'Geometry',
+    'divide-and-conquer': 'Divide and Conquer',
+    'game-theory': 'Game Theory'
 };
 
 function DuelIcon({ size = 28 }: { size?: number }) {

@@ -1463,6 +1463,2359 @@ You must implement a solution with a linear runtime complexity and use only cons
     }
 }`
         }
+    },
+
+    // HASH TABLE
+    {
+        title: 'Contains Duplicate',
+        description: `Given an integer array \`nums\`, return \`true\` if any value appears at least twice in the array, and return \`false\` if every element is distinct.`,
+        difficulty: 'easy',
+        category: 'hash-table',
+        isPremium: false,
+        functionName: 'contains_duplicate',
+        examples: [
+            { input: 'nums = [1,2,3,1]', output: 'true', explanation: '' },
+            { input: 'nums = [1,2,3,4]', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 10^5', '-10^9 <= nums[i] <= 10^9'],
+        testCases: [
+            { input: { nums: [1, 2, 3, 1] }, expectedOutput: true },
+            { input: { nums: [1, 2, 3, 4] }, expectedOutput: false },
+            { input: { nums: [1, 1, 1, 3, 3, 4, 3, 2, 4, 2] }, expectedOutput: true },
+            { input: { nums: [7] }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def contains_duplicate(nums: list[int]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function containsDuplicate(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Longest Consecutive Sequence',
+        description: `Given an unsorted array of integers \`nums\`, return the length of the longest consecutive elements sequence.
+
+You must write an algorithm that runs in \`O(n)\` time.`,
+        difficulty: 'medium',
+        category: 'hash-table',
+        isPremium: false,
+        functionName: 'longest_consecutive',
+        examples: [
+            { input: 'nums = [100,4,200,1,3,2]', output: '4', explanation: 'The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.' },
+            { input: 'nums = [0,3,7,2,5,8,4,6,0,1]', output: '9', explanation: '' },
+        ],
+        constraints: ['0 <= nums.length <= 10^5', '-10^9 <= nums[i] <= 10^9'],
+        testCases: [
+            { input: { nums: [100, 4, 200, 1, 3, 2] }, expectedOutput: 4 },
+            { input: { nums: [0, 3, 7, 2, 5, 8, 4, 6, 0, 1] }, expectedOutput: 9 },
+            { input: { nums: [] }, expectedOutput: 0 },
+            { input: { nums: [1, 2, 0, 1] }, expectedOutput: 3, isHidden: true },
+        ],
+        starterCode: {
+            python: `def longest_consecutive(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function longestConsecutive(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int longestConsecutive(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: '4Sum II',
+        description: `Given four integer arrays \`nums1\`, \`nums2\`, \`nums3\`, and \`nums4\` all of length \`n\`, return the number of tuples \`(i, j, k, l)\` such that:
+- \`0 <= i, j, k, l < n\`
+- \`nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0\``,
+        difficulty: 'medium',
+        category: 'hash-table',
+        isPremium: true,
+        functionName: 'four_sum_count',
+        examples: [
+            { input: 'nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]', output: '2', explanation: '' },
+        ],
+        constraints: ['n == nums1.length == nums2.length == nums3.length == nums4.length', '1 <= n <= 200', '-2^28 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 2^28'],
+        testCases: [
+            { input: { nums1: [1, 2], nums2: [-2, -1], nums3: [-1, 2], nums4: [0, 2] }, expectedOutput: 2 },
+            { input: { nums1: [0], nums2: [0], nums3: [0], nums4: [0] }, expectedOutput: 1 },
+            { input: { nums1: [0, 0], nums2: [0, 0], nums3: [0, 0], nums4: [0, 0] }, expectedOutput: 16, isHidden: true },
+        ],
+        starterCode: {
+            python: `def four_sum_count(nums1: list[int], nums2: list[int], nums3: list[int], nums4: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function fourSumCount(nums1, nums2, nums3, nums4) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Subarray Sum Equals K',
+        description: `Given an array of integers \`nums\` and an integer \`k\`, return the total number of subarrays whose sum equals to \`k\`.`,
+        difficulty: 'hard',
+        category: 'hash-table',
+        isPremium: true,
+        functionName: 'subarray_sum',
+        examples: [
+            { input: 'nums = [1,1,1], k = 2', output: '2', explanation: '' },
+            { input: 'nums = [1,2,3], k = 3', output: '2', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 2 * 10^4', '-1000 <= nums[i] <= 1000', '-10^7 <= k <= 10^7'],
+        testCases: [
+            { input: { nums: [1, 1, 1], k: 2 }, expectedOutput: 2 },
+            { input: { nums: [1, 2, 3], k: 3 }, expectedOutput: 2 },
+            { input: { nums: [1], k: 0 }, expectedOutput: 0 },
+            { input: { nums: [1, -1, 0], k: 0 }, expectedOutput: 3, isHidden: true },
+        ],
+        starterCode: {
+            python: `def subarray_sum(nums: list[int], k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function subarraySum(nums, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int subarraySum(int[] nums, int k) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // TWO POINTERS
+    {
+        title: 'Valid Palindrome II',
+        description: `Given a string \`s\`, return \`true\` if the \`s\` can be palindrome after deleting at most one character from it.`,
+        difficulty: 'easy',
+        category: 'two-pointers',
+        isPremium: false,
+        functionName: 'valid_palindrome',
+        examples: [
+            { input: 's = "aba"', output: 'true', explanation: '' },
+            { input: 's = "abca"', output: 'true', explanation: 'You could delete the character \'c\'.' },
+            { input: 's = "abc"', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= s.length <= 10^5', 's consists of lowercase English letters.'],
+        testCases: [
+            { input: { s: 'aba' }, expectedOutput: true },
+            { input: { s: 'abca' }, expectedOutput: true },
+            { input: { s: 'abc' }, expectedOutput: false },
+            { input: { s: 'deeee' }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def valid_palindrome(s: str) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function validPalindrome(s) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean validPalindrome(String s) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Container With Most Water',
+        description: `You are given an integer array \`height\` of length \`n\`. There are \`n\` vertical lines drawn such that the two endpoints of the \`ith\` line are \`(i, 0)\` and \`(i, height[i])\`.
+
+Find two lines that together with the x-axis form a container that contains the most water. Return the maximum amount of water a container can store.`,
+        difficulty: 'medium',
+        category: 'two-pointers',
+        isPremium: false,
+        functionName: 'max_area',
+        examples: [
+            { input: 'height = [1,8,6,2,5,4,8,3,7]', output: '49', explanation: '' },
+            { input: 'height = [1,1]', output: '1', explanation: '' },
+        ],
+        constraints: ['n == height.length', '2 <= n <= 10^5', '0 <= height[i] <= 10^4'],
+        testCases: [
+            { input: { height: [1, 8, 6, 2, 5, 4, 8, 3, 7] }, expectedOutput: 49 },
+            { input: { height: [1, 1] }, expectedOutput: 1 },
+            { input: { height: [4, 3, 2, 1, 4] }, expectedOutput: 16 },
+            { input: { height: [1, 2, 1] }, expectedOutput: 2, isHidden: true },
+        ],
+        starterCode: {
+            python: `def max_area(height: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function maxArea(height) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int maxArea(int[] height) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Sort Colors',
+        description: `Given an array \`nums\` with \`n\` objects colored red, white, or blue, represented by the integers \`0\`, \`1\`, and \`2\` respectively, sort them so that objects of the same color are adjacent, with the colors in the order red, white, and blue (i.e. sorted in non-decreasing order). Return the sorted array.`,
+        difficulty: 'medium',
+        category: 'two-pointers',
+        isPremium: true,
+        functionName: 'sort_colors',
+        examples: [
+            { input: 'nums = [2,0,2,1,1,0]', output: '[0,0,1,1,2,2]', explanation: '' },
+            { input: 'nums = [2,0,1]', output: '[0,1,2]', explanation: '' },
+        ],
+        constraints: ['n == nums.length', '1 <= n <= 300', 'nums[i] is 0, 1, or 2.'],
+        testCases: [
+            { input: { nums: [2, 0, 2, 1, 1, 0] }, expectedOutput: [0, 0, 1, 1, 2, 2] },
+            { input: { nums: [2, 0, 1] }, expectedOutput: [0, 1, 2] },
+            { input: { nums: [0] }, expectedOutput: [0] },
+            { input: { nums: [1, 2, 0, 2, 1, 0] }, expectedOutput: [0, 0, 1, 1, 2, 2], isHidden: true },
+        ],
+        starterCode: {
+            python: `def sort_colors(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function sortColors(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] sortColors(int[] nums) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Remove Duplicates from Sorted Array II',
+        description: `Given an integer array \`nums\` sorted in non-decreasing order, remove some duplicates such that each unique element appears at most twice. Return the resulting array after removing the duplicates, preserving the relative order of the elements.`,
+        difficulty: 'hard',
+        category: 'two-pointers',
+        isPremium: true,
+        functionName: 'remove_duplicates',
+        examples: [
+            { input: 'nums = [1,1,1,2,2,3]', output: '[1,1,2,2,3]', explanation: '' },
+            { input: 'nums = [0,0,1,1,1,1,2,3,3]', output: '[0,0,1,1,2,3,3]', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 3 * 10^4', '-10^4 <= nums[i] <= 10^4', 'nums is sorted in non-decreasing order.'],
+        testCases: [
+            { input: { nums: [1, 1, 1, 2, 2, 3] }, expectedOutput: [1, 1, 2, 2, 3] },
+            { input: { nums: [0, 0, 1, 1, 1, 1, 2, 3, 3] }, expectedOutput: [0, 0, 1, 1, 2, 3, 3] },
+            { input: { nums: [1, 1] }, expectedOutput: [1, 1] },
+            { input: { nums: [1, 1, 1, 1] }, expectedOutput: [1, 1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def remove_duplicates(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function removeDuplicates(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] removeDuplicates(int[] nums) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+
+    // HEAP (PRIORITY QUEUE)
+    {
+        title: 'Last Stone Weight',
+        description: `You are given an array of integers \`stones\` where \`stones[i]\` is the weight of the \`ith\` stone.
+
+We are playing a game with the stones. On each turn, we choose the two heaviest stones and smash them together. Suppose the heaviest two stones have weights \`x\` and \`y\` with \`x <= y\`. The result of this smash is:
+- If \`x == y\`, both stones are destroyed.
+- If \`x != y\`, the stone of weight \`x\` is destroyed, and the stone of weight \`y\` has new weight \`y - x\`.
+
+At the end of the game, there is at most one stone left. Return the weight of the last remaining stone, or \`0\` if there are no stones left.`,
+        difficulty: 'easy',
+        category: 'heap',
+        isPremium: false,
+        functionName: 'last_stone_weight',
+        examples: [
+            { input: 'stones = [2,7,4,1,8,1]', output: '1', explanation: 'Combine 7 and 8 to get 1, combine 2 and 4 to get 2, combine 1 and 2 to get 1, combine 1 and 1 to get 0. Last stone is 1.' },
+            { input: 'stones = [1]', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= stones.length <= 30', '1 <= stones[i] <= 1000'],
+        testCases: [
+            { input: { stones: [2, 7, 4, 1, 8, 1] }, expectedOutput: 1 },
+            { input: { stones: [1] }, expectedOutput: 1 },
+            { input: { stones: [1, 3] }, expectedOutput: 2 },
+            { input: { stones: [2, 2] }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def last_stone_weight(stones: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function lastStoneWeight(stones) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int lastStoneWeight(int[] stones) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Kth Largest Element in an Array',
+        description: `Given an integer array \`nums\` and an integer \`k\`, return the \`kth\` largest element in the array.
+
+Note that it is the \`kth\` largest element in sorted order, not the \`kth\` distinct element.`,
+        difficulty: 'medium',
+        category: 'heap',
+        isPremium: false,
+        functionName: 'find_kth_largest',
+        examples: [
+            { input: 'nums = [3,2,1,5,6,4], k = 2', output: '5', explanation: '' },
+            { input: 'nums = [3,2,3,1,2,4,5,5,6], k = 4', output: '4', explanation: '' },
+        ],
+        constraints: ['1 <= k <= nums.length <= 10^5', '-10^4 <= nums[i] <= 10^4'],
+        testCases: [
+            { input: { nums: [3, 2, 1, 5, 6, 4], k: 2 }, expectedOutput: 5 },
+            { input: { nums: [3, 2, 3, 1, 2, 4, 5, 5, 6], k: 4 }, expectedOutput: 4 },
+            { input: { nums: [1], k: 1 }, expectedOutput: 1 },
+            { input: { nums: [7, 6, 5, 4, 3, 2, 1], k: 5 }, expectedOutput: 3, isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_kth_largest(nums: list[int], k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function findKthLargest(nums, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Kth Smallest Element in a Sorted Matrix',
+        description: `Given an \`n x n\` \`matrix\` where each of the rows and columns is sorted in ascending order, return the \`kth\` smallest element in the matrix.
+
+Note that it is the \`kth\` smallest element in sorted order, not the \`kth\` distinct element.`,
+        difficulty: 'medium',
+        category: 'heap',
+        isPremium: true,
+        functionName: 'kth_smallest',
+        examples: [
+            { input: 'matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8', output: '13', explanation: '' },
+        ],
+        constraints: ['n == matrix.length == matrix[i].length', '1 <= n <= 300', '-10^9 <= matrix[i][j] <= 10^9', 'All the rows and columns of matrix are guaranteed to be sorted in non-decreasing order.', '1 <= k <= n^2'],
+        testCases: [
+            { input: { matrix: [[1, 5, 9], [10, 11, 13], [12, 13, 15]], k: 8 }, expectedOutput: 13 },
+            { input: { matrix: [[-5]], k: 1 }, expectedOutput: -5 },
+            { input: { matrix: [[1, 2], [1, 3]], k: 2 }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def kth_smallest(matrix: list[list[int]], k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function kthSmallest(matrix, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Meeting Rooms II',
+        description: `Given an array of meeting time intervals \`intervals\` where \`intervals[i] = [starti, endi]\`, return the minimum number of conference rooms required.`,
+        difficulty: 'hard',
+        category: 'heap',
+        isPremium: true,
+        functionName: 'min_meeting_rooms',
+        examples: [
+            { input: 'intervals = [[0,30],[5,10],[15,20]]', output: '2', explanation: '' },
+            { input: 'intervals = [[7,10],[2,4]]', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= intervals.length <= 10^4', '0 <= starti < endi <= 10^6'],
+        testCases: [
+            { input: { intervals: [[0, 30], [5, 10], [15, 20]] }, expectedOutput: 2 },
+            { input: { intervals: [[7, 10], [2, 4]] }, expectedOutput: 1 },
+            { input: { intervals: [[1, 5], [8, 9], [8, 9]] }, expectedOutput: 2, isHidden: true },
+        ],
+        starterCode: {
+            python: `def min_meeting_rooms(intervals: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minMeetingRooms(intervals) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // SLIDING WINDOW
+    {
+        title: 'Permutation in String',
+        description: `Given two strings \`s1\` and \`s2\`, return \`true\` if \`s2\` contains a permutation of \`s1\`, or \`false\` otherwise.
+
+In other words, return \`true\` if one of \`s1\`'s permutations is the substring of \`s2\`.`,
+        difficulty: 'medium',
+        category: 'sliding-window',
+        isPremium: false,
+        functionName: 'check_inclusion',
+        examples: [
+            { input: 's1 = "ab", s2 = "eidbaooo"', output: 'true', explanation: 's2 contains one permutation of s1 ("ba").' },
+            { input: 's1 = "ab", s2 = "eidboaoo"', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= s1.length, s2.length <= 10^4', 's1 and s2 consist of lowercase English letters.'],
+        testCases: [
+            { input: { s1: 'ab', s2: 'eidbaooo' }, expectedOutput: true },
+            { input: { s1: 'ab', s2: 'eidboaoo' }, expectedOutput: false },
+            { input: { s1: 'adc', s2: 'dcda' }, expectedOutput: true },
+            { input: { s1: 'hello', s2: 'ooolleoooleh' }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def check_inclusion(s1: str, s2: str) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function checkInclusion(s1, s2) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Minimum Size Subarray Sum',
+        description: `Given an array of positive integers \`nums\` and a positive integer \`target\`, return the minimal length of a subarray whose sum is greater than or equal to \`target\`. If there is no such subarray, return \`0\` instead.`,
+        difficulty: 'medium',
+        category: 'sliding-window',
+        isPremium: false,
+        functionName: 'min_sub_array_len',
+        examples: [
+            { input: 'target = 7, nums = [2,3,1,2,4,3]', output: '2', explanation: 'The subarray [4,3] has the minimal length under the problem constraint.' },
+            { input: 'target = 11, nums = [1,1,1,1,1,1,1,1]', output: '0', explanation: '' },
+        ],
+        constraints: ['1 <= target <= 10^9', '1 <= nums.length <= 10^5', '1 <= nums[i] <= 10^4'],
+        testCases: [
+            { input: { target: 7, nums: [2, 3, 1, 2, 4, 3] }, expectedOutput: 2 },
+            { input: { target: 4, nums: [1, 4, 4] }, expectedOutput: 1 },
+            { input: { target: 11, nums: [1, 1, 1, 1, 1, 1, 1, 1] }, expectedOutput: 0 },
+            { input: { target: 15, nums: [1, 2, 3, 4, 5] }, expectedOutput: 5, isHidden: true },
+        ],
+        starterCode: {
+            python: `def min_sub_array_len(target: int, nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minSubArrayLen(target, nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Longest Repeating Character Replacement',
+        description: `You are given a string \`s\` and an integer \`k\`. You can choose any character of the string and change it to any other uppercase English character, at most \`k\` times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.`,
+        difficulty: 'medium',
+        category: 'sliding-window',
+        isPremium: true,
+        functionName: 'character_replacement',
+        examples: [
+            { input: 's = "ABAB", k = 2', output: '4', explanation: 'Replace the two \'A\'s with two \'B\'s or vice versa.' },
+            { input: 's = "AABABBA", k = 1', output: '4', explanation: '' },
+        ],
+        constraints: ['1 <= s.length <= 10^5', 's consists of only uppercase English letters.', '0 <= k <= s.length'],
+        testCases: [
+            { input: { s: 'ABAB', k: 2 }, expectedOutput: 4 },
+            { input: { s: 'AABABBA', k: 1 }, expectedOutput: 4 },
+            { input: { s: 'ABBB', k: 2 }, expectedOutput: 4 },
+            { input: { s: 'AAAA', k: 0 }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def character_replacement(s: str, k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function characterReplacement(s, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int characterReplacement(String s, int k) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Sliding Window Maximum',
+        description: `You are given an array of integers \`nums\`, there is a sliding window of size \`k\` which is moving from the very left of the array to the very right. You can only see the \`k\` numbers in the window. Each time the sliding window moves right by one position.
+
+Return the max sliding window.`,
+        difficulty: 'hard',
+        category: 'sliding-window',
+        isPremium: true,
+        functionName: 'max_sliding_window',
+        examples: [
+            { input: 'nums = [1,3,-1,-3,5,3,6,7], k = 3', output: '[3,3,5,5,6,7]', explanation: '' },
+            { input: 'nums = [1], k = 1', output: '[1]', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 10^5', '-10^4 <= nums[i] <= 10^4', '1 <= k <= nums.length'],
+        testCases: [
+            { input: { nums: [1, 3, -1, -3, 5, 3, 6, 7], k: 3 }, expectedOutput: [3, 3, 5, 5, 6, 7] },
+            { input: { nums: [1], k: 1 }, expectedOutput: [1] },
+            { input: { nums: [9, 11], k: 2 }, expectedOutput: [11] },
+            { input: { nums: [4, -2], k: 2 }, expectedOutput: [4], isHidden: true },
+        ],
+        starterCode: {
+            python: `def max_sliding_window(nums: list[int], k: int) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function maxSlidingWindow(nums, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+
+    // MATRIX
+    {
+        title: 'Flood Fill',
+        description: `You are given an image represented by an \`m x n\` grid of integers \`image\`, where \`image[i][j]\` represents the pixel value of the image. You are also given three integers \`sr\`, \`sc\`, and \`color\`.
+
+Perform a flood fill on the image starting from the pixel \`image[sr][sc]\`: change its color to \`color\`, then repeat the process for four-directionally adjacent pixels that have the same original color, until you reach pixels with a different color or the boundary of the image.
+
+Return the modified image after performing the flood fill.`,
+        difficulty: 'easy',
+        category: 'matrix',
+        isPremium: false,
+        functionName: 'flood_fill',
+        examples: [
+            { input: 'image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2', output: '[[2,2,2],[2,2,0],[2,0,1]]', explanation: 'All pixels connected to the starting pixel with the same color as the starting pixel are colored with the new color.' },
+        ],
+        constraints: ['m == image.length', 'n == image[i].length', '1 <= m, n <= 50', '0 <= image[i][j], color < 2^16', '0 <= sr < m', '0 <= sc < n'],
+        testCases: [
+            { input: { image: [[1, 1, 1], [1, 1, 0], [1, 0, 1]], sr: 1, sc: 1, color: 2 }, expectedOutput: [[2, 2, 2], [2, 2, 0], [2, 0, 1]] },
+            { input: { image: [[0, 0, 0], [0, 0, 0]], sr: 0, sc: 0, color: 0 }, expectedOutput: [[0, 0, 0], [0, 0, 0]] },
+            { input: { image: [[1]], sr: 0, sc: 0, color: 1 }, expectedOutput: [[1]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def flood_fill(image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function floodFill(image, sr, sc, color) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Rotate Image',
+        description: `You are given an \`n x n\` 2D \`matrix\` representing an image. Rotate the image by 90 degrees (clockwise), and return the rotated matrix.`,
+        difficulty: 'medium',
+        category: 'matrix',
+        isPremium: false,
+        functionName: 'rotate',
+        examples: [
+            { input: 'matrix = [[1,2,3],[4,5,6],[7,8,9]]', output: '[[7,4,1],[8,5,2],[9,6,3]]', explanation: '' },
+        ],
+        constraints: ['n == matrix.length == matrix[i].length', '1 <= n <= 20', '-1000 <= matrix[i][j] <= 1000'],
+        testCases: [
+            { input: { matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] }, expectedOutput: [[7, 4, 1], [8, 5, 2], [9, 6, 3]] },
+            { input: { matrix: [[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]] }, expectedOutput: [[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]] },
+            { input: { matrix: [[1]] }, expectedOutput: [[1]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def rotate(matrix: list[list[int]]) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function rotate(matrix) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] rotate(int[][] matrix) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Spiral Matrix',
+        description: `Given an \`m x n\` \`matrix\`, return all elements of the matrix in spiral order.`,
+        difficulty: 'medium',
+        category: 'matrix',
+        isPremium: true,
+        functionName: 'spiral_order',
+        examples: [
+            { input: 'matrix = [[1,2,3],[4,5,6],[7,8,9]]', output: '[1,2,3,6,9,8,7,4,5]', explanation: '' },
+        ],
+        constraints: ['m == matrix.length', 'n == matrix[i].length', '1 <= m, n <= 10', '-100 <= matrix[i][j] <= 100'],
+        testCases: [
+            { input: { matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] }, expectedOutput: [1, 2, 3, 6, 9, 8, 7, 4, 5] },
+            { input: { matrix: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]] }, expectedOutput: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7] },
+            { input: { matrix: [[1]] }, expectedOutput: [1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def spiral_order(matrix: list[list[int]]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function spiralOrder(matrix) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        }
+    },
+    {
+        title: 'Set Matrix Zeroes',
+        description: `Given an \`m x n\` integer \`matrix\`, if an element is \`0\`, set its entire row and column to \`0\`. Return the modified matrix.`,
+        difficulty: 'hard',
+        category: 'matrix',
+        isPremium: true,
+        functionName: 'set_zeroes',
+        examples: [
+            { input: 'matrix = [[1,1,1],[1,0,1],[1,1,1]]', output: '[[1,0,1],[0,0,0],[1,0,1]]', explanation: '' },
+        ],
+        constraints: ['m == matrix.length', 'n == matrix[0].length', '1 <= m, n <= 200', '-2^31 <= matrix[i][j] <= 2^31 - 1'],
+        testCases: [
+            { input: { matrix: [[1, 1, 1], [1, 0, 1], [1, 1, 1]] }, expectedOutput: [[1, 0, 1], [0, 0, 0], [1, 0, 1]] },
+            { input: { matrix: [[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]] }, expectedOutput: [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]] },
+            { input: { matrix: [[1]] }, expectedOutput: [[1]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def set_zeroes(matrix: list[list[int]]) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function setZeroes(matrix) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] setZeroes(int[][] matrix) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+
+    // SORTING
+    {
+        title: 'Merge Sorted Array',
+        description: `You are given two integer arrays \`nums1\` and \`nums2\`, sorted in non-decreasing order. Merge \`nums1\` and \`nums2\` into a single array sorted in non-decreasing order, and return it.`,
+        difficulty: 'easy',
+        category: 'sorting',
+        isPremium: false,
+        functionName: 'merge_sorted_array',
+        examples: [
+            { input: 'nums1 = [1,2,3], nums2 = [2,5,6]', output: '[1,2,2,3,5,6]', explanation: '' },
+        ],
+        constraints: ['0 <= nums1.length, nums2.length <= 200', '-10^9 <= nums1[i], nums2[i] <= 10^9'],
+        testCases: [
+            { input: { nums1: [1, 2, 3], nums2: [2, 5, 6] }, expectedOutput: [1, 2, 2, 3, 5, 6] },
+            { input: { nums1: [], nums2: [1] }, expectedOutput: [1] },
+            { input: { nums1: [1], nums2: [] }, expectedOutput: [1] },
+            { input: { nums1: [4, 5, 6], nums2: [1, 2, 3] }, expectedOutput: [1, 2, 3, 4, 5, 6], isHidden: true },
+        ],
+        starterCode: {
+            python: `def merge_sorted_array(nums1: list[int], nums2: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function mergeSortedArray(nums1, nums2) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] mergeSortedArray(int[] nums1, int[] nums2) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Sort an Array',
+        description: `Given an array of integers \`nums\`, sort the array in ascending order and return it.`,
+        difficulty: 'medium',
+        category: 'sorting',
+        isPremium: false,
+        functionName: 'sort_array',
+        examples: [
+            { input: 'nums = [5,2,3,1]', output: '[1,2,3,5]', explanation: '' },
+            { input: 'nums = [5,1,1,2,0,0]', output: '[0,0,1,1,2,5]', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 5 * 10^4', '-5 * 10^4 <= nums[i] <= 5 * 10^4'],
+        testCases: [
+            { input: { nums: [5, 2, 3, 1] }, expectedOutput: [1, 2, 3, 5] },
+            { input: { nums: [5, 1, 1, 2, 0, 0] }, expectedOutput: [0, 0, 1, 1, 2, 5] },
+            { input: { nums: [1] }, expectedOutput: [1] },
+            { input: { nums: [3, 3, 3, 1] }, expectedOutput: [1, 3, 3, 3], isHidden: true },
+        ],
+        starterCode: {
+            python: `def sort_array(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function sortArray(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] sortArray(int[] nums) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'H-Index',
+        description: `Given an array of integers \`citations\` where \`citations[i]\` is the number of citations a researcher received for their \`ith\` paper, return the researcher's h-index.
+
+The h-index is defined as the maximum value of \`h\` such that the given researcher has published at least \`h\` papers that have each been cited at least \`h\` times.`,
+        difficulty: 'medium',
+        category: 'sorting',
+        isPremium: true,
+        functionName: 'h_index',
+        examples: [
+            { input: 'citations = [3,0,6,1,5]', output: '3', explanation: 'The researcher has 3 papers with at least 3 citations each, and the remaining papers have no more than 3 citations each, so their h-index is 3.' },
+            { input: 'citations = [1,3,1]', output: '1', explanation: '' },
+        ],
+        constraints: ['n == citations.length', '1 <= n <= 5000', '0 <= citations[i] <= 1000'],
+        testCases: [
+            { input: { citations: [3, 0, 6, 1, 5] }, expectedOutput: 3 },
+            { input: { citations: [1, 3, 1] }, expectedOutput: 1 },
+            { input: { citations: [0, 0, 0] }, expectedOutput: 0 },
+            { input: { citations: [10, 8, 5, 4, 3] }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def h_index(citations: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function hIndex(citations) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int hIndex(int[] citations) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Largest Number',
+        description: `Given a list of non-negative integers \`nums\`, arrange them such that they form the largest number and return it as a string.`,
+        difficulty: 'hard',
+        category: 'sorting',
+        isPremium: true,
+        functionName: 'largest_number',
+        examples: [
+            { input: 'nums = [10,2]', output: '"210"', explanation: '' },
+            { input: 'nums = [3,30,34,5,9]', output: '"9534330"', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 100', '0 <= nums[i] <= 10^9'],
+        testCases: [
+            { input: { nums: [10, 2] }, expectedOutput: '210' },
+            { input: { nums: [3, 30, 34, 5, 9] }, expectedOutput: '9534330' },
+            { input: { nums: [0, 0] }, expectedOutput: '0' },
+            { input: { nums: [1] }, expectedOutput: '1', isHidden: true },
+        ],
+        starterCode: {
+            python: `def largest_number(nums: list[int]) -> str:
+    # Write your solution here
+    pass`,
+            javascript: `function largestNumber(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public String largestNumber(int[] nums) {
+        // Write your solution here
+        return "";
+    }
+}`
+        }
+    },
+
+    // UNION-FIND
+    {
+        title: 'Number of Provinces',
+        description: `There are \`n\` cities. Some of them are connected, while some are not. If city \`a\` is connected directly with city \`b\`, and city \`b\` is connected directly with city \`c\`, then city \`a\` is connected indirectly with city \`c\`.
+
+A province is a group of directly or indirectly connected cities and no other cities outside of the group.
+
+You are given an \`n x n\` matrix \`isConnected\` where \`isConnected[i][j] = 1\` if the \`ith\` city and the \`jth\` city are directly connected, and \`isConnected[i][j] = 0\` otherwise.
+
+Return the total number of provinces.`,
+        difficulty: 'medium',
+        category: 'union-find',
+        isPremium: false,
+        functionName: 'find_circle_num',
+        examples: [
+            { input: 'isConnected = [[1,1,0],[1,1,0],[0,0,1]]', output: '2', explanation: '' },
+            { input: 'isConnected = [[1,0,0],[0,1,0],[0,0,1]]', output: '3', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 200', 'n == isConnected.length == isConnected[i].length', 'isConnected[i][j] is 1 or 0.', 'isConnected[i][i] == 1', 'isConnected[i][j] == isConnected[j][i]'],
+        testCases: [
+            { input: { isConnected: [[1, 1, 0], [1, 1, 0], [0, 0, 1]] }, expectedOutput: 2 },
+            { input: { isConnected: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] }, expectedOutput: 3 },
+            { input: { isConnected: [[1, 1, 1], [1, 1, 1], [1, 1, 1]] }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_circle_num(isConnected: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function findCircleNum(isConnected) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Number of Connected Components in an Undirected Graph',
+        description: `You have a graph of \`n\` nodes labeled from \`0\` to \`n - 1\`. You are given an integer \`n\` and an array \`edges\` where \`edges[i] = [ai, bi]\` indicates that there is an edge between \`ai\` and \`bi\` in the graph.
+
+Return the number of connected components in the graph.`,
+        difficulty: 'medium',
+        category: 'union-find',
+        isPremium: false,
+        functionName: 'count_components',
+        examples: [
+            { input: 'n = 5, edges = [[0,1],[1,2],[3,4]]', output: '2', explanation: '' },
+            { input: 'n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2000', '1 <= edges.length <= 5000', 'edges[i].length == 2', '0 <= ai, bi < n', 'ai != bi', 'There are no repeated edges.'],
+        testCases: [
+            { input: { n: 5, edges: [[0, 1], [1, 2], [3, 4]] }, expectedOutput: 2 },
+            { input: { n: 5, edges: [[0, 1], [1, 2], [2, 3], [3, 4]] }, expectedOutput: 1 },
+            { input: { n: 4, edges: [] }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def count_components(n: int, edges: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function countComponents(n, edges) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Redundant Connection',
+        description: `A tree is an undirected graph that is connected and has no cycles. You are given a graph that started as a tree with \`n\` nodes labeled from \`1\` to \`n\`, with one additional edge added. The added edge has two different vertices chosen from \`1\` to \`n\`, and was not an edge that already existed.
+
+The graph is represented as an array \`edges\` of length \`n\` where \`edges[i] = [ai, bi]\` indicates that there is an edge between nodes \`ai\` and \`bi\` in the graph.
+
+Return an edge that can be removed so that the resulting graph is a tree of \`n\` nodes. If there are multiple answers, return the answer that occurs last in the input.`,
+        difficulty: 'medium',
+        category: 'union-find',
+        isPremium: true,
+        functionName: 'find_redundant_connection',
+        examples: [
+            { input: 'edges = [[1,2],[1,3],[2,3]]', output: '[2,3]', explanation: '' },
+            { input: 'edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]', output: '[1,4]', explanation: '' },
+        ],
+        constraints: ['n == edges.length', '3 <= n <= 1000', 'edges[i].length == 2', '1 <= ai < bi <= edges.length', 'ai != bi', 'There are no repeated edges.', 'The given graph is connected.'],
+        testCases: [
+            { input: { edges: [[1, 2], [1, 3], [2, 3]] }, expectedOutput: [2, 3] },
+            { input: { edges: [[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]] }, expectedOutput: [1, 4] },
+            { input: { edges: [[1, 2], [2, 3], [1, 3]] }, expectedOutput: [1, 3], isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_redundant_connection(edges: list[list[int]]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function findRedundantConnection(edges) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] findRedundantConnection(int[][] edges) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Graph Valid Tree',
+        description: `You have a graph of \`n\` nodes labeled from \`0\` to \`n - 1\`. You are given an integer \`n\` and a list of \`edges\` where \`edges[i] = [ai, bi]\` indicates that there is an undirected edge between nodes \`ai\` and \`bi\` in the graph.
+
+Return \`true\` if the edges of the given graph make up a valid tree, and \`false\` otherwise.`,
+        difficulty: 'hard',
+        category: 'union-find',
+        isPremium: true,
+        functionName: 'valid_tree',
+        examples: [
+            { input: 'n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]', output: 'true', explanation: '' },
+            { input: 'n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2000', '0 <= edges.length <= 5000', 'edges[i].length == 2', '0 <= ai, bi < n', 'ai != bi', 'There are no self-loops or repeated edges.'],
+        testCases: [
+            { input: { n: 5, edges: [[0, 1], [0, 2], [0, 3], [1, 4]] }, expectedOutput: true },
+            { input: { n: 5, edges: [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]] }, expectedOutput: false },
+            { input: { n: 1, edges: [] }, expectedOutput: true },
+            { input: { n: 4, edges: [[0, 1], [2, 3]] }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def valid_tree(n: int, edges: list[list[int]]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function validTree(n, edges) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+
+    // TOPOLOGICAL SORT
+    {
+        title: 'Course Schedule',
+        description: `There are a total of \`numCourses\` courses you have to take, labeled from \`0\` to \`numCourses - 1\`. You are given an array \`prerequisites\` where \`prerequisites[i] = [ai, bi]\` indicates that you must take course \`bi\` first if you want to take course \`ai\`.
+
+Return \`true\` if you can finish all courses. Otherwise, return \`false\`.`,
+        difficulty: 'medium',
+        category: 'topological-sort',
+        isPremium: false,
+        functionName: 'can_finish',
+        examples: [
+            { input: 'numCourses = 2, prerequisites = [[1,0]]', output: 'true', explanation: '' },
+            { input: 'numCourses = 2, prerequisites = [[1,0],[0,1]]', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= numCourses <= 2000', '0 <= prerequisites.length <= 5000', 'prerequisites[i].length == 2', '0 <= ai, bi < numCourses', 'All the pairs prerequisites[i] are unique.'],
+        testCases: [
+            { input: { numCourses: 2, prerequisites: [[1, 0]] }, expectedOutput: true },
+            { input: { numCourses: 2, prerequisites: [[1, 0], [0, 1]] }, expectedOutput: false },
+            { input: { numCourses: 5, prerequisites: [[1, 0], [2, 1], [3, 2], [4, 3]] }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_finish(numCourses: int, prerequisites: list[list[int]]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canFinish(numCourses, prerequisites) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Course Schedule II',
+        description: `There are a total of \`numCourses\` courses you have to take, labeled from \`0\` to \`numCourses - 1\`. You are given an array \`prerequisites\` where \`prerequisites[i] = [ai, bi]\` indicates that you must take course \`bi\` first if you want to take course \`ai\`.
+
+Return the ordering of courses you should take to finish all courses. If there are multiple valid orderings, return the lexicographically smallest one (comparing the order arrays element by element). If it is impossible to finish all courses, return an empty array.`,
+        difficulty: 'medium',
+        category: 'topological-sort',
+        isPremium: false,
+        functionName: 'find_order',
+        examples: [
+            { input: 'numCourses = 2, prerequisites = [[1,0]]', output: '[0,1]', explanation: '' },
+            { input: 'numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]', output: '[0,1,2,3]', explanation: 'Among valid orderings, this is the lexicographically smallest.' },
+        ],
+        constraints: ['1 <= numCourses <= 2000', '0 <= prerequisites.length <= numCourses * (numCourses - 1)', 'prerequisites[i].length == 2', '0 <= ai, bi < numCourses', 'ai != bi', 'All the pairs [ai, bi] are distinct.'],
+        testCases: [
+            { input: { numCourses: 2, prerequisites: [[1, 0]] }, expectedOutput: [0, 1] },
+            { input: { numCourses: 4, prerequisites: [[1, 0], [2, 0], [3, 1], [3, 2]] }, expectedOutput: [0, 1, 2, 3] },
+            { input: { numCourses: 1, prerequisites: [] }, expectedOutput: [0] },
+            { input: { numCourses: 2, prerequisites: [[1, 0], [0, 1]] }, expectedOutput: [], isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_order(numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function findOrder(numCourses, prerequisites) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Minimum Height Trees',
+        description: `A tree is an undirected graph in which any two vertices are connected by exactly one path. Given a tree of \`n\` nodes labeled from \`0\` to \`n - 1\` and an array of \`n - 1\` \`edges\`, you can choose any node of the tree as the root. When you select a node \`x\` as the root, the result tree has height \`h\`. Among all possible trees, the ones with minimum height are called minimum height trees (MHTs).
+
+Return a list of all MHTs' root labels, sorted in ascending order.`,
+        difficulty: 'hard',
+        category: 'topological-sort',
+        isPremium: true,
+        functionName: 'find_min_height_trees',
+        examples: [
+            { input: 'n = 4, edges = [[1,0],[1,2],[1,3]]', output: '[1]', explanation: '' },
+            { input: 'n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]', output: '[3,4]', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2 * 10^4', 'edges.length == n - 1', '0 <= ai, bi < n', 'ai != bi', 'All the pairs (ai, bi) are distinct.', 'The given input is guaranteed to be a tree and there will be no repeated edges.'],
+        testCases: [
+            { input: { n: 4, edges: [[1, 0], [1, 2], [1, 3]] }, expectedOutput: [1] },
+            { input: { n: 6, edges: [[3, 0], [3, 1], [3, 2], [3, 4], [5, 4]] }, expectedOutput: [3, 4] },
+            { input: { n: 1, edges: [] }, expectedOutput: [0] },
+            { input: { n: 2, edges: [[0, 1]] }, expectedOutput: [0, 1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_min_height_trees(n: int, edges: list[list[int]]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function findMinHeightTrees(n, edges) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] findMinHeightTrees(int n, int[][] edges) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Find Eventual Safe States',
+        description: `There is a directed graph of \`n\` nodes with each node labeled \`0\` through \`n - 1\`. The graph is represented by a 2D array \`graph\`, where \`graph[i]\` is a list of all nodes you can visit from node \`i\` (i.e. there is a directed edge from node \`i\` to node \`j\`).
+
+A node is a terminal node if there are no outgoing edges. A node is a safe node if every possible path starting from that node leads to a terminal node (or another safe node).
+
+Return an array containing all the safe nodes of the graph, sorted in ascending order.`,
+        difficulty: 'hard',
+        category: 'topological-sort',
+        isPremium: true,
+        functionName: 'eventual_safe_nodes',
+        examples: [
+            { input: 'graph = [[1,2],[2,3],[5],[0],[5],[],[]]', output: '[2,4,5,6]', explanation: '' },
+        ],
+        constraints: ['n == graph.length', '1 <= n <= 10^4', '0 <= graph[i].length <= n', '0 <= graph[i][j] <= n - 1', 'graph[i] is sorted in a strictly increasing order.', 'The graph may contain self-loops.'],
+        testCases: [
+            { input: { graph: [[1, 2], [2, 3], [5], [0], [5], [], []] }, expectedOutput: [2, 4, 5, 6] },
+            { input: { graph: [[1, 2, 3, 4], [1, 2], [3, 4], [0, 4], []] }, expectedOutput: [4] },
+            { input: { graph: [[]] }, expectedOutput: [0], isHidden: true },
+        ],
+        starterCode: {
+            python: `def eventual_safe_nodes(graph: list[list[int]]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function eventualSafeNodes(graph) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] eventualSafeNodes(int[][] graph) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+
+    // SIMULATION
+    {
+        title: 'Robot Return to Origin',
+        description: `There is a robot starting at position \`(0, 0)\`, the origin, on a 2D plane. Given a sequence of its moves, judge if this robot ends up at \`(0, 0)\` after it completes its moves.
+
+You are given a string \`moves\` that represents the moves made by the robot where \`moves[i]\` represents its \`ith\` move. Valid moves are \`'R'\` (right), \`'L'\` (left), \`'U'\` (up), and \`'D'\` (down).
+
+Return \`true\` if the robot returns to the origin after it finishes all of its moves, or \`false\` otherwise.`,
+        difficulty: 'easy',
+        category: 'simulation',
+        isPremium: false,
+        functionName: 'judge_circle',
+        examples: [
+            { input: 'moves = "UD"', output: 'true', explanation: 'The robot moves up once, and then down once, ending at the origin.' },
+            { input: 'moves = "LL"', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= moves.length <= 2 * 10^4', "moves only contains the characters 'U', 'D', 'L' and 'R'."],
+        testCases: [
+            { input: { moves: 'UD' }, expectedOutput: true },
+            { input: { moves: 'LL' }, expectedOutput: false },
+            { input: { moves: 'UDLR' }, expectedOutput: true },
+            { input: { moves: 'RRDD' }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def judge_circle(moves: str) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function judgeCircle(moves) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean judgeCircle(String moves) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Game of Life',
+        description: `Given the current state of an \`m x n\` grid \`board\` representing Conway's Game of Life, return the next state.
+
+Rules:
+- Any live cell (\`1\`) with fewer than two live neighbors dies.
+- Any live cell with two or three live neighbors lives on.
+- Any live cell with more than three live neighbors dies.
+- Any dead cell (\`0\`) with exactly three live neighbors becomes a live cell.
+
+Neighbors are the eight cells horizontally, vertically, or diagonally adjacent.`,
+        difficulty: 'medium',
+        category: 'simulation',
+        isPremium: false,
+        functionName: 'game_of_life',
+        examples: [
+            { input: 'board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]', output: '[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]', explanation: '' },
+        ],
+        constraints: ['m == board.length', 'n == board[i].length', '1 <= m, n <= 25', 'board[i][j] is 0 or 1.'],
+        testCases: [
+            { input: { board: [[0, 1, 0], [0, 0, 1], [1, 1, 1], [0, 0, 0]] }, expectedOutput: [[0, 0, 0], [1, 0, 1], [0, 1, 1], [0, 1, 0]] },
+            { input: { board: [[1, 1], [1, 0]] }, expectedOutput: [[1, 1], [1, 1]] },
+            { input: { board: [[0, 0], [0, 0]] }, expectedOutput: [[0, 0], [0, 0]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def game_of_life(board: list[list[int]]) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function gameOfLife(board) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] gameOfLife(int[][] board) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Zigzag Conversion',
+        description: `The string \`s\` is written in a zigzag pattern on a given number of rows, and then read line by line, left to right. Given \`s\` and the number of rows \`numRows\`, return the string read line by line.`,
+        difficulty: 'medium',
+        category: 'simulation',
+        isPremium: true,
+        functionName: 'convert',
+        examples: [
+            { input: 's = "PAYPALISHIRING", numRows = 3', output: '"PAHNAPLSIIGYIR"', explanation: '' },
+            { input: 's = "PAYPALISHIRING", numRows = 4', output: '"PINALSIGYAHRPI"', explanation: '' },
+            { input: 's = "A", numRows = 1', output: '"A"', explanation: '' },
+        ],
+        constraints: ["1 <= s.length <= 1000", 's consists of English letters, commas, and periods.', '1 <= numRows <= 1000'],
+        testCases: [
+            { input: { s: 'PAYPALISHIRING', numRows: 3 }, expectedOutput: 'PAHNAPLSIIGYIR' },
+            { input: { s: 'PAYPALISHIRING', numRows: 4 }, expectedOutput: 'PINALSIGYAHRPI' },
+            { input: { s: 'A', numRows: 1 }, expectedOutput: 'A' },
+            { input: { s: 'AB', numRows: 1 }, expectedOutput: 'AB', isHidden: true },
+        ],
+        starterCode: {
+            python: `def convert(s: str, numRows: int) -> str:
+    # Write your solution here
+    pass`,
+            javascript: `function convert(s, numRows) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public String convert(String s, int numRows) {
+        // Write your solution here
+        return "";
+    }
+}`
+        }
+    },
+    {
+        title: 'Spiral Matrix II',
+        description: `Given a positive integer \`n\`, generate an \`n x n\` matrix filled with elements from \`1\` to \`n^2\` in spiral order, and return it.`,
+        difficulty: 'hard',
+        category: 'simulation',
+        isPremium: true,
+        functionName: 'generate_matrix',
+        examples: [
+            { input: 'n = 3', output: '[[1,2,3],[8,9,4],[7,6,5]]', explanation: '' },
+            { input: 'n = 1', output: '[[1]]', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 20'],
+        testCases: [
+            { input: { n: 3 }, expectedOutput: [[1, 2, 3], [8, 9, 4], [7, 6, 5]] },
+            { input: { n: 1 }, expectedOutput: [[1]] },
+            { input: { n: 2 }, expectedOutput: [[1, 2], [4, 3]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def generate_matrix(n: int) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function generateMatrix(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] generateMatrix(int n) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+
+    // COUNTING
+    {
+        title: 'Majority Element',
+        description: `Given an array \`nums\` of size \`n\`, return the majority element.
+
+The majority element is the element that appears more than \`⌊n / 2⌋\` times. You may assume that the majority element always exists in the array.`,
+        difficulty: 'easy',
+        category: 'counting',
+        isPremium: false,
+        functionName: 'majority_element',
+        examples: [
+            { input: 'nums = [3,2,3]', output: '3', explanation: '' },
+            { input: 'nums = [2,2,1,1,1,2,2]', output: '2', explanation: '' },
+        ],
+        constraints: ['n == nums.length', '1 <= n <= 5 * 10^4', '-10^9 <= nums[i] <= 10^9'],
+        testCases: [
+            { input: { nums: [3, 2, 3] }, expectedOutput: 3 },
+            { input: { nums: [2, 2, 1, 1, 1, 2, 2] }, expectedOutput: 2 },
+            { input: { nums: [1] }, expectedOutput: 1 },
+            { input: { nums: [6, 5, 5] }, expectedOutput: 5, isHidden: true },
+        ],
+        starterCode: {
+            python: `def majority_element(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function majorityElement(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int majorityElement(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Number of Good Pairs',
+        description: `Given an array of integers \`nums\`, return the number of good pairs.
+
+A pair \`(i, j)\` is called good if \`nums[i] == nums[j]\` and \`i < j\`.`,
+        difficulty: 'easy',
+        category: 'counting',
+        isPremium: false,
+        functionName: 'num_identical_pairs',
+        examples: [
+            { input: 'nums = [1,2,3,1,1,3]', output: '4', explanation: 'The good pairs are (0,3), (0,4), (3,4), (2,5).' },
+            { input: 'nums = [1,1,1,1]', output: '6', explanation: 'Each pair in the array is good.' },
+        ],
+        constraints: ['1 <= nums.length <= 100', '1 <= nums[i] <= 100'],
+        testCases: [
+            { input: { nums: [1, 2, 3, 1, 1, 3] }, expectedOutput: 4 },
+            { input: { nums: [1, 1, 1, 1] }, expectedOutput: 6 },
+            { input: { nums: [1, 2, 3] }, expectedOutput: 0 },
+            { input: { nums: [1, 2, 1, 1, 2] }, expectedOutput: 4, isHidden: true },
+        ],
+        starterCode: {
+            python: `def num_identical_pairs(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function numIdenticalPairs(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int numIdenticalPairs(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Single Number II',
+        description: `Given an integer array \`nums\` where every element appears three times except for one, which appears exactly once. Find the single element and return it.`,
+        difficulty: 'medium',
+        category: 'counting',
+        isPremium: true,
+        functionName: 'single_number_ii',
+        examples: [
+            { input: 'nums = [2,2,3,2]', output: '3', explanation: '' },
+            { input: 'nums = [0,1,0,1,0,1,99]', output: '99', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 3 * 10^4', '-2^31 <= nums[i] <= 2^31 - 1', 'Each element in nums appears exactly three times except for one element which appears once.'],
+        testCases: [
+            { input: { nums: [2, 2, 3, 2] }, expectedOutput: 3 },
+            { input: { nums: [0, 1, 0, 1, 0, 1, 99] }, expectedOutput: 99 },
+            { input: { nums: [30000, 500, 100, 30000, 100, 30000, 100] }, expectedOutput: 500, isHidden: true },
+        ],
+        starterCode: {
+            python: `def single_number_ii(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function singleNumberII(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int singleNumberII(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Find All Numbers Disappeared in an Array',
+        description: `Given an array \`nums\` of \`n\` integers where \`nums[i]\` is in the range \`[1, n]\`, return an array of all the integers in the range \`[1, n]\` that do not appear in \`nums\`, sorted in ascending order.`,
+        difficulty: 'medium',
+        category: 'counting',
+        isPremium: true,
+        functionName: 'find_disappeared_numbers',
+        examples: [
+            { input: 'nums = [4,3,2,7,8,2,3,1]', output: '[5,6]', explanation: '' },
+            { input: 'nums = [1,1]', output: '[2]', explanation: '' },
+        ],
+        constraints: ['n == nums.length', '1 <= n <= 10^5', '1 <= nums[i] <= n'],
+        testCases: [
+            { input: { nums: [4, 3, 2, 7, 8, 2, 3, 1] }, expectedOutput: [5, 6] },
+            { input: { nums: [1, 1] }, expectedOutput: [2] },
+            { input: { nums: [1, 2, 3] }, expectedOutput: [] },
+            { input: { nums: [2, 2] }, expectedOutput: [1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_disappeared_numbers(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function findDisappearedNumbers(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        }
+    },
+
+    // SHORTEST PATH
+    {
+        title: 'Network Delay Time',
+        description: `You are given a network of \`n\` nodes, labeled from \`1\` to \`n\`. You are also given \`times\`, a list of travel times as directed edges \`times[i] = (ui, vi, wi)\`, where \`ui\` is the source node, \`vi\` is the target node, and \`wi\` is the time it takes for a signal to travel from source to target.
+
+We will send a signal from a given node \`k\`. Return the minimum time it takes for all the \`n\` nodes to receive the signal. If it is impossible for all the \`n\` nodes to receive the signal, return \`-1\`.`,
+        difficulty: 'medium',
+        category: 'shortest-path',
+        isPremium: false,
+        functionName: 'network_delay_time',
+        examples: [
+            { input: 'times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2', output: '2', explanation: '' },
+            { input: 'times = [[1,2,1]], n = 2, k = 1', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= k <= n <= 100', '1 <= times.length <= 6000', 'times[i].length == 3', '1 <= ui, vi <= n', 'ui != vi', '0 <= wi <= 100', 'All the pairs (ui, vi) are unique.'],
+        testCases: [
+            { input: { times: [[2, 1, 1], [2, 3, 1], [3, 4, 1]], n: 4, k: 2 }, expectedOutput: 2 },
+            { input: { times: [[1, 2, 1]], n: 2, k: 1 }, expectedOutput: 1 },
+            { input: { times: [[1, 2, 1]], n: 2, k: 2 }, expectedOutput: -1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function networkDelayTime(times, n, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // Write your solution here
+        return -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'Cheapest Flights Within K Stops',
+        description: `There are \`n\` cities connected by some number of flights. You are given an array \`flights\` where \`flights[i] = [fromi, toi, pricei]\` indicates that there is a flight from city \`fromi\` to city \`toi\` with cost \`pricei\`.
+
+You are also given three integers \`src\`, \`dst\`, and \`k\`, return the cheapest price from \`src\` to \`dst\` with at most \`k\` stops. If there is no such route, return \`-1\`.`,
+        difficulty: 'medium',
+        category: 'shortest-path',
+        isPremium: false,
+        functionName: 'find_cheapest_price',
+        examples: [
+            { input: 'n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1', output: '700', explanation: '' },
+            { input: 'n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1', output: '200', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 100', '0 <= flights.length <= (n * (n - 1) / 2)', 'flights[i].length == 3', '0 <= fromi, toi < n', 'fromi != toi', '1 <= pricei <= 10^4', '0 <= src, dst, k < n', 'src != dst'],
+        testCases: [
+            { input: { n: 4, flights: [[0, 1, 100], [1, 2, 100], [2, 0, 100], [1, 3, 600], [2, 3, 200]], src: 0, dst: 3, k: 1 }, expectedOutput: 700 },
+            { input: { n: 3, flights: [[0, 1, 100], [1, 2, 100], [0, 2, 500]], src: 0, dst: 2, k: 1 }, expectedOutput: 200 },
+            { input: { n: 3, flights: [[0, 1, 100], [1, 2, 100], [0, 2, 500]], src: 0, dst: 2, k: 0 }, expectedOutput: 500, isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_cheapest_price(n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function findCheapestPrice(n, flights, src, dst, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        // Write your solution here
+        return -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'Path With Minimum Effort',
+        description: `You are given \`heights\`, a 2D array of size \`rows x columns\`, where \`heights[row][col]\` represents the height of cell \`(row, col)\`. You are situated in the top-left cell, \`(0, 0)\`, and you hope to travel to the bottom-right cell, \`(rows-1, columns-1)\`. You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
+
+A route's effort is the maximum absolute difference in heights between two consecutive cells of the route.
+
+Return the minimum effort required to travel from the top-left cell to the bottom-right cell.`,
+        difficulty: 'medium',
+        category: 'shortest-path',
+        isPremium: true,
+        functionName: 'minimum_effort_path',
+        examples: [
+            { input: 'heights = [[1,2,2],[3,8,2],[5,3,5]]', output: '2', explanation: '' },
+            { input: 'heights = [[1,2,3],[3,8,4],[5,3,5]]', output: '1', explanation: '' },
+        ],
+        constraints: ['rows == heights.length', 'columns == heights[i].length', '1 <= rows, columns <= 100', '1 <= heights[i][j] <= 10^6'],
+        testCases: [
+            { input: { heights: [[1, 2, 2], [3, 8, 2], [5, 3, 5]] }, expectedOutput: 2 },
+            { input: { heights: [[1, 2, 3], [3, 8, 4], [5, 3, 5]] }, expectedOutput: 1 },
+            { input: { heights: [[1, 2, 1, 1, 1], [1, 2, 1, 2, 1], [1, 2, 1, 2, 1], [1, 2, 1, 2, 1], [1, 1, 1, 2, 1]] }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def minimum_effort_path(heights: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minimumEffortPath(heights) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Swim in Rising Water',
+        description: `You are given an \`n x n\` integer matrix \`grid\` where each value \`grid[i][j]\` represents the elevation at that point \`(i, j)\`. Every value is unique.
+
+It starts raining, and water starts rising. At time \`t\`, the water level is \`t\`, meaning any cell with elevation less than or equal to \`t\` is submerged or reachable. You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most \`t\`. You can swim infinite distances in zero time.
+
+Return the least time until you can reach the bottom right square \`(n-1, n-1)\` if you start at the top left square \`(0, 0)\`.`,
+        difficulty: 'hard',
+        category: 'shortest-path',
+        isPremium: true,
+        functionName: 'swim_in_water',
+        examples: [
+            { input: 'grid = [[0,2],[1,3]]', output: '3', explanation: '' },
+        ],
+        constraints: ['n == grid.length', 'n == grid[i].length', '1 <= n <= 50', '0 <= grid[i][j] < n^2', 'Each value grid[i][j] is unique.'],
+        testCases: [
+            { input: { grid: [[0, 2], [1, 3]] }, expectedOutput: 3 },
+            { input: { grid: [[0, 1], [2, 3]] }, expectedOutput: 3 },
+            { input: { grid: [[3, 2], [0, 1]] }, expectedOutput: 3, isHidden: true },
+        ],
+        starterCode: {
+            python: `def swim_in_water(grid: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function swimInWater(grid) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int swimInWater(int[][] grid) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // NUMBER THEORY
+    {
+        title: 'Happy Number',
+        description: `Write an algorithm to determine if a number \`n\` is happy.
+
+A happy number is a number defined by the following process: starting with any positive integer, replace the number by the sum of the squares of its digits. Repeat the process until the number equals \`1\` (where it will stay), or it loops endlessly in a cycle which does not include \`1\`. Those numbers for which this process ends in \`1\` are happy.
+
+Return \`true\` if \`n\` is a happy number, and \`false\` if not.`,
+        difficulty: 'easy',
+        category: 'number-theory',
+        isPremium: false,
+        functionName: 'is_happy',
+        examples: [
+            { input: 'n = 19', output: 'true', explanation: '1^2 + 9^2 = 82, 8^2 + 2^2 = 68, 6^2 + 8^2 = 100, 1^2 + 0^2 + 0^2 = 1' },
+            { input: 'n = 2', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2^31 - 1'],
+        testCases: [
+            { input: { n: 19 }, expectedOutput: true },
+            { input: { n: 2 }, expectedOutput: false },
+            { input: { n: 1 }, expectedOutput: true },
+            { input: { n: 7 }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def is_happy(n: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function isHappy(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean isHappy(int n) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Count Primes',
+        description: `Given an integer \`n\`, return the number of prime numbers that are strictly less than \`n\`.`,
+        difficulty: 'medium',
+        category: 'number-theory',
+        isPremium: false,
+        functionName: 'count_primes',
+        examples: [
+            { input: 'n = 10', output: '4', explanation: 'There are 4 primes less than 10: 2, 3, 5, 7.' },
+            { input: 'n = 0', output: '0', explanation: '' },
+        ],
+        constraints: ['0 <= n <= 5 * 10^6'],
+        testCases: [
+            { input: { n: 10 }, expectedOutput: 4 },
+            { input: { n: 0 }, expectedOutput: 0 },
+            { input: { n: 1 }, expectedOutput: 0 },
+            { input: { n: 100 }, expectedOutput: 25, isHidden: true },
+        ],
+        starterCode: {
+            python: `def count_primes(n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function countPrimes(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int countPrimes(int n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Nth Ugly Number',
+        description: `An ugly number is a positive integer whose prime factors are limited to \`2\`, \`3\`, and \`5\`.
+
+Given an integer \`n\`, return the \`nth\` ugly number.`,
+        difficulty: 'medium',
+        category: 'number-theory',
+        isPremium: true,
+        functionName: 'nth_ugly_number',
+        examples: [
+            { input: 'n = 10', output: '12', explanation: '[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] is the sequence of the first 10 ugly numbers.' },
+            { input: 'n = 1', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 1690'],
+        testCases: [
+            { input: { n: 10 }, expectedOutput: 12 },
+            { input: { n: 1 }, expectedOutput: 1 },
+            { input: { n: 15 }, expectedOutput: 24, isHidden: true },
+        ],
+        starterCode: {
+            python: `def nth_ugly_number(n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function nthUglyNumber(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int nthUglyNumber(int n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Integer to English Words',
+        description: `Convert a non-negative integer \`num\` to its English words representation.`,
+        difficulty: 'hard',
+        category: 'number-theory',
+        isPremium: true,
+        functionName: 'number_to_words',
+        examples: [
+            { input: 'num = 123', output: '"One Hundred Twenty Three"', explanation: '' },
+            { input: 'num = 12345', output: '"Twelve Thousand Three Hundred Forty Five"', explanation: '' },
+            { input: 'num = 1234567', output: '"One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"', explanation: '' },
+        ],
+        constraints: ['0 <= num <= 2^31 - 1'],
+        testCases: [
+            { input: { num: 123 }, expectedOutput: 'One Hundred Twenty Three' },
+            { input: { num: 12345 }, expectedOutput: 'Twelve Thousand Three Hundred Forty Five' },
+            { input: { num: 1234567 }, expectedOutput: 'One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven' },
+            { input: { num: 0 }, expectedOutput: 'Zero', isHidden: true },
+        ],
+        starterCode: {
+            python: `def number_to_words(num: int) -> str:
+    # Write your solution here
+    pass`,
+            javascript: `function numberToWords(num) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public String numberToWords(int num) {
+        // Write your solution here
+        return "";
+    }
+}`
+        }
+    },
+
+    // BITMASK
+    {
+        title: 'Single Number III',
+        description: `Given an integer array \`nums\` in which exactly two elements appear only once and all the other elements appear exactly twice, find the two elements that appear only once. Return them sorted in ascending order.`,
+        difficulty: 'medium',
+        category: 'bitmask',
+        isPremium: false,
+        functionName: 'single_number_iii',
+        examples: [
+            { input: 'nums = [1,2,1,3,2,5]', output: '[3,5]', explanation: '' },
+            { input: 'nums = [-1,0]', output: '[-1,0]', explanation: '' },
+        ],
+        constraints: ['2 <= nums.length <= 3 * 10^4', '-2^31 <= nums[i] <= 2^31 - 1', 'Each integer in nums will appear twice, only two integers will appear once.'],
+        testCases: [
+            { input: { nums: [1, 2, 1, 3, 2, 5] }, expectedOutput: [3, 5] },
+            { input: { nums: [-1, 0] }, expectedOutput: [-1, 0] },
+            { input: { nums: [0, 1] }, expectedOutput: [0, 1] },
+            { input: { nums: [4, 1, 4, 2] }, expectedOutput: [1, 2], isHidden: true },
+        ],
+        starterCode: {
+            python: `def single_number_iii(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function singleNumberIII(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] singleNumberIII(int[] nums) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Partition to K Equal Sum Subsets',
+        description: `Given an integer array \`nums\` and an integer \`k\`, return \`true\` if it is possible to divide this array into \`k\` non-empty subsets whose sums are all equal.`,
+        difficulty: 'medium',
+        category: 'bitmask',
+        isPremium: false,
+        functionName: 'can_partition_k_subsets',
+        examples: [
+            { input: 'nums = [4,3,2,3,5,2,1], k = 4', output: 'true', explanation: 'It is possible to divide it into 4 subsets (5), (1,4), (2,3), (2,3) with equal sums.' },
+            { input: 'nums = [1,2,3,4], k = 3', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= k <= nums.length <= 16', '1 <= nums[i] <= 10^4', 'The frequency of each element is in the range [1, 4].'],
+        testCases: [
+            { input: { nums: [4, 3, 2, 3, 5, 2, 1], k: 4 }, expectedOutput: true },
+            { input: { nums: [1, 2, 3, 4], k: 3 }, expectedOutput: false },
+            { input: { nums: [2, 2, 2, 2, 3, 4, 5], k: 4 }, expectedOutput: false },
+            { input: { nums: [1, 1, 1, 1, 2, 2, 2, 2], k: 4 }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_partition_k_subsets(nums: list[int], k: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canPartitionKSubsets(nums, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Shortest Path Visiting All Nodes',
+        description: `You have an undirected, connected graph of \`n\` nodes labeled from \`0\` to \`n - 1\`. You are given an array \`graph\` where \`graph[i]\` is a list of all the nodes connected with node \`i\` by an edge.
+
+Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.`,
+        difficulty: 'hard',
+        category: 'bitmask',
+        isPremium: true,
+        functionName: 'shortest_path_length',
+        examples: [
+            { input: 'graph = [[1,2,3],[0],[0],[0]]', output: '4', explanation: 'One possible path is [1,0,2,0,3]' },
+            { input: 'graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]', output: '4', explanation: 'One possible path is [0,1,4,2,3]' },
+        ],
+        constraints: ['n == graph.length', '1 <= n <= 12', '0 <= graph[i].length < n', 'graph[i] does not contain i.', 'If graph[a] contains b, then graph[b] contains a.', 'The input graph is always connected.'],
+        testCases: [
+            { input: { graph: [[1, 2, 3], [0], [0], [0]] }, expectedOutput: 4 },
+            { input: { graph: [[1], [0, 2, 4], [1, 3, 4], [2], [1, 2]] }, expectedOutput: 4 },
+            { input: { graph: [[1], [0]] }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def shortest_path_length(graph: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function shortestPathLength(graph) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int shortestPathLength(int[][] graph) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Minimum XOR Sum of Two Arrays',
+        description: `You are given two integer arrays \`nums1\` and \`nums2\` of length \`n\`. The XOR sum of the two arrays is the sum of \`(nums1[i] XOR nums2[i])\` for all \`0 <= i < n\`.
+
+Rearrange the elements of \`nums2\` such that the resulting XOR sum is minimized. Return the XOR sum after the rearrangement.`,
+        difficulty: 'hard',
+        category: 'bitmask',
+        isPremium: true,
+        functionName: 'minimum_xor_sum',
+        examples: [
+            { input: 'nums1 = [1,2], nums2 = [2,3]', output: '2', explanation: 'Rearrange nums2 so that it becomes [3,2]. Then the XOR sum is (1 XOR 3) + (2 XOR 2) = 2 + 0 = 2.' },
+            { input: 'nums1 = [1,0,3], nums2 = [5,3,4]', output: '8', explanation: '' },
+        ],
+        constraints: ['n == nums1.length == nums2.length', '1 <= n <= 14', '0 <= nums1[i], nums2[i] <= 10^7'],
+        testCases: [
+            { input: { nums1: [1, 2], nums2: [2, 3] }, expectedOutput: 2 },
+            { input: { nums1: [1, 0, 3], nums2: [5, 3, 4] }, expectedOutput: 8 },
+            { input: { nums1: [0], nums2: [0] }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minimumXorSum(nums1, nums2) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minimumXorSum(int[] nums1, int[] nums2) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // RECURSION
+    {
+        title: 'Fibonacci Number',
+        description: `The Fibonacci numbers, commonly denoted \`F(n)\`, form a sequence such that each number is the sum of the two preceding ones, starting from \`0\` and \`1\`. That is, \`F(0) = 0\`, \`F(1) = 1\`, \`F(n) = F(n - 1) + F(n - 2)\` for \`n > 1\`.
+
+Given \`n\`, calculate \`F(n)\`.`,
+        difficulty: 'easy',
+        category: 'recursion',
+        isPremium: false,
+        functionName: 'fib',
+        examples: [
+            { input: 'n = 2', output: '1', explanation: 'F(2) = F(1) + F(0) = 1 + 0 = 1.' },
+            { input: 'n = 4', output: '3', explanation: 'F(4) = F(3) + F(2) = 2 + 1 = 3.' },
+        ],
+        constraints: ['0 <= n <= 30'],
+        testCases: [
+            { input: { n: 2 }, expectedOutput: 1 },
+            { input: { n: 3 }, expectedOutput: 2 },
+            { input: { n: 4 }, expectedOutput: 3 },
+            { input: { n: 10 }, expectedOutput: 55, isHidden: true },
+        ],
+        starterCode: {
+            python: `def fib(n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function fib(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int fib(int n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Power of Four',
+        description: `Given an integer \`n\`, return \`true\` if it is a power of four. Otherwise, return \`false\`.
+
+An integer \`n\` is a power of four, if there exists an integer \`x\` such that \`n == 4^x\`.`,
+        difficulty: 'easy',
+        category: 'recursion',
+        isPremium: false,
+        functionName: 'is_power_of_four',
+        examples: [
+            { input: 'n = 16', output: 'true', explanation: '' },
+            { input: 'n = 5', output: 'false', explanation: '' },
+            { input: 'n = 1', output: 'true', explanation: '' },
+        ],
+        constraints: ['-2^31 <= n <= 2^31 - 1'],
+        testCases: [
+            { input: { n: 16 }, expectedOutput: true },
+            { input: { n: 5 }, expectedOutput: false },
+            { input: { n: 1 }, expectedOutput: true },
+            { input: { n: 64 }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def is_power_of_four(n: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function isPowerOfFour(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean isPowerOfFour(int n) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Unique Binary Search Trees',
+        description: `Given an integer \`n\`, return the number of structurally unique BST's (binary search trees) which has exactly \`n\` nodes of unique values from \`1\` to \`n\`.`,
+        difficulty: 'medium',
+        category: 'recursion',
+        isPremium: true,
+        functionName: 'num_trees',
+        examples: [
+            { input: 'n = 3', output: '5', explanation: '' },
+            { input: 'n = 1', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 19'],
+        testCases: [
+            { input: { n: 3 }, expectedOutput: 5 },
+            { input: { n: 1 }, expectedOutput: 1 },
+            { input: { n: 4 }, expectedOutput: 14, isHidden: true },
+        ],
+        starterCode: {
+            python: `def num_trees(n: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function numTrees(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int numTrees(int n) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: "K-th Symbol in Grammar",
+        description: `We build a table of \`n\` rows (1-indexed). We start by writing a \`0\` in the 1st row. Now in every subsequent row, we look at the previous row and replace each occurrence of \`0\` with \`01\`, and each occurrence of \`1\` with \`10\`.
+
+Given two integers \`n\` and \`k\`, return the \`kth\` (1-indexed) symbol in the \`nth\` row of the table.`,
+        difficulty: 'hard',
+        category: 'recursion',
+        isPremium: true,
+        functionName: 'kth_grammar',
+        examples: [
+            { input: 'n = 1, k = 1', output: '0', explanation: '' },
+            { input: 'n = 2, k = 1', output: '0', explanation: '' },
+            { input: 'n = 2, k = 2', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 30', '1 <= k <= 2^(n - 1)'],
+        testCases: [
+            { input: { n: 1, k: 1 }, expectedOutput: 0 },
+            { input: { n: 2, k: 1 }, expectedOutput: 0 },
+            { input: { n: 2, k: 2 }, expectedOutput: 1 },
+            { input: { n: 4, k: 5 }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def kth_grammar(n: int, k: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function kthGrammar(n, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int kthGrammar(int n, int k) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // GEOMETRY
+    {
+        title: 'Valid Square',
+        description: `Given the coordinates of four points in 2D space \`p1\`, \`p2\`, \`p3\`, and \`p4\`, return \`true\` if the four points construct a square. Each point is given as \`[x, y]\`. The order of the points is not guaranteed.`,
+        difficulty: 'medium',
+        category: 'geometry',
+        isPremium: false,
+        functionName: 'valid_square',
+        examples: [
+            { input: 'p1 = [0,0], p2 = [1,1], p3 = [1,0], p4 = [0,1]', output: 'true', explanation: '' },
+            { input: 'p1 = [0,0], p2 = [1,1], p3 = [1,0], p4 = [0,12]', output: 'false', explanation: '' },
+        ],
+        constraints: ['p1.length == p2.length == p3.length == p4.length == 2', '-10^4 <= xi, yi <= 10^4'],
+        testCases: [
+            { input: { p1: [0, 0], p2: [1, 1], p3: [1, 0], p4: [0, 1] }, expectedOutput: true },
+            { input: { p1: [0, 0], p2: [1, 1], p3: [1, 0], p4: [0, 12] }, expectedOutput: false },
+            { input: { p1: [0, 0], p2: [0, 0], p3: [0, 0], p4: [0, 0] }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def valid_square(p1: list[int], p2: list[int], p3: list[int], p4: list[int]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function validSquare(p1, p2, p3, p4) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Max Points on a Line',
+        description: `Given an array of \`points\` where \`points[i] = [xi, yi]\` represents a point on the X-Y plane, return the maximum number of points that lie on the same straight line.`,
+        difficulty: 'medium',
+        category: 'geometry',
+        isPremium: false,
+        functionName: 'max_points',
+        examples: [
+            { input: 'points = [[1,1],[2,2],[3,3]]', output: '3', explanation: '' },
+            { input: 'points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]', output: '4', explanation: '' },
+        ],
+        constraints: ['1 <= points.length <= 300', 'points[i].length == 2', '-10^4 <= xi, yi <= 10^4', 'All the points are unique.'],
+        testCases: [
+            { input: { points: [[1, 1], [2, 2], [3, 3]] }, expectedOutput: 3 },
+            { input: { points: [[1, 1], [3, 2], [5, 3], [4, 1], [2, 3], [1, 4]] }, expectedOutput: 4 },
+            { input: { points: [[0, 0]] }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def max_points(points: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function maxPoints(points) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int maxPoints(int[][] points) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'K Closest Points to Origin',
+        description: `Given an array of \`points\` where \`points[i] = [xi, yi]\` represents a point on the X-Y plane and an integer \`k\`, return the \`k\` closest points to the origin \`(0, 0)\`.
+
+If there are ties in distance, break ties by smaller \`x\` first, then by smaller \`y\`.`,
+        difficulty: 'medium',
+        category: 'geometry',
+        isPremium: true,
+        functionName: 'k_closest',
+        examples: [
+            { input: 'points = [[1,3],[-2,2]], k = 1', output: '[[-2,2]]', explanation: '' },
+            { input: 'points = [[3,3],[5,-1],[-2,4]], k = 2', output: '[[3,3],[-2,4]]', explanation: '' },
+        ],
+        constraints: ['1 <= k <= points.length <= 10^4', '-10^4 <= xi, yi <= 10^4'],
+        testCases: [
+            { input: { points: [[1, 3], [-2, 2]], k: 1 }, expectedOutput: [[-2, 2]] },
+            { input: { points: [[3, 3], [5, -1], [-2, 4]], k: 2 }, expectedOutput: [[3, 3], [-2, 4]] },
+            { input: { points: [[0, 1], [1, 0]], k: 2 }, expectedOutput: [[0, 1], [1, 0]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def k_closest(points: list[list[int]], k: int) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function kClosest(points, k) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[][] kClosest(int[][] points, int k) {
+        // Write your solution here
+        return new int[][]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Minimum Area Rectangle',
+        description: `You are given an array of points in the X-Y plane \`points\` where \`points[i] = [xi, yi]\`. Return the minimum area of a rectangle formed from these points, with sides parallel to the X and Y axes. If there is not any such rectangle, return \`0\`.`,
+        difficulty: 'hard',
+        category: 'geometry',
+        isPremium: true,
+        functionName: 'min_area_rect',
+        examples: [
+            { input: 'points = [[1,1],[1,3],[3,1],[3,3],[2,2]]', output: '4', explanation: '' },
+            { input: 'points = [[1,1],[1,3],[3,1],[3,3],[4,1],[4,3]]', output: '2', explanation: '' },
+        ],
+        constraints: ['1 <= points.length <= 500', '0 <= xi, yi <= 4 * 10^4', 'All the given points are unique.'],
+        testCases: [
+            { input: { points: [[1, 1], [1, 3], [3, 1], [3, 3], [2, 2]] }, expectedOutput: 4 },
+            { input: { points: [[1, 1], [1, 3], [3, 1], [3, 3], [4, 1], [4, 3]] }, expectedOutput: 2 },
+            { input: { points: [[1, 1], [1, 3], [3, 1]] }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def min_area_rect(points: list[list[int]]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minAreaRect(points) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minAreaRect(int[][] points) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+
+    // DIVIDE AND CONQUER
+    {
+        title: 'Different Ways to Add Parentheses',
+        description: `Given a string \`expression\` of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators. The results are guaranteed to fit in a 32-bit integer. Return the results sorted in ascending order.`,
+        difficulty: 'medium',
+        category: 'divide-and-conquer',
+        isPremium: false,
+        functionName: 'diff_ways_to_compute',
+        examples: [
+            { input: 'expression = "2-1-1"', output: '[0,2]', explanation: '(2-1)-1 = 0, 2-(1-1) = 2' },
+            { input: 'expression = "2*3-4*5"', output: '[-34,-14,-10,-10,10]', explanation: '' },
+        ],
+        constraints: ['1 <= expression.length <= 20', 'expression consists of digits and the operators (+, -, *).', 'All the integer values in the input expression are in the range [0, 99].'],
+        testCases: [
+            { input: { expression: '2-1-1' }, expectedOutput: [0, 2] },
+            { input: { expression: '2*3-4*5' }, expectedOutput: [-34, -14, -10, -10, 10] },
+            { input: { expression: '1' }, expectedOutput: [1], isHidden: true },
+        ],
+        starterCode: {
+            python: `def diff_ways_to_compute(expression: str) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function diffWaysToCompute(expression) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<Integer> diffWaysToCompute(String expression) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        }
+    },
+    {
+        title: 'Search a 2D Matrix II',
+        description: `Write an efficient algorithm that searches for a value \`target\` in an \`m x n\` integer \`matrix\`. This matrix has the following properties: integers in each row are sorted in ascending order from left to right, and integers in each column are sorted in ascending order from top to bottom.
+
+Return \`true\` if \`target\` is in the matrix, \`false\` otherwise.`,
+        difficulty: 'medium',
+        category: 'divide-and-conquer',
+        isPremium: false,
+        functionName: 'search_matrix',
+        examples: [
+            { input: 'matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5', output: 'true', explanation: '' },
+            { input: 'matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20', output: 'false', explanation: '' },
+        ],
+        constraints: ['m == matrix.length', 'n == matrix[i].length', '1 <= n, m <= 300', '-10^9 <= matrix[i][j] <= 10^9', 'All the integers in each row are sorted in ascending order.', 'All the integers in each column are sorted in ascending order.', '-10^9 <= target <= 10^9'],
+        testCases: [
+            { input: { matrix: [[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22], [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], target: 5 }, expectedOutput: true },
+            { input: { matrix: [[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22], [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], target: 20 }, expectedOutput: false },
+            { input: { matrix: [[1]], target: 1 }, expectedOutput: true, isHidden: true },
+        ],
+        starterCode: {
+            python: `def search_matrix(matrix: list[list[int]], target: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function searchMatrix(matrix, target) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Count of Smaller Numbers After Self',
+        description: `Given an integer array \`nums\`, return an integer array \`counts\` where \`counts[i]\` is the number of smaller elements to the right of \`nums[i]\`.`,
+        difficulty: 'hard',
+        category: 'divide-and-conquer',
+        isPremium: true,
+        functionName: 'count_smaller',
+        examples: [
+            { input: 'nums = [5,2,6,1]', output: '[2,1,1,0]', explanation: '' },
+            { input: 'nums = [-1]', output: '[0]', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 10^5', '-10^4 <= nums[i] <= 10^4'],
+        testCases: [
+            { input: { nums: [5, 2, 6, 1] }, expectedOutput: [2, 1, 1, 0] },
+            { input: { nums: [-1] }, expectedOutput: [0] },
+            { input: { nums: [-1, -1] }, expectedOutput: [0, 0] },
+            { input: { nums: [2, 0, 1] }, expectedOutput: [2, 0, 0], isHidden: true },
+        ],
+        starterCode: {
+            python: `def count_smaller(nums: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function countSmaller(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        }
+    },
+    {
+        title: 'The Skyline Problem',
+        description: `A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively, represented as a list of "key points" \`[[x1,y1],[x2,y2],...]\` sorted by x-coordinate.
+
+Each building is given as \`buildings[i] = [lefti, righti, heighti]\` where \`lefti\` is the x coordinate of the left edge, \`righti\` is the x coordinate of the right edge, and \`heighti\` is the height. A key point is the left endpoint of a horizontal line segment where the height changes (including a final point with height 0). The final list should not have consecutive horizontal lines of the same height.`,
+        difficulty: 'hard',
+        category: 'divide-and-conquer',
+        isPremium: true,
+        functionName: 'get_skyline',
+        examples: [
+            { input: 'buildings = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]', output: '[[2,10],[3,15],[7,12],[12,0],[15,10],[20,8],[24,0]]', explanation: '' },
+        ],
+        constraints: ['1 <= buildings.length <= 10^4', '0 <= lefti < righti <= 2^31 - 1', '1 <= heighti <= 2^31 - 1', 'buildings is sorted by lefti in non-decreasing order.'],
+        testCases: [
+            { input: { buildings: [[2, 9, 10], [3, 7, 15], [5, 12, 12], [15, 20, 10], [19, 24, 8]] }, expectedOutput: [[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]] },
+            { input: { buildings: [[0, 2, 3], [2, 5, 3]] }, expectedOutput: [[0, 3], [5, 0]] },
+            { input: { buildings: [[0, 1, 1]] }, expectedOutput: [[0, 1], [1, 0]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def get_skyline(buildings: list[list[int]]) -> list[list[int]]:
+    # Write your solution here
+    pass`,
+            javascript: `function getSkyline(buildings) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        }
+    },
+
+    // GAME THEORY
+    {
+        title: 'Nim Game',
+        description: `You are playing the following Nim Game with your friend: initially, there is a heap of stones on the table. You and your friend will alternate taking turns, and you go first. On each turn, the person whose turn it is removes 1 to 3 stones from the heap. The one who removes the last stone is the winner.
+
+Given \`n\`, the number of stones in the heap, return \`true\` if you can win the game assuming both you and your friend play optimally, otherwise return \`false\`.`,
+        difficulty: 'easy',
+        category: 'game-theory',
+        isPremium: false,
+        functionName: 'can_win_nim',
+        examples: [
+            { input: 'n = 4', output: 'false', explanation: 'No matter which move you make, your friend can always make the right choice and eventually win.' },
+            { input: 'n = 1', output: 'true', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2^31 - 1'],
+        testCases: [
+            { input: { n: 4 }, expectedOutput: false },
+            { input: { n: 1 }, expectedOutput: true },
+            { input: { n: 2 }, expectedOutput: true },
+            { input: { n: 8 }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_win_nim(n: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canWinNim(n) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canWinNim(int n) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Predict the Winner',
+        description: `You are given an integer array \`nums\`. Two players are playing a game with this array: player 1 and player 2. Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array, which reduces the size of the array by 1. The player adds the chosen number to their score.
+
+Return \`true\` if Player 1 can win the game. If the scores of both players are equal, player 1 is still the winner, and you should return \`true\`. Assume both players play optimally.`,
+        difficulty: 'medium',
+        category: 'game-theory',
+        isPremium: false,
+        functionName: 'predict_the_winner',
+        examples: [
+            { input: 'nums = [1,5,2]', output: 'false', explanation: '' },
+            { input: 'nums = [1,5,233,7]', output: 'true', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 20', '0 <= nums[i] <= 10^7'],
+        testCases: [
+            { input: { nums: [1, 5, 2] }, expectedOutput: false },
+            { input: { nums: [1, 5, 233, 7] }, expectedOutput: true },
+            { input: { nums: [1] }, expectedOutput: true },
+            { input: { nums: [20, 30, 1] }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def predict_the_winner(nums: list[int]) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function predictTheWinner(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean predictTheWinner(int[] nums) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Flip Game II',
+        description: `You are playing a Flip Game with your friend. You are given a string \`currentState\` that contains only \`'+'\` and \`'-'\`. You and your friend take turns to flip two consecutive \`"++"\` into \`"--"\`. The game ends when a person can no longer make a move, and therefore the other person will be the winner.
+
+Return \`true\` if the starting player can guarantee a win, and \`false\` otherwise.`,
+        difficulty: 'medium',
+        category: 'game-theory',
+        isPremium: true,
+        functionName: 'can_win',
+        examples: [
+            { input: 'currentState = "++++"', output: 'true', explanation: "The starting player can guarantee a win by flipping the middle \"++\" to become \"+--+\"." },
+            { input: 'currentState = "+"', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= currentState.length <= 60', "currentState[i] is either '+' or '-'."],
+        testCases: [
+            { input: { currentState: '++++' }, expectedOutput: true },
+            { input: { currentState: '+' }, expectedOutput: false },
+            { input: { currentState: '+++' }, expectedOutput: true },
+            { input: { currentState: '--' }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_win(currentState: str) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canWin(currentState) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canWin(String currentState) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Can I Win',
+        description: `In the "100 game," two players take turns adding, to a running total, integers from \`1\` to \`maxChoosableInteger\` without reusing integers already chosen. The player who first causes the running total to reach or exceed \`desiredTotal\` wins.
+
+Given two integers \`maxChoosableInteger\` and \`desiredTotal\`, return \`true\` if the first player to move can force a win, otherwise return \`false\`. Assume both players play optimally.`,
+        difficulty: 'hard',
+        category: 'game-theory',
+        isPremium: true,
+        functionName: 'can_i_win',
+        examples: [
+            { input: 'maxChoosableInteger = 10, desiredTotal = 11', output: 'false', explanation: 'No matter which number the first player chooses, the first player will lose.' },
+            { input: 'maxChoosableInteger = 10, desiredTotal = 0', output: 'true', explanation: '' },
+            { input: 'maxChoosableInteger = 10, desiredTotal = 1', output: 'true', explanation: '' },
+        ],
+        constraints: ['1 <= maxChoosableInteger <= 20', '0 <= desiredTotal <= 300'],
+        testCases: [
+            { input: { maxChoosableInteger: 10, desiredTotal: 11 }, expectedOutput: false },
+            { input: { maxChoosableInteger: 10, desiredTotal: 0 }, expectedOutput: true },
+            { input: { maxChoosableInteger: 10, desiredTotal: 1 }, expectedOutput: true },
+            { input: { maxChoosableInteger: 5, desiredTotal: 50 }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def can_i_win(maxChoosableInteger: int, desiredTotal: int) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function canIWin(maxChoosableInteger, desiredTotal) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
     }
 ];
 
