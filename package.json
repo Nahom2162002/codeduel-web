@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx scripts/seedProblems.ts"
+    "seed": "tsx scripts/seedProblems.ts",
+    "seed:add": "tsx scripts/addProblems.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.5",

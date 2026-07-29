@@ -3,7 +3,7 @@ import Problem from '../models/Problem';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
-const problems = [
+export const problems = [
     // ARRAYS
     {
         title: 'Two Sum',
@@ -889,6 +889,296 @@ class Twitter {
     public void follow(int followerId, int followeeId) {}
     
     public void unfollow(int followerId, int followeeId) {}
+}`
+        }
+    },
+
+    // BINARY SEARCH
+    {
+        title: 'Binary Search',
+        description: `Given an array of integers \`nums\` sorted in ascending order, and an integer \`target\`, write a function to search \`target\` in \`nums\`. If \`target\` exists, return its index. Otherwise, return \`-1\`.
+
+You must write an algorithm with \`O(log n)\` runtime complexity.`,
+        difficulty: 'easy',
+        category: 'binary-search',
+        isPremium: false,
+        functionName: 'search',
+        examples: [
+            { input: 'nums = [-1,0,3,5,9,12], target = 9', output: '4', explanation: '9 exists in nums and its index is 4.' },
+            { input: 'nums = [-1,0,3,5,9,12], target = 2', output: '-1', explanation: '2 does not exist in nums so return -1.' },
+        ],
+        constraints: ['1 <= nums.length <= 10^4', '-10^4 < nums[i], target < 10^4', 'All the integers in nums are unique.', 'nums is sorted in ascending order.'],
+        testCases: [
+            { input: { nums: [-1, 0, 3, 5, 9, 12], target: 9 }, expectedOutput: 4 },
+            { input: { nums: [-1, 0, 3, 5, 9, 12], target: 2 }, expectedOutput: -1 },
+            { input: { nums: [5], target: 5 }, expectedOutput: 0 },
+            { input: { nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], target: 1 }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def search(nums: list[int], target: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function search(nums, target) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int search(int[] nums, int target) {
+        // Write your solution here
+        return -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'Search in Rotated Sorted Array',
+        description: `There is an integer array \`nums\` sorted in ascending order (with distinct values). Prior to being passed to your function, \`nums\` is possibly rotated at an unknown pivot index.
+
+Given the array \`nums\` after the possible rotation and an integer \`target\`, return the index of \`target\` if it is in \`nums\`, or \`-1\` if it is not.
+
+You must write an algorithm with \`O(log n)\` runtime complexity.`,
+        difficulty: 'medium',
+        category: 'binary-search',
+        isPremium: false,
+        functionName: 'search_rotated',
+        examples: [
+            { input: 'nums = [4,5,6,7,0,1,2], target = 0', output: '4', explanation: '' },
+            { input: 'nums = [4,5,6,7,0,1,2], target = 3', output: '-1', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 5000', '-10^4 <= nums[i] <= 10^4', 'All values of nums are unique.', 'nums is an ascending array that is possibly rotated.', '-10^4 <= target <= 10^4'],
+        testCases: [
+            { input: { nums: [4, 5, 6, 7, 0, 1, 2], target: 0 }, expectedOutput: 4 },
+            { input: { nums: [4, 5, 6, 7, 0, 1, 2], target: 3 }, expectedOutput: -1 },
+            { input: { nums: [1], target: 0 }, expectedOutput: -1 },
+            { input: { nums: [5, 1, 3], target: 5 }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def search_rotated(nums: list[int], target: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function searchRotated(nums, target) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int searchRotated(int[] nums, int target) {
+        // Write your solution here
+        return -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'Find Minimum in Rotated Sorted Array',
+        description: `Suppose an array of length \`n\` sorted in ascending order is rotated between \`1\` and \`n\` times. Given the sorted rotated array \`nums\` of unique elements, return the minimum element of this array.
+
+You must write an algorithm that runs in \`O(log n)\` time.`,
+        difficulty: 'medium',
+        category: 'binary-search',
+        isPremium: true,
+        functionName: 'find_min',
+        examples: [
+            { input: 'nums = [3,4,5,1,2]', output: '1', explanation: 'The original array was [1,2,3,4,5] rotated 3 times.' },
+            { input: 'nums = [4,5,6,7,0,1,2]', output: '0', explanation: 'The original array was [0,1,2,4,5,6,7] rotated 4 times.' },
+        ],
+        constraints: ['n == nums.length', '1 <= n <= 5000', '-5000 <= nums[i] <= 5000', 'All the integers of nums are unique.', 'nums is sorted and rotated between 1 and n times.'],
+        testCases: [
+            { input: { nums: [3, 4, 5, 1, 2] }, expectedOutput: 1 },
+            { input: { nums: [4, 5, 6, 7, 0, 1, 2] }, expectedOutput: 0 },
+            { input: { nums: [11, 13, 15, 17] }, expectedOutput: 11 },
+            { input: { nums: [2, 1] }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_min(nums: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function findMin(nums) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int findMin(int[] nums) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Koko Eating Bananas',
+        description: `Koko loves to eat bananas. There are \`n\` piles of bananas, the \`ith\` pile has \`piles[i]\` bananas. The guards have gone and will come back in \`h\` hours.
+
+Koko can decide her bananas-per-hour eating speed of \`k\`. Each hour, she chooses some pile of bananas and eats \`k\` bananas from that pile. If the pile has less than \`k\` bananas, she eats all of them instead, and won't eat any more bananas during this hour.
+
+Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return. Return the minimum integer \`k\` such that she can eat all the bananas within \`h\` hours.`,
+        difficulty: 'hard',
+        category: 'binary-search',
+        isPremium: true,
+        functionName: 'min_eating_speed',
+        examples: [
+            { input: 'piles = [3,6,7,11], h = 8', output: '4', explanation: '' },
+            { input: 'piles = [30,11,23,4,20], h = 5', output: '30', explanation: '' },
+        ],
+        constraints: ['1 <= piles.length <= 10^4', 'piles.length <= h <= 10^9', '1 <= piles[i] <= 10^9'],
+        testCases: [
+            { input: { piles: [3, 6, 7, 11], h: 8 }, expectedOutput: 4 },
+            { input: { piles: [30, 11, 23, 4, 20], h: 5 }, expectedOutput: 30 },
+            { input: { piles: [30, 11, 23, 4, 20], h: 6 }, expectedOutput: 23 },
+            { input: { piles: [312884470], h: 968709470 }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def min_eating_speed(piles: list[int], h: int) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function minEatingSpeed(piles, h) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        // Write your solution here
+        return 1;
+    }
+}`
+        }
+    },
+
+    // STACKS & QUEUES
+    {
+        title: 'Valid Parentheses',
+        description: `Given a string \`s\` containing just the characters \`'('\`, \`')'\`, \`'{'\`, \`'}'\`, \`'['\` and \`']'\`, determine if the input string is valid.
+
+An input string is valid if:
+- Open brackets must be closed by the same type of brackets.
+- Open brackets must be closed in the correct order.
+- Every close bracket has a corresponding open bracket of the same type.`,
+        difficulty: 'easy',
+        category: 'stacks',
+        isPremium: false,
+        functionName: 'is_valid',
+        examples: [
+            { input: 's = "()"', output: 'true', explanation: '' },
+            { input: 's = "()[]{}"', output: 'true', explanation: '' },
+            { input: 's = "(]"', output: 'false', explanation: '' },
+        ],
+        constraints: ['1 <= s.length <= 10^4', "s consists of parentheses only '()[]{}'."],
+        testCases: [
+            { input: { s: '()' }, expectedOutput: true },
+            { input: { s: '()[]{}' }, expectedOutput: true },
+            { input: { s: '(]' }, expectedOutput: false },
+            { input: { s: '([)]' }, expectedOutput: false, isHidden: true },
+        ],
+        starterCode: {
+            python: `def is_valid(s: str) -> bool:
+    # Write your solution here
+    pass`,
+            javascript: `function isValid(s) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public boolean isValid(String s) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Daily Temperatures',
+        description: `Given an array of integers \`temperatures\` representing the daily temperatures, return an array \`answer\` such that \`answer[i]\` is the number of days you have to wait after the \`ith\` day to get a warmer temperature. If there is no future day for which this is possible, keep \`answer[i] == 0\` instead.`,
+        difficulty: 'medium',
+        category: 'stacks',
+        isPremium: false,
+        functionName: 'daily_temperatures',
+        examples: [
+            { input: 'temperatures = [73,74,75,71,69,72,76,73]', output: '[1,1,4,2,1,1,0,0]', explanation: '' },
+            { input: 'temperatures = [30,40,50,60]', output: '[1,1,1,0]', explanation: '' },
+        ],
+        constraints: ['1 <= temperatures.length <= 10^5', '30 <= temperatures[i] <= 100'],
+        testCases: [
+            { input: { temperatures: [73, 74, 75, 71, 69, 72, 76, 73] }, expectedOutput: [1, 1, 4, 2, 1, 1, 0, 0] },
+            { input: { temperatures: [30, 40, 50, 60] }, expectedOutput: [1, 1, 1, 0] },
+            { input: { temperatures: [30, 60, 90] }, expectedOutput: [1, 1, 0] },
+            { input: { temperatures: [89, 62, 70, 58, 47, 47, 46, 76, 100, 70] }, expectedOutput: [8, 1, 5, 4, 3, 2, 1, 1, 0, 0], isHidden: true },
+        ],
+        starterCode: {
+            python: `def daily_temperatures(temperatures: list[int]) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function dailyTemperatures(temperatures) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
+        }
+    },
+    {
+        title: 'Evaluate Reverse Polish Notation',
+        description: `You are given an array of strings \`tokens\` that represents an arithmetic expression in Reverse Polish Notation.
+
+Evaluate the expression. Return an integer that represents the value of the expression.
+
+Valid operators are \`'+'\`, \`'-'\`, \`'*'\`, and \`'/'\`. Division between two integers should truncate toward zero.`,
+        difficulty: 'medium',
+        category: 'stacks',
+        isPremium: true,
+        functionName: 'eval_rpn',
+        examples: [
+            { input: 'tokens = ["2","1","+","3","*"]', output: '9', explanation: '((2 + 1) * 3) = 9' },
+            { input: 'tokens = ["4","13","5","/","+"]', output: '6', explanation: '(4 + (13 / 5)) = 6' },
+        ],
+        constraints: ['1 <= tokens.length <= 10^4', "tokens[i] is either an operator: '+', '-', '*', or '/', or an integer in the range [-200, 200]."],
+        testCases: [
+            { input: { tokens: ['2', '1', '+', '3', '*'] }, expectedOutput: 9 },
+            { input: { tokens: ['4', '13', '5', '/', '+'] }, expectedOutput: 6 },
+            { input: { tokens: ['10', '6', '9', '3', '+', '-11', '*', '/', '*', '17', '+', '5', '+'] }, expectedOutput: 22 },
+            { input: { tokens: ['4', '3', '-'] }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def eval_rpn(tokens: list[str]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function evalRPN(tokens) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int evalRPN(String[] tokens) {
+        // Write your solution here
+        return 0;
+    }
+}`
+        }
+    },
+    {
+        title: 'Largest Rectangle in Histogram',
+        description: `Given an array of integers \`heights\` representing the histogram's bar height where the width of each bar is \`1\`, return the area of the largest rectangle in the histogram.`,
+        difficulty: 'hard',
+        category: 'stacks',
+        isPremium: true,
+        functionName: 'largest_rectangle_area',
+        examples: [
+            { input: 'heights = [2,1,5,6,2,3]', output: '10', explanation: 'The largest rectangle is formed by the bars of height 5 and 6 (indices 2-3), giving an area of 5 * 2 = 10.' },
+            { input: 'heights = [2,4]', output: '4', explanation: '' },
+        ],
+        constraints: ['1 <= heights.length <= 10^5', '0 <= heights[i] <= 10^4'],
+        testCases: [
+            { input: { heights: [2, 1, 5, 6, 2, 3] }, expectedOutput: 10 },
+            { input: { heights: [2, 4] }, expectedOutput: 4 },
+            { input: { heights: [1, 1] }, expectedOutput: 2 },
+            { input: { heights: [6, 2, 5, 4, 5, 1, 6] }, expectedOutput: 12, isHidden: true },
+        ],
+        starterCode: {
+            python: `def largest_rectangle_area(heights: list[int]) -> int:
+    # Write your solution here
+    pass`,
+            javascript: `function largestRectangleArea(heights) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int largestRectangleArea(int[] heights) {
+        // Write your solution here
+        return 0;
+    }
 }`
         }
     }

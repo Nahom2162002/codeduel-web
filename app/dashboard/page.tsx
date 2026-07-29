@@ -57,7 +57,9 @@ const CATEGORY_LABELS: Record<string, string> = {
     trees: 'Trees',
     graphs: 'Graphs',
     'dynamic-programming': 'Dynamic Programming',
-    'system-design': 'System Design'
+    'system-design': 'System Design',
+    'binary-search': 'Binary Search',
+    stacks: 'Stacks & Queues'
 };
 
 function DuelIcon({ size = 28 }: { size?: number }) {
