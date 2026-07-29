@@ -33,7 +33,7 @@ interface Me {
 }
 
 const CATEGORIES = [
-    'all', 'arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design', 'binary-search', 'stacks'
+    'all', 'arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design', 'binary-search', 'stacks', 'greedy', 'bit-manipulation'
 ];
 
 const DIFFICULTIES = ['all', 'easy', 'medium', 'hard'];

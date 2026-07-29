@@ -54,7 +54,9 @@ const CATEGORY_LABELS: Record<string, string> = {
     'dynamic-programming': 'Dynamic Programming',
     'system-design': 'System Design',
     'binary-search': 'Binary Search',
-    stacks: 'Stacks & Queues'
+    stacks: 'Stacks & Queues',
+    greedy: 'Greedy',
+    'bit-manipulation': 'Bit Manipulation'
 };
 
 // Purely decorative scaffold text revealed character-by-character in sync with

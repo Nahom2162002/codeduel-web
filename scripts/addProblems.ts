@@ -10,7 +10,7 @@ const MONGODB_URI = process.env.MONGODB_URI!;
 // Unlike seedProblems.ts (which wipes the whole collection and reassigns every
 // _id — breaking problemId references on any existing Duel documents), this
 // only adds the newer categories, upserting by title so it's safe to re-run.
-const NEW_CATEGORIES = ['binary-search', 'stacks'];
+const NEW_CATEGORIES = ['binary-search', 'stacks', 'greedy', 'bit-manipulation'];
 
 async function addProblems() {
     await mongoose.connect(MONGODB_URI);
@@ -21,13 +21,16 @@ async function addProblems() {
     let added = 0;
     let skipped = 0;
     for (const problem of toAdd) {
-        const existing = await Problem.findOne({ title: problem.title });
-        if (existing) {
-            skipped++;
-            continue;
-        }
-        await Problem.create(problem);
-        added++;
+        // Atomic upsert-by-title (title now has a unique index too) instead of a
+        // separate findOne-then-create — closes the race window that let two
+        // concurrent/overlapping runs both insert the same problem.
+        const result = await Problem.updateOne(
+            { title: problem.title },
+            { $setOnInsert: problem },
+            { upsert: true }
+        );
+        if (result.upsertedCount > 0) added++;
+        else skipped++;
     }
 
     console.log(`Added ${added} new problems, skipped ${skipped} already present.`);
