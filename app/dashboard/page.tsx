@@ -78,7 +78,12 @@ const CATEGORY_LABELS: Record<string, string> = {
     recursion: 'Recursion',
     geometry: 'Geometry',
     'divide-and-conquer': 'Divide and Conquer',
-    'game-theory': 'Game Theory'
+    'game-theory': 'Game Theory',
+    'linked-list': 'Linked List',
+    trie: 'Trie',
+    iterator: 'Iterator',
+    interactive: 'Interactive',
+    concurrency: 'Concurrency'
 };
 
 function DuelIcon({ size = 28 }: { size?: number }) {

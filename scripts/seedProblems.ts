@@ -277,6 +277,7 @@ A binary tree's maximum depth is the number of nodes along the longest path from
         category: 'trees',
         isPremium: false,
         functionName: 'max_depth',
+        treeNodeParams: ['root'],
         examples: [
             { input: 'root = [3,9,20,null,null,15,7]', output: '3', explanation: '' },
             { input: 'root = [1,null,2]', output: '2', explanation: '' },
@@ -298,10 +299,25 @@ A binary tree's maximum depth is the number of nodes along the longest path from
 def max_depth(root: TreeNode) -> int:
     # Write your solution here
     pass`,
-            javascript: `function maxDepth(root) {
+            javascript: `function TreeNode(val, left, right) {
+    this.val = (val===undefined ? 0 : val);
+    this.left = (left===undefined ? null : left);
+    this.right = (right===undefined ? null : right);
+}
+
+function maxDepth(root) {
     // Write your solution here
 }`,
-            java: `class Solution {
+            java: `class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left = left; this.right = right; }
+}
+
+class Solution {
     public int maxDepth(TreeNode root) {
         // Write your solution here
         return 0;
@@ -321,6 +337,7 @@ A valid BST is defined as follows:
         category: 'trees',
         isPremium: true,
         functionName: 'is_valid_bst',
+        treeNodeParams: ['root'],
         examples: [
             { input: 'root = [2,1,3]', output: 'true', explanation: '' },
             { input: 'root = [5,1,4,null,null,3,6]', output: 'false', explanation: 'The root node\'s value is 5 but its right child\'s value is 4.' },
@@ -342,10 +359,25 @@ A valid BST is defined as follows:
 def is_valid_bst(root: TreeNode) -> bool:
     # Write your solution here
     pass`,
-            javascript: `function isValidBST(root) {
+            javascript: `function TreeNode(val, left, right) {
+    this.val = (val===undefined ? 0 : val);
+    this.left = (left===undefined ? null : left);
+    this.right = (right===undefined ? null : right);
+}
+
+function isValidBST(root) {
     // Write your solution here
 }`,
-            java: `class Solution {
+            java: `class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left = left; this.right = right; }
+}
+
+class Solution {
     public boolean isValidBST(TreeNode root) {
         // Write your solution here
         return false;
@@ -364,6 +396,7 @@ Given the \`root\` of a binary tree, return the maximum path sum of any non-empt
         category: 'trees',
         isPremium: true,
         functionName: 'max_path_sum',
+        treeNodeParams: ['root'],
         examples: [
             { input: 'root = [1,2,3]', output: '6', explanation: 'The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.' },
             { input: 'root = [-10,9,20,null,null,15,7]', output: '42', explanation: 'The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.' },
@@ -385,10 +418,25 @@ Given the \`root\` of a binary tree, return the maximum path sum of any non-empt
 def max_path_sum(root: TreeNode) -> int:
     # Write your solution here
     pass`,
-            javascript: `function maxPathSum(root) {
+            javascript: `function TreeNode(val, left, right) {
+    this.val = (val===undefined ? 0 : val);
+    this.left = (left===undefined ? null : left);
+    this.right = (right===undefined ? null : right);
+}
+
+function maxPathSum(root) {
     // Write your solution here
 }`,
-            java: `class Solution {
+            java: `class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left = left; this.right = right; }
+}
+
+class Solution {
     public int maxPathSum(TreeNode root) {
         // Write your solution here
         return 0;
@@ -652,246 +700,238 @@ You have the following three operations permitted on a word:
 
     // SYSTEM DESIGN
     {
-        title: 'Design a URL Shortener',
-        description: `Design a URL shortening service like TinyURL.
+        title: 'LRU Cache',
+        description: `Design a data structure that follows the constraints of a **Least Recently Used (LRU) cache**.
 
-**Requirements:**
-- Given a long URL, generate a short URL (e.g. \`https://tinyurl.com/abc123\`)
-- Given a short URL, redirect to the original long URL
-- Short URLs should be unique and not predictable
-- System should handle 100M URLs and 10B redirects per month
+Implement the \`LRUCache\` class:
+- \`LRUCache(int capacity)\` initializes the cache with a positive size \`capacity\`.
+- \`get(int key)\` returns the value of the key if it exists, otherwise returns \`-1\`.
+- \`put(int key, int value)\` updates the value of the key if it exists. Otherwise, adds the key-value pair. If the number of keys exceeds \`capacity\` from this operation, evict the least recently used key.
 
-**Your task:** Write pseudocode or actual code for the core components:
-1. The hash/encoding function that generates short codes
-2. The data model for storing URL mappings
-3. The redirect logic
-4. How you would handle collisions
-
-Explain your design decisions and any trade-offs.`,
+Both \`get\` and \`put\` must run in \`O(1)\` average time complexity.`,
         difficulty: 'medium',
         category: 'system-design',
         isPremium: true,
-        functionName: 'solution',
+        functionName: 'LRUCache',
+        executionType: 'multi-call',
         examples: [
-            { input: 'longUrl = "https://www.example.com/very/long/path?with=params"', output: '"https://tinyurl.com/abc123"', explanation: 'Generate a unique 6-character code and store the mapping.' },
+            { input: '["LRUCache","put","put","get","put","get","put","get","get","get"]\n[[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]', output: '[null,null,null,1,null,-1,null,-1,3,4]', explanation: 'Capacity 2. Putting a 3rd key evicts the least recently used one.' },
         ],
-        constraints: [
-            'Short codes should be 6-8 characters',
-            'Use alphanumeric characters (a-z, A-Z, 0-9)',
-            'System must handle high read traffic (10:1 read/write ratio)',
-            'URLs should never expire unless explicitly set'
-        ],
+        constraints: ['1 <= capacity <= 3000', '0 <= key <= 10^4', '0 <= value <= 10^5', 'At most 2 * 10^5 calls will be made to get and put.'],
         testCases: [
-            { input: { url: 'https://www.example.com' }, expectedOutput: 'valid_short_url' },
+            {
+                input: {
+                    operations: ['LRUCache', 'put', 'put', 'get', 'put', 'get', 'put', 'get', 'get', 'get'],
+                    args: [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+                },
+                expectedOutput: [null, null, null, 1, null, -1, null, -1, 3, 4]
+            },
         ],
         starterCode: {
-            python: `# Design a URL Shortener
-# Write your solution explaining:
-# 1. The encoding function
-# 2. Data model
-# 3. Redirect logic
-# 4. Collision handling
+            python: `class LRUCache:
+    def __init__(self, capacity: int):
+        # Write your solution here
+        pass
 
-class URLShortener:
-    def __init__(self):
-        # Initialize your data structures
+    def get(self, key: int) -> int:
+        # Write your solution here
         pass
-    
-    def encode(self, long_url: str) -> str:
-        # Generate a short URL
-        pass
-    
-    def decode(self, short_url: str) -> str:
-        # Return the original URL
+
+    def put(self, key: int, value: int) -> None:
+        # Write your solution here
         pass`,
-            javascript: `// Design a URL Shortener
-class URLShortener {
-    constructor() {
-        // Initialize your data structures
+            javascript: `class LRUCache {
+    constructor(capacity) {
+        // Write your solution here
     }
-    
-    encode(longUrl) {
-        // Generate a short URL
+
+    get(key) {
+        // Write your solution here
     }
-    
-    decode(shortUrl) {
-        // Return the original URL
+
+    put(key, value) {
+        // Write your solution here
     }
 }`,
-            java: `// Design a URL Shortener
-public class URLShortener {
-    public URLShortener() {
-        // Initialize your data structures
+            java: `class LRUCache {
+    public LRUCache(int capacity) {
+        // Write your solution here
     }
-    
-    public String encode(String longUrl) {
-        // Generate a short URL
-        return "";
+
+    public int get(int key) {
+        // Write your solution here
+        return -1;
     }
-    
-    public String decode(String shortUrl) {
-        // Return the original URL
-        return "";
+
+    public void put(int key, int value) {
+        // Write your solution here
     }
 }`
         }
     },
     {
-        title: 'Design a Rate Limiter',
-        description: `Design a rate limiter that can be used to limit the number of requests a user can make to an API within a time window.
+        title: 'Design Hit Counter',
+        description: `Design a hit counter which counts the number of hits received in the past 5 minutes (i.e. the past 300 seconds).
 
-**Requirements:**
-- Limit each user to N requests per time window (e.g. 100 requests per minute)
-- Return HTTP 429 (Too Many Requests) when limit is exceeded
-- The solution should work in a distributed system (multiple servers)
-- Minimize latency impact on normal requests
+Your system should accept a \`timestamp\` parameter (in seconds granularity), and you may assume that calls are made in chronological order (\`timestamp\` is monotonically increasing). Several hits may arrive at the same timestamp.
 
-**Your task:** Implement a rate limiter using one of these algorithms:
-1. Token Bucket
-2. Sliding Window Log
-3. Sliding Window Counter
-
-Explain which algorithm you chose and why, then implement it.`,
+Implement the \`HitCounter\` class:
+- \`HitCounter()\` initializes the object.
+- \`hit(int timestamp)\` records a hit at \`timestamp\`.
+- \`getHits(int timestamp)\` returns the number of hits in the past 5 minutes from \`timestamp\` (i.e. the range \`[timestamp - 300 + 1, timestamp]\`).`,
         difficulty: 'medium',
         category: 'system-design',
         isPremium: true,
-        functionName: 'solution',
+        functionName: 'HitCounter',
+        executionType: 'multi-call',
         examples: [
-            { input: 'userId = "user123", limit = 100, window = 60', output: 'true (request allowed) or false (rate limited)', explanation: 'Return true if the user is within their rate limit, false if exceeded.' },
+            { input: '["HitCounter","hit","hit","hit","getHits","hit","getHits","getHits"]\n[[],[1],[2],[3],[4],[300],[300],[301]]', output: '[null,null,null,null,3,null,4,3]', explanation: 'At timestamp 301, the hit at timestamp 1 (300 seconds ago) has fallen out of the window.' },
         ],
-        constraints: [
-            'Must work across multiple servers',
-            'O(1) time complexity preferred',
-            'Should handle burst traffic gracefully',
-            'Must be accurate within the time window'
-        ],
+        constraints: ['1 <= timestamp <= 2 * 10^9', 'All calls are made in chronological order (timestamp is monotonically increasing).', 'At most 300 calls will be made to hit and getHits.'],
         testCases: [
-            { input: { userId: 'user1', limit: 3, window: 60, requests: 4 }, expectedOutput: false },
-            { input: { userId: 'user1', limit: 3, window: 60, requests: 2 }, expectedOutput: true },
+            {
+                input: {
+                    operations: ['HitCounter', 'hit', 'hit', 'hit', 'getHits', 'hit', 'getHits', 'getHits'],
+                    args: [[], [1], [2], [3], [4], [300], [300], [301]]
+                },
+                expectedOutput: [null, null, null, null, 3, null, 4, 3]
+            },
         ],
         starterCode: {
-            python: `# Design a Rate Limiter
-# Choose an algorithm and implement it
+            python: `class HitCounter:
+    def __init__(self):
+        # Write your solution here
+        pass
 
-class RateLimiter:
-    def __init__(self, limit: int, window_seconds: int):
-        self.limit = limit
-        self.window = window_seconds
-        # Initialize your data structures
-    
-    def is_allowed(self, user_id: str) -> bool:
-        # Return True if request is allowed, False if rate limited
+    def hit(self, timestamp: int) -> None:
+        # Write your solution here
+        pass
+
+    def get_hits(self, timestamp: int) -> int:
+        # Write your solution here
         pass`,
-            javascript: `// Design a Rate Limiter
-class RateLimiter {
-    constructor(limit, windowSeconds) {
-        this.limit = limit;
-        this.window = windowSeconds;
-        // Initialize your data structures
+            javascript: `class HitCounter {
+    constructor() {
+        // Write your solution here
     }
-    
-    isAllowed(userId) {
-        // Return true if request is allowed, false if rate limited
+
+    hit(timestamp) {
+        // Write your solution here
+    }
+
+    getHits(timestamp) {
+        // Write your solution here
+        return 0;
     }
 }`,
-            java: `// Design a Rate Limiter
-public class RateLimiter {
-    private int limit;
-    private int window;
-    
-    public RateLimiter(int limit, int windowSeconds) {
-        this.limit = limit;
-        this.window = windowSeconds;
-        // Initialize your data structures
+            java: `class HitCounter {
+    public HitCounter() {
+        // Write your solution here
     }
-    
-    public boolean isAllowed(String userId) {
-        // Return true if request is allowed, false if rate limited
-        return false;
+
+    public void hit(int timestamp) {
+        // Write your solution here
+    }
+
+    public int getHits(int timestamp) {
+        // Write your solution here
+        return 0;
     }
 }`
         }
     },
     {
         title: 'Design Twitter Feed',
-        description: `Design a simplified version of Twitter's news feed system.
+        description: `Design a simplified version of Twitter where users can post tweets, follow/unfollow other users, and see the 10 most recent tweet IDs in their news feed.
 
-**Requirements:**
-- Users can post tweets
-- Users can follow/unfollow other users
-- Users can see a feed of the 10 most recent tweets from people they follow
-- System must handle 100M daily active users
-- Reads should be fast (< 100ms)
-
-**Your task:** Design and implement the core data structures and algorithms for:
-1. \`postTweet(userId, tweetId)\` — Post a new tweet
-2. \`getNewsFeed(userId)\` — Get the 10 most recent tweets from followed users
-3. \`follow(followerId, followeeId)\` — Follow a user
-4. \`unfollow(followerId, followeeId)\` — Unfollow a user
-
-Explain how you would scale this to 100M users.`,
+Implement the \`Twitter\` class:
+- \`Twitter()\` initializes the object.
+- \`postTweet(int userId, int tweetId)\` composes a new tweet. Each call is made with a unique \`tweetId\`.
+- \`getNewsFeed(int userId)\` returns a list of the 10 most recent tweet IDs in the user's news feed. Each item must be posted by users the user follows or by the user themself. Tweets must be ordered from most recent to least recent.
+- \`follow(int followerId, int followeeId)\` makes \`followerId\` follow \`followeeId\`.
+- \`unfollow(int followerId, int followeeId)\` makes \`followerId\` unfollow \`followeeId\`.`,
         difficulty: 'hard',
         category: 'system-design',
         isPremium: true,
-        functionName: 'solution',
+        functionName: 'Twitter',
+        executionType: 'multi-call',
         examples: [
-            { input: 'postTweet(1, 5), postTweet(1, 3), follow(2, 1), getNewsFeed(2)', output: '[3, 5]', explanation: 'User 2 follows user 1. User 1 posted tweets 5 and 3. getNewsFeed returns most recent first.' },
+            { input: '["Twitter","postTweet","getNewsFeed","follow","postTweet","getNewsFeed","unfollow","getNewsFeed"]\n[[],[1,5],[1],[1,2],[2,6],[1],[1,2],[1]]', output: '[null,null,[5],null,null,[6,5],null,[5]]', explanation: 'User 1 posts, follows user 2 (who also posts), then unfollows — the feed reflects each state.' },
         ],
-        constraints: [
-            '1 <= userId, tweetId <= 500',
-            'All tweets have unique IDs',
-            'At most 3 * 10^4 calls will be made',
-            'Feed should return at most 10 tweets'
-        ],
+        constraints: ['1 <= userId, tweetId <= 500', 'All the tweets have unique IDs.', 'At most 3 * 10^4 calls will be made to postTweet, getNewsFeed, follow, and unfollow.'],
         testCases: [
-            { input: { operations: ['postTweet', 'postTweet', 'follow', 'getNewsFeed'], args: [[1, 5], [1, 3], [2, 1], [2]] }, expectedOutput: [3, 5] },
+            {
+                input: {
+                    operations: ['Twitter', 'postTweet', 'getNewsFeed', 'follow', 'postTweet', 'getNewsFeed', 'unfollow', 'getNewsFeed'],
+                    args: [[], [1, 5], [1], [1, 2], [2, 6], [1], [1, 2], [1]]
+                },
+                expectedOutput: [null, null, [5], null, null, [6, 5], null, [5]]
+            },
         ],
         starterCode: {
-            python: `# Design Twitter Feed
-
-class Twitter:
+            python: `class Twitter:
     def __init__(self):
-        # Initialize your data structures
+        # Write your solution here
         pass
-    
+
     def post_tweet(self, user_id: int, tweet_id: int) -> None:
+        # Write your solution here
         pass
-    
+
     def get_news_feed(self, user_id: int) -> list[int]:
+        # Write your solution here
         pass
-    
+
     def follow(self, follower_id: int, followee_id: int) -> None:
+        # Write your solution here
         pass
-    
+
     def unfollow(self, follower_id: int, followee_id: int) -> None:
+        # Write your solution here
         pass`,
-            javascript: `// Design Twitter Feed
-class Twitter {
+            javascript: `class Twitter {
     constructor() {
-        // Initialize your data structures
+        // Write your solution here
     }
-    
-    postTweet(userId, tweetId) {}
-    
-    getNewsFeed(userId) {}
-    
-    follow(followerId, followeeId) {}
-    
-    unfollow(followerId, followeeId) {}
+
+    postTweet(userId, tweetId) {
+        // Write your solution here
+    }
+
+    getNewsFeed(userId) {
+        // Write your solution here
+        return [];
+    }
+
+    follow(followerId, followeeId) {
+        // Write your solution here
+    }
+
+    unfollow(followerId, followeeId) {
+        // Write your solution here
+    }
 }`,
-            java: `// Design Twitter Feed
-class Twitter {
+            java: `class Twitter {
     public Twitter() {
-        // Initialize your data structures
+        // Write your solution here
     }
-    
-    public void postTweet(int userId, int tweetId) {}
-    
-    public List<Integer> getNewsFeed(int userId) { return new ArrayList<>(); }
-    
-    public void follow(int followerId, int followeeId) {}
-    
-    public void unfollow(int followerId, int followeeId) {}
+
+    public void postTweet(int userId, int tweetId) {
+        // Write your solution here
+    }
+
+    public List<Integer> getNewsFeed(int userId) {
+        // Write your solution here
+        return new ArrayList<>();
+    }
+
+    public void follow(int followerId, int followeeId) {
+        // Write your solution here
+    }
+
+    public void unfollow(int followerId, int followeeId) {
+        // Write your solution here
+    }
 }`
         }
     },
@@ -3813,6 +3853,1601 @@ Given two integers \`maxChoosableInteger\` and \`desiredTotal\`, return \`true\`
     public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
         // Write your solution here
         return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Reverse Linked List',
+        description: `Given the \`head\` of a singly linked list, reverse the list, and return the reversed list's head.`,
+        difficulty: 'easy',
+        category: 'linked-list',
+        isPremium: false,
+        functionName: 'reverse_list',
+        listNodeParams: ['head'],
+        returnsListNode: true,
+        examples: [
+            { input: 'head = [1,2,3,4,5]', output: '[5,4,3,2,1]', explanation: '' },
+            { input: 'head = [1,2]', output: '[2,1]', explanation: '' },
+            { input: 'head = []', output: '[]', explanation: '' },
+        ],
+        constraints: ['The number of nodes in the list is in the range [0, 5000].', '-5000 <= Node.val <= 5000'],
+        testCases: [
+            { input: { head: [1, 2, 3, 4, 5] }, expectedOutput: [5, 4, 3, 2, 1] },
+            { input: { head: [1, 2] }, expectedOutput: [2, 1] },
+            { input: { head: [] }, expectedOutput: [] },
+            { input: { head: [1] }, expectedOutput: [1], isHidden: true },
+        ],
+        starterCode: {
+            python: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reverse_list(head: ListNode) -> ListNode:
+    # Write your solution here
+    pass`,
+            javascript: `function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val);
+    this.next = (next===undefined ? null : next);
+}
+
+function reverseList(head) {
+    // Write your solution here
+}`,
+            java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        // Write your solution here
+        return null;
+    }
+}`
+        }
+    },
+    {
+        title: 'Merge Two Sorted Lists',
+        description: `You are given the heads of two sorted linked lists \`list1\` and \`list2\`.
+
+Merge the two lists into one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+
+Return the head of the merged linked list.`,
+        difficulty: 'easy',
+        category: 'linked-list',
+        isPremium: false,
+        functionName: 'merge_two_lists',
+        listNodeParams: ['list1', 'list2'],
+        returnsListNode: true,
+        examples: [
+            { input: 'list1 = [1,2,4], list2 = [1,3,4]', output: '[1,1,2,3,4,4]', explanation: '' },
+            { input: 'list1 = [], list2 = []', output: '[]', explanation: '' },
+            { input: 'list1 = [], list2 = [0]', output: '[0]', explanation: '' },
+        ],
+        constraints: ['The number of nodes in both lists is in the range [0, 50].', '-100 <= Node.val <= 100', 'Both list1 and list2 are sorted in non-decreasing order.'],
+        testCases: [
+            { input: { list1: [1, 2, 4], list2: [1, 3, 4] }, expectedOutput: [1, 1, 2, 3, 4, 4] },
+            { input: { list1: [], list2: [] }, expectedOutput: [] },
+            { input: { list1: [], list2: [0] }, expectedOutput: [0] },
+            { input: { list1: [1, 2, 3], list2: [] }, expectedOutput: [1, 2, 3], isHidden: true },
+        ],
+        starterCode: {
+            python: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_two_lists(list1: ListNode, list2: ListNode) -> ListNode:
+    # Write your solution here
+    pass`,
+            javascript: `function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val);
+    this.next = (next===undefined ? null : next);
+}
+
+function mergeTwoLists(list1, list2) {
+    // Write your solution here
+}`,
+            java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        // Write your solution here
+        return null;
+    }
+}`
+        }
+    },
+    {
+        title: 'Remove Nth Node From End of List',
+        description: `Given the \`head\` of a linked list, remove the \`n\`th node from the end of the list and return its head.`,
+        difficulty: 'medium',
+        category: 'linked-list',
+        isPremium: true,
+        functionName: 'remove_nth_from_end',
+        listNodeParams: ['head'],
+        returnsListNode: true,
+        examples: [
+            { input: 'head = [1,2,3,4,5], n = 2', output: '[1,2,3,5]', explanation: '' },
+            { input: 'head = [1], n = 1', output: '[]', explanation: '' },
+            { input: 'head = [1,2], n = 1', output: '[1]', explanation: '' },
+        ],
+        constraints: ['The number of nodes in the list is sz.', '1 <= sz <= 30', '0 <= Node.val <= 100', '1 <= n <= sz'],
+        testCases: [
+            { input: { head: [1, 2, 3, 4, 5], n: 2 }, expectedOutput: [1, 2, 3, 5] },
+            { input: { head: [1], n: 1 }, expectedOutput: [] },
+            { input: { head: [1, 2], n: 1 }, expectedOutput: [1] },
+            { input: { head: [1, 2, 3, 4, 5], n: 5 }, expectedOutput: [2, 3, 4, 5], isHidden: true },
+        ],
+        starterCode: {
+            python: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
+    # Write your solution here
+    pass`,
+            javascript: `function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val);
+    this.next = (next===undefined ? null : next);
+}
+
+function removeNthFromEnd(head, n) {
+    // Write your solution here
+}`,
+            java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        // Write your solution here
+        return null;
+    }
+}`
+        }
+    },
+    {
+        title: 'Reorder List',
+        description: `You are given the head of a singly linked list. The list can be represented as:
+
+\`L0 -> L1 -> ... -> Ln-1 -> Ln\`
+
+Reorder the list to be on the following form:
+
+\`L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2 -> ...\`
+
+You may not modify the values in the list's nodes. Only nodes themselves may be changed. Modify \`head\` in place, and also return \`head\`.`,
+        difficulty: 'hard',
+        category: 'linked-list',
+        isPremium: true,
+        functionName: 'reorder_list',
+        listNodeParams: ['head'],
+        returnsListNode: true,
+        examples: [
+            { input: 'head = [1,2,3,4]', output: '[1,4,2,3]', explanation: '' },
+            { input: 'head = [1,2,3,4,5]', output: '[1,5,2,4,3]', explanation: '' },
+        ],
+        constraints: ['The number of nodes in the list is in the range [1, 5 * 10^4].', '1 <= Node.val <= 1000'],
+        testCases: [
+            { input: { head: [1, 2, 3, 4] }, expectedOutput: [1, 4, 2, 3] },
+            { input: { head: [1, 2, 3, 4, 5] }, expectedOutput: [1, 5, 2, 4, 3] },
+            { input: { head: [1, 2] }, expectedOutput: [1, 2], isHidden: true },
+            { input: { head: [1] }, expectedOutput: [1], isHidden: true },
+        ],
+        starterCode: {
+            python: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reorder_list(head: ListNode) -> ListNode:
+    # Write your solution here
+    pass`,
+            javascript: `function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val);
+    this.next = (next===undefined ? null : next);
+}
+
+function reorderList(head) {
+    // Write your solution here
+}`,
+            java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode reorderList(ListNode head) {
+        // Write your solution here
+        return null;
+    }
+}`
+        }
+    },
+    {
+        title: 'Implement Trie (Prefix Tree)',
+        description: `A **trie** (pronounced as "try") or **prefix tree** is a tree data structure used to efficiently store and retrieve keys in a dataset of strings.
+
+Implement the \`Trie\` class:
+- \`Trie()\` Initializes the trie object.
+- \`insert(String word)\` Inserts the string \`word\` into the trie.
+- \`search(String word)\` Returns \`true\` if the string \`word\` is in the trie (i.e., was inserted before), and \`false\` otherwise.
+- \`startsWith(String prefix)\` Returns \`true\` if there is a previously inserted string \`word\` that has the prefix \`prefix\`, and \`false\` otherwise.`,
+        difficulty: 'easy',
+        category: 'trie',
+        isPremium: false,
+        functionName: 'Trie',
+        executionType: 'multi-call',
+        examples: [
+            { input: '["Trie","insert","search","search","startsWith","insert","search"]\n[[],["apple"],["apple"],["app"],["app"],["app"],["app"]]', output: '[null,null,true,false,true,null,true]', explanation: '' },
+        ],
+        constraints: ['1 <= word.length, prefix.length <= 2000', 'word and prefix consist only of lowercase English letters.', 'At most 3 * 10^4 calls in total will be made to insert, search, and startsWith.'],
+        testCases: [
+            {
+                input: {
+                    operations: ['Trie', 'insert', 'search', 'search', 'startsWith', 'insert', 'search'],
+                    args: [[], ['apple'], ['apple'], ['app'], ['app'], ['app'], ['app']]
+                },
+                expectedOutput: [null, null, true, false, true, null, true]
+            },
+        ],
+        starterCode: {
+            python: `class Trie:
+    def __init__(self):
+        # Write your solution here
+        pass
+
+    def insert(self, word: str) -> None:
+        # Write your solution here
+        pass
+
+    def search(self, word: str) -> bool:
+        # Write your solution here
+        pass
+
+    def starts_with(self, prefix: str) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class Trie {
+    constructor() {
+        // Write your solution here
+    }
+
+    insert(word) {
+        // Write your solution here
+    }
+
+    search(word) {
+        // Write your solution here
+    }
+
+    startsWith(prefix) {
+        // Write your solution here
+    }
+}`,
+            java: `class Trie {
+    public Trie() {
+        // Write your solution here
+    }
+
+    public void insert(String word) {
+        // Write your solution here
+    }
+
+    public boolean search(String word) {
+        // Write your solution here
+        return false;
+    }
+
+    public boolean startsWith(String prefix) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Longest Word in Dictionary',
+        description: `Given an array of strings \`words\` representing an English dictionary, return the longest word in \`words\` that can be built one character at a time by other words in \`words\`.
+
+If there is more than one possible answer, return the longest word with the smallest lexicographical order. If there is no answer, return the empty string \`""\`.
+
+Note that the word should be built from left to right, with each additional character added to the end of a previous word — every prefix of the returned word (including the word itself) must also appear in \`words\`.`,
+        difficulty: 'medium',
+        category: 'trie',
+        isPremium: false,
+        functionName: 'longest_word',
+        examples: [
+            { input: 'words = ["w","wo","wor","worl","world"]', output: '"world"', explanation: 'The word "world" can be built one character at a time by "w", "wo", "wor", and "worl".' },
+            { input: 'words = ["a","banana","app","appl","ap","apply","apple"]', output: '"apple"', explanation: '' },
+        ],
+        constraints: ['1 <= words.length <= 1000', '1 <= words[i].length <= 30', 'words[i] consists of lowercase English letters.'],
+        testCases: [
+            { input: { words: ['w', 'wo', 'wor', 'worl', 'world'] }, expectedOutput: 'world' },
+            { input: { words: ['a', 'banana', 'app', 'appl', 'ap', 'apply', 'apple'] }, expectedOutput: 'apple' },
+            { input: { words: ['yo', 'ew', 'fc', 'zrc', 'yodn', 'fcm', 'qm', 'qmo', 'fcmz', 'z', 'ewq', 'yod', 'ewqz', 'y'] }, expectedOutput: 'yodn' },
+            { input: { words: ['a'] }, expectedOutput: 'a', isHidden: true },
+        ],
+        starterCode: {
+            python: `def longest_word(words: list[str]) -> str:
+    # Write your solution here
+    pass`,
+            javascript: `function longestWord(words) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public String longestWord(String[] words) {
+        // Write your solution here
+        return "";
+    }
+}`
+        }
+    },
+    {
+        title: 'Design Add and Search Words Data Structure',
+        description: `Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the \`WordDictionary\` class:
+- \`WordDictionary()\` Initializes the object.
+- \`addWord(word)\` Adds \`word\` to the data structure, it can be matched later.
+- \`search(word)\` Returns \`true\` if there is any string in the data structure that matches \`word\` or \`false\` otherwise. \`word\` may contain dots \`'.'\` where dots can be matched with any letter.`,
+        difficulty: 'medium',
+        category: 'trie',
+        isPremium: true,
+        functionName: 'WordDictionary',
+        executionType: 'multi-call',
+        examples: [
+            { input: '["WordDictionary","addWord","addWord","addWord","search","search","search","search"]\n[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]', output: '[null,null,null,null,false,true,true,true]', explanation: '' },
+        ],
+        constraints: ['1 <= word.length <= 25', 'word in addWord consists of lowercase English letters.', 'word in search consists of "." or lowercase English letters.', 'At most 10^4 calls will be made to addWord and search.'],
+        testCases: [
+            {
+                input: {
+                    operations: ['WordDictionary', 'addWord', 'addWord', 'addWord', 'search', 'search', 'search', 'search'],
+                    args: [[], ['bad'], ['dad'], ['mad'], ['pad'], ['bad'], ['.ad'], ['b..']]
+                },
+                expectedOutput: [null, null, null, null, false, true, true, true]
+            },
+        ],
+        starterCode: {
+            python: `class WordDictionary:
+    def __init__(self):
+        # Write your solution here
+        pass
+
+    def add_word(self, word: str) -> None:
+        # Write your solution here
+        pass
+
+    def search(self, word: str) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class WordDictionary {
+    constructor() {
+        // Write your solution here
+    }
+
+    addWord(word) {
+        // Write your solution here
+    }
+
+    search(word) {
+        // Write your solution here
+    }
+}`,
+            java: `class WordDictionary {
+    public WordDictionary() {
+        // Write your solution here
+    }
+
+    public void addWord(String word) {
+        // Write your solution here
+    }
+
+    public boolean search(String word) {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Replace Words',
+        description: `In English, we have a concept called **root**, which can be followed by some other word to form another longer word - let's call this word **successor**. For example, when the root \`"an"\` is followed by the successor word \`"other"\`, we can form a new word \`"another"\`.
+
+Given a \`dictionary\` consisting of many roots and a \`sentence\` consisting of words separated by spaces, replace all the successors in the sentence with the root forming it. If a successor can be replaced by more than one root, replace it with the root that has the shortest length.
+
+Return the \`sentence\` after the replacement.`,
+        difficulty: 'medium',
+        category: 'trie',
+        isPremium: true,
+        functionName: 'replace_words',
+        examples: [
+            { input: 'dictionary = ["cat","bat","rat"], sentence = "the cattle was rattled by the battery"', output: '"the cat was rat by the bat"', explanation: '' },
+            { input: 'dictionary = ["a","b","c"], sentence = "aadsfasf absbs bbab cadsfafs"', output: '"a a b c"', explanation: '' },
+        ],
+        constraints: ['1 <= dictionary.length <= 1000', '1 <= dictionary[i].length <= 100', 'dictionary[i] consists of only lowercase letters.', '1 <= sentence.length <= 10^6', 'sentence consists of only lowercase letters and spaces.'],
+        testCases: [
+            { input: { dictionary: ['cat', 'bat', 'rat'], sentence: 'the cattle was rattled by the battery' }, expectedOutput: 'the cat was rat by the bat' },
+            { input: { dictionary: ['a', 'b', 'c'], sentence: 'aadsfasf absbs bbab cadsfafs' }, expectedOutput: 'a a b c' },
+            { input: { dictionary: ['a', 'aa', 'aaa', 'aaaa'], sentence: 'a aa a aaaa aaa aaa aaa aaaaaa bbb baba ababa' }, expectedOutput: 'a a a a a a a a bbb baba a', isHidden: true },
+        ],
+        starterCode: {
+            python: `def replace_words(dictionary: list[str], sentence: str) -> str:
+    # Write your solution here
+    pass`,
+            javascript: `function replaceWords(dictionary, sentence) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        // Write your solution here
+        return "";
+    }
+}`
+        }
+    },
+    {
+        title: 'Design a Flatten 2D Vector',
+        description: `Design an iterator to flatten a 2D vector. It should support the \`next\` and \`hasNext\` operations.
+
+Implement the \`Vector2D\` class:
+- \`Vector2D(int[][] vec)\` initializes the object with the 2D vector \`vec\`.
+- \`next()\` returns the next element from the 2D vector and moves the pointer one step forward. You may assume that all the calls to \`next\` are valid.
+- \`hasNext()\` returns \`true\` if there are still some elements in the vector, and \`false\` otherwise.`,
+        difficulty: 'medium',
+        category: 'iterator',
+        isPremium: false,
+        functionName: 'Vector2D',
+        executionType: 'multi-call',
+        examples: [
+            { input: '["Vector2D","next","next","next","hasNext","hasNext","next","hasNext"]\n[[[[1,2],[3],[4]]],[],[],[],[],[],[],[]]', output: '[null,1,2,3,true,true,4,false]', explanation: '' },
+        ],
+        constraints: ['0 <= vec.length <= 200', '0 <= vec[i].length <= 500', '-500 <= vec[i][j] <= 500', 'At most 10^5 calls will be made to next and hasNext.'],
+        testCases: [
+            {
+                input: {
+                    operations: ['Vector2D', 'next', 'next', 'next', 'hasNext', 'hasNext', 'next', 'hasNext'],
+                    args: [[[[1, 2], [3], [4]]], [], [], [], [], [], [], []]
+                },
+                expectedOutput: [null, 1, 2, 3, true, true, 4, false]
+            },
+        ],
+        starterCode: {
+            python: `class Vector2D:
+    def __init__(self, vec: list[list[int]]):
+        # Write your solution here
+        pass
+
+    def next(self) -> int:
+        # Write your solution here
+        pass
+
+    def has_next(self) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class Vector2D {
+    constructor(vec) {
+        // Write your solution here
+    }
+
+    next() {
+        // Write your solution here
+    }
+
+    hasNext() {
+        // Write your solution here
+    }
+}`,
+            java: `class Vector2D {
+    public Vector2D(int[][] vec) {
+        // Write your solution here
+    }
+
+    public int next() {
+        // Write your solution here
+        return 0;
+    }
+
+    public boolean hasNext() {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Peeking Iterator',
+        description: `Design an iterator that supports the \`peek\` operation on an existing array-based iterator in addition to the \`hasNext\` and the \`next\` operations.
+
+Implement the \`PeekingIterator\` class:
+- \`PeekingIterator(int[] nums)\` Initializes the object with the given integer array \`nums\`.
+- \`next()\` Returns the next element in the array and moves the pointer to the next element.
+- \`hasNext()\` Returns \`true\` if there are still elements in the array.
+- \`peek()\` Returns the next element in the array **without** moving the pointer.`,
+        difficulty: 'medium',
+        category: 'iterator',
+        isPremium: false,
+        functionName: 'PeekingIterator',
+        executionType: 'multi-call',
+        examples: [
+            { input: '["PeekingIterator","peek","next","next","hasNext","next","hasNext"]\n[[[1,2,3]],[],[],[],[],[],[]]', output: '[null,1,1,2,true,3,false]', explanation: '' },
+        ],
+        constraints: ['1 <= nums.length <= 1000', '1 <= nums[i] <= 1000', 'All calls to next and peek are valid.', 'At most 1000 calls will be made to next, hasNext, and peek.'],
+        testCases: [
+            {
+                input: {
+                    operations: ['PeekingIterator', 'peek', 'next', 'next', 'hasNext', 'next', 'hasNext'],
+                    args: [[[1, 2, 3]], [], [], [], [], [], []]
+                },
+                expectedOutput: [null, 1, 1, 2, true, 3, false]
+            },
+        ],
+        starterCode: {
+            python: `class PeekingIterator:
+    def __init__(self, nums: list[int]):
+        # Write your solution here
+        pass
+
+    def peek(self) -> int:
+        # Write your solution here
+        pass
+
+    def next(self) -> int:
+        # Write your solution here
+        pass
+
+    def has_next(self) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class PeekingIterator {
+    constructor(nums) {
+        // Write your solution here
+    }
+
+    peek() {
+        // Write your solution here
+    }
+
+    next() {
+        // Write your solution here
+    }
+
+    hasNext() {
+        // Write your solution here
+    }
+}`,
+            java: `class PeekingIterator {
+    public PeekingIterator(int[] nums) {
+        // Write your solution here
+    }
+
+    public int peek() {
+        // Write your solution here
+        return 0;
+    }
+
+    public int next() {
+        // Write your solution here
+        return 0;
+    }
+
+    public boolean hasNext() {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Zigzag Iterator',
+        description: `Given two integer arrays \`v1\` and \`v2\`, implement an iterator to return their elements alternately.
+
+Implement the \`ZigzagIterator\` class:
+- \`ZigzagIterator(int[] v1, int[] v2)\` initializes the object with the two arrays \`v1\` and \`v2\`.
+- \`next()\` returns the current element of the iterator and moves the pointer to the next element.
+- \`hasNext()\` returns \`true\` if the iterator still has elements, and \`false\` otherwise.
+
+If both arrays are non-empty, the returned sequence should alternate between an element from \`v1\` and an element from \`v2\`. Once one array is exhausted, continue returning the remaining elements of the other array in order.`,
+        difficulty: 'medium',
+        category: 'iterator',
+        isPremium: true,
+        functionName: 'ZigzagIterator',
+        executionType: 'multi-call',
+        examples: [
+            { input: 'v1 = [1,2], v2 = [3,4,5,6]', output: '[1,3,2,4,5,6]', explanation: 'By calling next repeatedly until hasNext returns false.' },
+        ],
+        constraints: ['0 <= v1.length, v2.length <= 1000', '1 <= v1.length + v2.length <= 2000', '-2^31 <= v1[i], v2[i] <= 2^31 - 1'],
+        testCases: [
+            {
+                input: {
+                    operations: ['ZigzagIterator', 'next', 'next', 'next', 'next', 'next', 'next', 'hasNext'],
+                    args: [[[1, 2], [3, 4, 5, 6]], [], [], [], [], [], [], []]
+                },
+                expectedOutput: [null, 1, 3, 2, 4, 5, 6, false]
+            },
+        ],
+        starterCode: {
+            python: `class ZigzagIterator:
+    def __init__(self, v1: list[int], v2: list[int]):
+        # Write your solution here
+        pass
+
+    def next(self) -> int:
+        # Write your solution here
+        pass
+
+    def has_next(self) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class ZigzagIterator {
+    constructor(v1, v2) {
+        // Write your solution here
+    }
+
+    next() {
+        // Write your solution here
+    }
+
+    hasNext() {
+        // Write your solution here
+    }
+}`,
+            java: `class ZigzagIterator {
+    public ZigzagIterator(int[] v1, int[] v2) {
+        // Write your solution here
+    }
+
+    public int next() {
+        // Write your solution here
+        return 0;
+    }
+
+    public boolean hasNext() {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Flatten Nested List Iterator',
+        description: `You are given a nested list of integers \`nestedList\`. Each element is either an integer, or a list whose elements may also be integers or other lists (i.e. it can be arbitrarily nested).
+
+Implement an iterator to flatten it. In this simplified representation, \`nestedList\` is passed directly as nested arrays — an element is either an integer or another array of elements (no wrapper type).
+
+Implement the \`NestedIterator\` class:
+- \`NestedIterator(nestedList)\` Initializes the iterator with the nested list \`nestedList\`.
+- \`next()\` Returns the next integer in the nested list, in flattened left-to-right order.
+- \`hasNext()\` Returns \`true\` if there are still elements left, and \`false\` otherwise.`,
+        difficulty: 'medium',
+        category: 'iterator',
+        isPremium: true,
+        functionName: 'NestedIterator',
+        executionType: 'multi-call',
+        examples: [
+            { input: 'nestedList = [[1,1],2,[1,1]]', output: '[1,1,2,1,1]', explanation: 'By repeatedly calling next while hasNext returns true.' },
+            { input: 'nestedList = [1,[4,[6]]]', output: '[1,4,6]', explanation: '' },
+        ],
+        constraints: ['1 <= nestedList.length <= 500', 'The values of the integers in the nested list is in the range [-10^6, 10^6].'],
+        testCases: [
+            {
+                input: {
+                    operations: ['NestedIterator', 'next', 'next', 'next', 'next', 'next', 'hasNext'],
+                    args: [[[[1, 1], 2, [1, 1]]], [], [], [], [], [], []]
+                },
+                expectedOutput: [null, 1, 1, 2, 1, 1, false]
+            },
+            {
+                input: {
+                    operations: ['NestedIterator', 'next', 'next', 'next', 'hasNext'],
+                    args: [[[1, [4, [6]]]], [], [], [], []]
+                },
+                expectedOutput: [null, 1, 4, 6, false],
+                isHidden: true
+            },
+        ],
+        starterCode: {
+            python: `class NestedIterator:
+    def __init__(self, nestedList: list):
+        # Write your solution here
+        # Each element of nestedList is either an int or a (possibly nested) list.
+        pass
+
+    def next(self) -> int:
+        # Write your solution here
+        pass
+
+    def has_next(self) -> bool:
+        # Write your solution here
+        pass`,
+            javascript: `class NestedIterator {
+    constructor(nestedList) {
+        // Write your solution here
+        // Each element of nestedList is either a number or a (possibly nested) array.
+    }
+
+    next() {
+        // Write your solution here
+    }
+
+    hasNext() {
+        // Write your solution here
+    }
+}`,
+            java: `class NestedIterator {
+    // Each element of nestedList is either an Integer or a (possibly nested) List<Object>.
+    public NestedIterator(List<Object> nestedList) {
+        // Write your solution here
+    }
+
+    public Integer next() {
+        // Write your solution here
+        return 0;
+    }
+
+    public boolean hasNext() {
+        // Write your solution here
+        return false;
+    }
+}`
+        }
+    },
+    {
+        title: 'Guess Number Higher or Lower',
+        description: `We are playing the Guess Game. The game is as follows:
+
+I pick a number from \`1\` to \`n\`. You have to guess which number I picked.
+
+Every time you guess wrong, you'll be told whether the number I picked is higher or lower than your guess.
+
+You call a pre-defined API \`int guess(int num)\`, which returns three possible results:
+- \`-1\`: Your guess is higher than the number I picked (i.e. \`num > pick\`).
+- \`1\`: Your guess is lower than the number I picked (i.e. \`num < pick\`).
+- \`0\`: your guess is equal to the number I picked (i.e. \`num == pick\`).
+
+Return the number that I picked.`,
+        difficulty: 'easy',
+        category: 'interactive',
+        isPremium: false,
+        functionName: 'guess_number',
+        executionType: 'interactive',
+        interactiveSecretKeys: ['secret'],
+        examples: [
+            { input: 'n = 10, pick = 6', output: '6', explanation: '' },
+            { input: 'n = 1, pick = 1', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 2^31 - 1', '1 <= pick <= n'],
+        testCases: [
+            { input: { n: 10, secret: 6 }, expectedOutput: 6 },
+            { input: { n: 1, secret: 1 }, expectedOutput: 1 },
+            { input: { n: 2126753390, secret: 1702766719 }, expectedOutput: 1702766719 },
+            { input: { n: 100, secret: 1 }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def guess_number(n: int) -> int:
+    # You may call guess(num) to compare num against the secretly picked number.
+    # It returns -1 if num is too high, 1 if num is too low, 0 if num is correct.
+    # Write your solution here
+    pass`,
+            javascript: `function guessNumber(n) {
+    // You may call guess(num) to compare num against the secretly picked number.
+    // It returns -1 if num is too high, 1 if num is too low, 0 if num is correct.
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int guessNumber(int n) {
+        // You may call Judge.guess(num) to compare num against the secretly picked
+        // number. It returns -1 if num is too high, 1 if num is too low, 0 if correct.
+        // Write your solution here
+        return -1;
+    }
+}`
+        },
+        customDriver: {
+            python: `def guess(num):
+    secret = data["secret"]
+    if num == secret:
+        return 0
+    return 1 if num < secret else -1`,
+            javascript: `function guess(num) {
+    const secret = data.secret;
+    if (num === secret) return 0;
+    return num < secret ? 1 : -1;
+}`,
+            java: `class Judge {
+    static Map<String,Object> data;
+    static int guess(int num) {
+        int secret = ((Number) data.get("secret")).intValue();
+        if (num == secret) return 0;
+        return num < secret ? 1 : -1;
+    }
+}`
+        }
+    },
+    {
+        title: 'First Bad Version',
+        description: `You are a product manager and currently leading a team to develop a new product. Since each version is developed based on the previous version, all the versions after a bad version are also bad.
+
+Suppose you have \`n\` versions \`[1, 2, ..., n]\` and you want to find out the first bad one, which causes all the following ones to be bad.
+
+You are given an API \`bool isBadVersion(version)\` which returns whether \`version\` is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.`,
+        difficulty: 'easy',
+        category: 'interactive',
+        isPremium: false,
+        functionName: 'first_bad_version',
+        executionType: 'interactive',
+        interactiveSecretKeys: ['bad'],
+        examples: [
+            { input: 'n = 5, bad = 4', output: '4', explanation: 'call isBadVersion(3) -> false; call isBadVersion(5) -> true; call isBadVersion(4) -> true. So 4 is the first bad version.' },
+            { input: 'n = 1, bad = 1', output: '1', explanation: '' },
+        ],
+        constraints: ['1 <= bad <= n <= 2^31 - 1'],
+        testCases: [
+            { input: { n: 5, bad: 4 }, expectedOutput: 4 },
+            { input: { n: 1, bad: 1 }, expectedOutput: 1 },
+            { input: { n: 2126753390, bad: 1702766719 }, expectedOutput: 1702766719 },
+            { input: { n: 10, bad: 1 }, expectedOutput: 1, isHidden: true },
+        ],
+        starterCode: {
+            python: `def first_bad_version(n: int) -> int:
+    # You may call is_bad_version(version) to check whether a version is bad.
+    # Write your solution here
+    pass`,
+            javascript: `function firstBadVersion(n) {
+    // You may call isBadVersion(version) to check whether a version is bad.
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int firstBadVersion(int n) {
+        // You may call Judge.isBadVersion(version) to check whether a version is bad.
+        // Write your solution here
+        return 1;
+    }
+}`
+        },
+        customDriver: {
+            python: `def is_bad_version(version):
+    return version >= data["bad"]`,
+            javascript: `function isBadVersion(version) {
+    return version >= data.bad;
+}`,
+            java: `class Judge {
+    static Map<String,Object> data;
+    static boolean isBadVersion(int version) {
+        return version >= ((Number) data.get("bad")).intValue();
+    }
+}`
+        }
+    },
+    {
+        title: 'Find Positive Integer Solution for a Given Equation',
+        description: `Given a callable function \`f(x, y)\` and a target integer \`z\`, find all pairs of positive integers \`x\` and \`y\` such that \`f(x, y) == z\`, where \`1 <= x, y <= 1000\`.
+
+For this problem, \`f\` is implemented as \`f(x, y) = x + y\` — but treat it as a black box: only call \`f\`, don't assume you know its formula.
+
+Return the pairs sorted in **ascending order of x** as a list of \`[x, y]\` pairs. It is guaranteed that \`f\` is monotonically increasing in both \`x\` and \`y\`.`,
+        difficulty: 'medium',
+        category: 'interactive',
+        isPremium: true,
+        functionName: 'find_solution',
+        executionType: 'interactive',
+        examples: [
+            { input: 'z = 5 (f(x,y) = x + y)', output: '[[1,4],[2,3],[3,2],[4,1]]', explanation: '' },
+            { input: 'z = 2 (f(x,y) = x + y)', output: '[[1,1]]', explanation: '' },
+        ],
+        constraints: ['1 <= function_id <= 9', '1 <= z <= 100', 'It is guaranteed that the values of x and y are in the range [1, 1000].'],
+        testCases: [
+            { input: { z: 5 }, expectedOutput: [[1, 4], [2, 3], [3, 2], [4, 1]] },
+            { input: { z: 2 }, expectedOutput: [[1, 1]] },
+            { input: { z: 3 }, expectedOutput: [[1, 2], [2, 1]], isHidden: true },
+        ],
+        starterCode: {
+            python: `def find_solution(z: int) -> list[list[int]]:
+    # You may call f(x, y) to evaluate the black-box function.
+    # Write your solution here
+    pass`,
+            javascript: `function findSolution(z) {
+    // You may call f(x, y) to evaluate the black-box function.
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public List<List<Integer>> findSolution(int z) {
+        // You may call Judge.f(x, y) to evaluate the black-box function.
+        // Write your solution here
+        return new ArrayList<>();
+    }
+}`
+        },
+        customDriver: {
+            python: `def f(x, y):
+    return x + y`,
+            javascript: `function f(x, y) {
+    return x + y;
+}`,
+            java: `class Judge {
+    static Map<String,Object> data;
+    static int f(int x, int y) {
+        return x + y;
+    }
+}`
+        }
+    },
+    {
+        title: 'Leftmost Column with at Least a One',
+        description: `A row-sorted binary matrix means that all elements are \`0\` or \`1\` and each row of the matrix is sorted in non-decreasing order.
+
+Given a row-sorted binary matrix, return the index (0-indexed) of the **leftmost column** with at least a \`1\` in it. If such an index does not exist, return \`-1\`.
+
+You are given access to the matrix only through two API calls:
+- \`get(row, col)\` returns the element of the matrix at index \`(row, col)\` (0-indexed).
+- \`dimensions()\` returns a list of 2 elements: \`[rows, cols]\`, indicating the number of rows and columns.
+
+You should minimize the number of calls to \`get\` and \`dimensions\`.`,
+        difficulty: 'medium',
+        category: 'interactive',
+        isPremium: true,
+        functionName: 'leftmost_column_with_one',
+        executionType: 'interactive',
+        interactiveSecretKeys: ['mat'],
+        examples: [
+            { input: 'mat = [[0,0],[1,1]]', output: '0', explanation: '' },
+            { input: 'mat = [[0,0],[0,1]]', output: '1', explanation: '' },
+            { input: 'mat = [[0,0],[0,0]]', output: '-1', explanation: '' },
+        ],
+        constraints: ['rows == mat.length', 'cols == mat[i].length', '1 <= rows, cols <= 100', 'mat[i][j] is either 0 or 1.', 'mat[i] is sorted in non-decreasing order.'],
+        testCases: [
+            { input: { mat: [[0, 0], [1, 1]] }, expectedOutput: 0 },
+            { input: { mat: [[0, 0], [0, 1]] }, expectedOutput: 1 },
+            { input: { mat: [[0, 0], [0, 0]] }, expectedOutput: -1 },
+            { input: { mat: [[1]] }, expectedOutput: 0, isHidden: true },
+        ],
+        starterCode: {
+            python: `def leftmost_column_with_one() -> int:
+    # You may call get(row, col) and dimensions() to inspect the hidden matrix.
+    # Write your solution here
+    pass`,
+            javascript: `function leftmostColumnWithOne() {
+    // You may call get(row, col) and dimensions() to inspect the hidden matrix.
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int leftmostColumnWithOne() {
+        // You may call Judge.get(row, col) and Judge.dimensions() to inspect the
+        // hidden matrix.
+        // Write your solution here
+        return -1;
+    }
+}`
+        },
+        customDriver: {
+            python: `def get(row, col):
+    return data["mat"][row][col]
+
+def dimensions():
+    mat = data["mat"]
+    return [len(mat), len(mat[0])]`,
+            javascript: `function get(row, col) {
+    return data.mat[row][col];
+}
+function dimensions() {
+    return [data.mat.length, data.mat[0].length];
+}`,
+            java: `class Judge {
+    static Map<String,Object> data;
+    @SuppressWarnings("unchecked")
+    static int get(int row, int col) {
+        List<Object> mat = (List<Object>) data.get("mat");
+        List<Object> r = (List<Object>) mat.get(row);
+        return ((Number) r.get(col)).intValue();
+    }
+    @SuppressWarnings("unchecked")
+    static int[] dimensions() {
+        List<Object> mat = (List<Object>) data.get("mat");
+        List<Object> r0 = (List<Object>) mat.get(0);
+        return new int[]{mat.size(), r0.size()};
+    }
+}`
+        }
+    },
+    {
+        title: 'Print in Order',
+        description: `Suppose we have a class \`Foo\` with three methods: \`first\`, \`second\`, and \`third\`. The same instance of \`Foo\` will be passed to three different threads. Thread A will call \`first()\`, thread B will call \`second()\`, and thread C will call \`third()\`. Design a mechanism so that \`second()\` is executed after \`first()\`, and \`third()\` is executed after \`second()\`, regardless of the order in which the three threads are started.`,
+        difficulty: 'easy',
+        category: 'concurrency',
+        isPremium: false,
+        functionName: 'Foo',
+        executionType: 'concurrent',
+        examples: [
+            { input: 'threads = [1,2,3] (call order: second, first, third)', output: '"firstsecondthird"', explanation: 'Regardless of the order the threads are started in, first() must run before second(), and second() before third().' },
+        ],
+        constraints: ['The input is only used to initialize the three threads.', 'You may modify the class as you see fit, but the three methods must get invoked as described.'],
+        testCases: [
+            { input: {}, expectedOutput: 'firstsecondthird' },
+        ],
+        starterCode: {
+            python: `class Foo:
+    def __init__(self):
+        # Write your solution here
+        pass
+
+    def first(self, print_first) -> None:
+        # print_first() outputs "first". Do not change or remove this line.
+        print_first()
+
+    def second(self, print_second) -> None:
+        # print_second() outputs "second". Do not change or remove this line.
+        print_second()
+
+    def third(self, print_third) -> None:
+        # print_third() outputs "third". Do not change or remove this line.
+        print_third()`,
+            javascript: `class Foo {
+    constructor() {
+        // Write your solution here
+    }
+
+    first(printFirst) {
+        // printFirst() outputs "first". Do not change or remove this line.
+        printFirst();
+    }
+
+    second(printSecond) {
+        // printSecond() outputs "second". Do not change or remove this line.
+        printSecond();
+    }
+
+    third(printThird) {
+        // printThird() outputs "third". Do not change or remove this line.
+        printThird();
+    }
+}`,
+            java: `class Foo {
+    public Foo() {
+        // Write your solution here
+    }
+
+    public void first(Runnable printFirst) throws InterruptedException {
+        // printFirst.run() outputs "first". Do not change or remove this line.
+        printFirst.run();
+    }
+
+    public void second(Runnable printSecond) throws InterruptedException {
+        // printSecond.run() outputs "second". Do not change or remove this line.
+        printSecond.run();
+    }
+
+    public void third(Runnable printThird) throws InterruptedException {
+        // printThird.run() outputs "third". Do not change or remove this line.
+        printThird.run();
+    }
+}`
+        },
+        customDriver: {
+            python: `data = json.loads(sys.stdin.read())
+
+output = []
+lock = threading.Lock()
+foo = Foo()
+
+def print_first():
+    with lock: output.append("first")
+
+def print_second():
+    with lock: output.append("second")
+
+def print_third():
+    with lock: output.append("third")
+
+t3 = threading.Thread(target=foo.third, args=(print_third,))
+t2 = threading.Thread(target=foo.second, args=(print_second,))
+t1 = threading.Thread(target=foo.first, args=(print_first,))
+t3.start(); t2.start(); t1.start()
+t1.join(); t2.join(); t3.join()
+print(json.dumps("".join(output)))`,
+            javascript: `const output = [];
+const foo = new Foo();
+const p1 = new Promise(r => setTimeout(() => r(foo.third(() => output.push('third'))), 0));
+const p2 = new Promise(r => setTimeout(() => r(foo.second(() => output.push('second'))), 0));
+const p3 = new Promise(r => setTimeout(() => r(foo.first(() => output.push('first'))), 0));
+Promise.all([p1, p2, p3]).then(() => console.log(JSON.stringify(output.join(''))));`,
+            java: `public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        scanner.useDelimiter("\\\\A").next();
+        StringBuilder output = new StringBuilder();
+        Object lock = new Object();
+        Foo foo = new Foo();
+        Thread t3 = new Thread(() -> { try { foo.third(() -> { synchronized(lock) { output.append("third"); } }); } catch (Exception e) {} });
+        Thread t2 = new Thread(() -> { try { foo.second(() -> { synchronized(lock) { output.append("second"); } }); } catch (Exception e) {} });
+        Thread t1 = new Thread(() -> { try { foo.first(() -> { synchronized(lock) { output.append("first"); } }); } catch (Exception e) {} });
+        t3.start(); t2.start(); t1.start();
+        t1.join(); t2.join(); t3.join();
+        System.out.println(Json.stringify(output.toString()));
+    }
+}`
+        }
+    },
+    {
+        title: 'Print FooBar Alternately',
+        description: `Suppose you are given the following code:
+
+\`\`\`
+class FooBar {
+    public void foo() {
+        for (int i = 0; i < n; i++) {
+            print("foo");
+        }
+    }
+
+    public void bar() {
+        for (int i = 0; i < n; i++) {
+            print("bar");
+        }
+    }
+}
+\`\`\`
+
+The same instance of \`FooBar\` will be passed to two different threads:
+- thread A will call \`foo()\`, while
+- thread B will call \`bar()\`.
+
+Modify the given program to output \`"foobar"\` \`n\` times, with the two threads alternating between \`foo\` and \`bar\`.`,
+        difficulty: 'medium',
+        category: 'concurrency',
+        isPremium: false,
+        functionName: 'FooBar',
+        executionType: 'concurrent',
+        examples: [
+            { input: 'n = 1', output: '"foobar"', explanation: '' },
+            { input: 'n = 2', output: '"foobarfoobar"', explanation: '"foobar" is being repeated 2 times.' },
+        ],
+        constraints: ['1 <= n <= 1000'],
+        testCases: [
+            { input: { n: 1 }, expectedOutput: 'foobar' },
+            { input: { n: 2 }, expectedOutput: 'foobarfoobar' },
+            { input: { n: 5 }, expectedOutput: 'foobarfoobarfoobarfoobarfoobar', isHidden: true },
+        ],
+        starterCode: {
+            python: `class FooBar:
+    def __init__(self, n):
+        self.n = n
+        # Write your solution here
+
+    def foo(self, print_foo) -> None:
+        for _ in range(self.n):
+            # Write your solution here
+            print_foo()
+
+    def bar(self, print_bar) -> None:
+        for _ in range(self.n):
+            # Write your solution here
+            print_bar()`,
+            javascript: `class FooBar {
+    constructor(n) {
+        this.n = n;
+        // Write your solution here
+    }
+
+    foo(printFoo) {
+        for (let i = 0; i < this.n; i++) {
+            // Write your solution here
+            printFoo();
+        }
+    }
+
+    bar(printBar) {
+        for (let i = 0; i < this.n; i++) {
+            // Write your solution here
+            printBar();
+        }
+    }
+}`,
+            java: `class FooBar {
+    private int n;
+
+    public FooBar(int n) {
+        this.n = n;
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            // Write your solution here
+            printFoo.run();
+        }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            // Write your solution here
+            printBar.run();
+        }
+    }
+}`
+        },
+        customDriver: {
+            python: `data = json.loads(sys.stdin.read())
+n = data["n"]
+
+output = []
+lock = threading.Lock()
+fb = FooBar(n)
+
+def print_foo():
+    with lock: output.append("foo")
+
+def print_bar():
+    with lock: output.append("bar")
+
+t2 = threading.Thread(target=fb.bar, args=(print_bar,))
+t1 = threading.Thread(target=fb.foo, args=(print_foo,))
+t2.start(); t1.start()
+t1.join(); t2.join()
+print(json.dumps("".join(output)))`,
+            javascript: `const chunks = [];
+process.stdin.on('data', chunk => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const n = data.n;
+    const output = [];
+    const fb = new FooBar(n);
+    const p1 = new Promise(r => setTimeout(() => r(fb.bar(() => output.push('bar'))), 0));
+    const p2 = new Promise(r => setTimeout(() => r(fb.foo(() => output.push('foo'))), 0));
+    Promise.all([p1, p2]).then(() => console.log(JSON.stringify(output.join(''))));
+});`,
+            java: `public class Main {
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.useDelimiter("\\\\A").next();
+        Map<String, Object> data = (Map<String, Object>) Json.parse(input);
+        int n = ((Number) data.get("n")).intValue();
+        StringBuilder output = new StringBuilder();
+        Object lock = new Object();
+        FooBar fb = new FooBar(n);
+        Thread t1 = new Thread(() -> { try { fb.foo(() -> { synchronized(lock) { output.append("foo"); } }); } catch (Exception e) {} });
+        Thread t2 = new Thread(() -> { try { fb.bar(() -> { synchronized(lock) { output.append("bar"); } }); } catch (Exception e) {} });
+        t2.start(); t1.start();
+        t1.join(); t2.join();
+        System.out.println(Json.stringify(output.toString()));
+    }
+}`
+        }
+    },
+    {
+        title: 'Print Zero Even Odd',
+        description: `You have a function \`printNumber\` that can be called with an integer parameter and prints it to the console.
+
+You are given an instance of the class \`ZeroEvenOdd\` that has three methods: \`zero\`, \`even\`, and \`odd\`. The same instance will be passed to three different threads:
+- Thread A calls \`zero()\` and should print \`0\`s.
+- Thread B calls \`even()\` and should print only the even numbers.
+- Thread C calls \`odd()\` and should print only the odd numbers.
+
+Modify the class so that the sequence printed is \`0, 1, 0, 2, 0, 3, ...\` where the total length of the sequence is \`2n\` (i.e. alternating \`0\`s with the numbers \`1\` through \`n\` in increasing order).
+
+Return the printed sequence as an array of integers.`,
+        difficulty: 'medium',
+        category: 'concurrency',
+        isPremium: true,
+        functionName: 'ZeroEvenOdd',
+        executionType: 'concurrent',
+        examples: [
+            { input: 'n = 2', output: '[0,1,0,2]', explanation: '' },
+            { input: 'n = 5', output: '[0,1,0,2,0,3,0,4,0,5]', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 1000'],
+        testCases: [
+            { input: { n: 2 }, expectedOutput: [0, 1, 0, 2] },
+            { input: { n: 1 }, expectedOutput: [0, 1] },
+            { input: { n: 5 }, expectedOutput: [0, 1, 0, 2, 0, 3, 0, 4, 0, 5], isHidden: true },
+        ],
+        starterCode: {
+            python: `class ZeroEvenOdd:
+    def __init__(self, n):
+        self.n = n
+        # Write your solution here
+
+    def zero(self, print_number) -> None:
+        for _ in range(self.n):
+            # Write your solution here
+            print_number(0)
+
+    def even(self, print_number) -> None:
+        for i in range(2, self.n + 1, 2):
+            # Write your solution here
+            print_number(i)
+
+    def odd(self, print_number) -> None:
+        for i in range(1, self.n + 1, 2):
+            # Write your solution here
+            print_number(i)`,
+            javascript: `class ZeroEvenOdd {
+    constructor(n) {
+        this.n = n;
+        // Write your solution here
+    }
+
+    zero(printNumber) {
+        for (let i = 0; i < this.n; i++) {
+            // Write your solution here
+            printNumber(0);
+        }
+    }
+
+    even(printNumber) {
+        for (let i = 2; i <= this.n; i += 2) {
+            // Write your solution here
+            printNumber(i);
+        }
+    }
+
+    odd(printNumber) {
+        for (let i = 1; i <= this.n; i += 2) {
+            // Write your solution here
+            printNumber(i);
+        }
+    }
+}`,
+            java: `class ZeroEvenOdd {
+    private int n;
+
+    public ZeroEvenOdd(int n) {
+        this.n = n;
+    }
+
+    public void zero(Runnable printNumber) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            // Write your solution here
+            printNumber.run();
+        }
+    }
+
+    public void even(java.util.function.IntConsumer printNumber) throws InterruptedException {
+        for (int i = 2; i <= n; i += 2) {
+            // Write your solution here
+            printNumber.accept(i);
+        }
+    }
+
+    public void odd(java.util.function.IntConsumer printNumber) throws InterruptedException {
+        for (int i = 1; i <= n; i += 2) {
+            // Write your solution here
+            printNumber.accept(i);
+        }
+    }
+}`
+        },
+        customDriver: {
+            python: `data = json.loads(sys.stdin.read())
+n = data["n"]
+
+output = []
+lock = threading.Lock()
+zeo = ZeroEvenOdd(n)
+
+def print_number(x):
+    with lock: output.append(x)
+
+tZero = threading.Thread(target=zeo.zero, args=(print_number,))
+tEven = threading.Thread(target=zeo.even, args=(print_number,))
+tOdd = threading.Thread(target=zeo.odd, args=(print_number,))
+tEven.start(); tOdd.start(); tZero.start()
+tZero.join(); tEven.join(); tOdd.join()
+print(json.dumps(output, separators=(",", ":")))`,
+            javascript: `const chunks = [];
+process.stdin.on('data', chunk => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const n = data.n;
+    const output = [];
+    const zeo = new ZeroEvenOdd(n);
+    const printNumber = x => output.push(x);
+    const p1 = new Promise(r => setTimeout(() => r(zeo.even(printNumber)), 0));
+    const p2 = new Promise(r => setTimeout(() => r(zeo.odd(printNumber)), 0));
+    const p3 = new Promise(r => setTimeout(() => r(zeo.zero(printNumber)), 0));
+    Promise.all([p1, p2, p3]).then(() => console.log(JSON.stringify(output)));
+});`,
+            java: `public class Main {
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.useDelimiter("\\\\A").next();
+        Map<String, Object> data = (Map<String, Object>) Json.parse(input);
+        int n = ((Number) data.get("n")).intValue();
+        List<Object> output = new ArrayList<>();
+        Object lock = new Object();
+        ZeroEvenOdd zeo = new ZeroEvenOdd(n);
+        Runnable printZero = () -> { synchronized(lock) { output.add(0); } };
+        java.util.function.IntConsumer printNum = x -> { synchronized(lock) { output.add(x); } };
+        Thread tZero = new Thread(() -> { try { zeo.zero(printZero); } catch (Exception e) {} });
+        Thread tEven = new Thread(() -> { try { zeo.even(printNum); } catch (Exception e) {} });
+        Thread tOdd = new Thread(() -> { try { zeo.odd(printNum); } catch (Exception e) {} });
+        tEven.start(); tOdd.start(); tZero.start();
+        tZero.join(); tEven.join(); tOdd.join();
+        System.out.println(Json.stringify(output));
+    }
+}`
+        }
+    },
+    {
+        title: 'Fizz Buzz Multithreaded',
+        description: `You have the four functions \`fizz\`, \`buzz\`, \`fizzbuzz\`, and \`number\`, and an integer \`n\`. Four threads will run concurrently:
+- Thread A calls \`fizz()\` and should output \`"fizz"\` for every multiple of 3 (not a multiple of 5).
+- Thread B calls \`buzz()\` and should output \`"buzz"\` for every multiple of 5 (not a multiple of 3).
+- Thread C calls \`fizzbuzz()\` and should output \`"fizzbuzz"\` for every multiple of both 3 and 5.
+- Thread D calls \`number()\` and should output the number itself for every value that is not a multiple of 3 or 5.
+
+Modify the class so that, together, the four threads produce the standard FizzBuzz sequence for the integers \`1\` to \`n\`, in increasing order. Return the resulting sequence as an array of strings.`,
+        difficulty: 'hard',
+        category: 'concurrency',
+        isPremium: true,
+        functionName: 'FizzBuzz',
+        executionType: 'concurrent',
+        examples: [
+            { input: 'n = 15', output: '["1","2","fizz","4","buzz","fizz","7","8","fizz","buzz","11","fizz","13","14","fizzbuzz"]', explanation: '' },
+        ],
+        constraints: ['1 <= n <= 50'],
+        testCases: [
+            { input: { n: 15 }, expectedOutput: ['1', '2', 'fizz', '4', 'buzz', 'fizz', '7', '8', 'fizz', 'buzz', '11', 'fizz', '13', '14', 'fizzbuzz'] },
+            { input: { n: 5 }, expectedOutput: ['1', '2', 'fizz', '4', 'buzz'] },
+            { input: { n: 1 }, expectedOutput: ['1'], isHidden: true },
+        ],
+        starterCode: {
+            python: `class FizzBuzz:
+    def __init__(self, n):
+        self.n = n
+        # Write your solution here
+
+    def fizz(self, print_fizz) -> None:
+        # print_fizz() outputs "fizz". Do not change or remove this line.
+        # Write your solution here
+        pass
+
+    def buzz(self, print_buzz) -> None:
+        # print_buzz() outputs "buzz". Do not change or remove this line.
+        # Write your solution here
+        pass
+
+    def fizzbuzz(self, print_fizz_buzz) -> None:
+        # print_fizz_buzz() outputs "fizzbuzz". Do not change or remove this line.
+        # Write your solution here
+        pass
+
+    def number(self, print_number) -> None:
+        # print_number(x) outputs x. Do not change or remove this line.
+        # Write your solution here
+        pass`,
+            javascript: `class FizzBuzz {
+    constructor(n) {
+        this.n = n;
+        // Write your solution here
+    }
+
+    fizz(printFizz) {
+        // printFizz() outputs "fizz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    buzz(printBuzz) {
+        // printBuzz() outputs "buzz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    fizzbuzz(printFizzBuzz) {
+        // printFizzBuzz() outputs "fizzbuzz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    number(printNumber) {
+        // printNumber(x) outputs x. Do not change or remove this line.
+        // Write your solution here
+    }
+}`,
+            java: `class FizzBuzz {
+    private int n;
+
+    public FizzBuzz(int n) {
+        this.n = n;
+    }
+
+    public void fizz(Runnable printFizz) throws InterruptedException {
+        // printFizz.run() outputs "fizz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    public void buzz(Runnable printBuzz) throws InterruptedException {
+        // printBuzz.run() outputs "buzz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
+        // printFizzBuzz.run() outputs "fizzbuzz". Do not change or remove this line.
+        // Write your solution here
+    }
+
+    public void number(java.util.function.IntConsumer printNumber) throws InterruptedException {
+        // printNumber.accept(x) outputs x. Do not change or remove this line.
+        // Write your solution here
+    }
+}`
+        },
+        customDriver: {
+            python: `data = json.loads(sys.stdin.read())
+n = data["n"]
+
+seq = []
+lock = threading.Lock()
+fb = FizzBuzz(n)
+
+def pf():
+    with lock: seq.append("fizz")
+
+def pb():
+    with lock: seq.append("buzz")
+
+def pfb():
+    with lock: seq.append("fizzbuzz")
+
+def pn(x):
+    with lock: seq.append(str(x))
+
+tFizz = threading.Thread(target=fb.fizz, args=(pf,))
+tBuzz = threading.Thread(target=fb.buzz, args=(pb,))
+tFizzBuzz = threading.Thread(target=fb.fizzbuzz, args=(pfb,))
+tNumber = threading.Thread(target=fb.number, args=(pn,))
+tBuzz.start(); tFizzBuzz.start(); tNumber.start(); tFizz.start()
+tFizz.join(); tBuzz.join(); tFizzBuzz.join(); tNumber.join()
+print(json.dumps(seq, separators=(",", ":")))`,
+            javascript: `const chunks = [];
+process.stdin.on('data', chunk => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const n = data.n;
+    const seq = [];
+    const fb = new FizzBuzz(n);
+    const p1 = new Promise(r => setTimeout(() => r(fb.buzz(() => seq.push('buzz'))), 0));
+    const p2 = new Promise(r => setTimeout(() => r(fb.fizzbuzz(() => seq.push('fizzbuzz'))), 0));
+    const p3 = new Promise(r => setTimeout(() => r(fb.number(x => seq.push(String(x)))), 0));
+    const p4 = new Promise(r => setTimeout(() => r(fb.fizz(() => seq.push('fizz'))), 0));
+    Promise.all([p1, p2, p3, p4]).then(() => console.log(JSON.stringify(seq)));
+});`,
+            java: `public class Main {
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.useDelimiter("\\\\A").next();
+        Map<String, Object> data = (Map<String, Object>) Json.parse(input);
+        int n = ((Number) data.get("n")).intValue();
+        List<Object> seq = new ArrayList<>();
+        Object lock = new Object();
+        FizzBuzz fb = new FizzBuzz(n);
+        Thread tFizz = new Thread(() -> { try { fb.fizz(() -> { synchronized(lock) { seq.add("fizz"); } }); } catch (Exception e) {} });
+        Thread tBuzz = new Thread(() -> { try { fb.buzz(() -> { synchronized(lock) { seq.add("buzz"); } }); } catch (Exception e) {} });
+        Thread tFizzBuzz = new Thread(() -> { try { fb.fizzbuzz(() -> { synchronized(lock) { seq.add("fizzbuzz"); } }); } catch (Exception e) {} });
+        Thread tNumber = new Thread(() -> { try { fb.number(x -> { synchronized(lock) { seq.add(String.valueOf(x)); } }); } catch (Exception e) {} });
+        tBuzz.start(); tFizzBuzz.start(); tNumber.start(); tFizz.start();
+        tFizz.join(); tBuzz.join(); tFizzBuzz.join(); tNumber.join();
+        System.out.println(Json.stringify(seq));
     }
 }`
         }
