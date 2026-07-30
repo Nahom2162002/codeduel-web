@@ -23,6 +23,9 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [needsVerification, setNeedsVerification] = useState(false);
+    const [resendMessage, setResendMessage] = useState('');
+    const [resending, setResending] = useState(false);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -30,6 +33,8 @@ export default function LoginPage() {
         if (!email || !password) { setError('Please fill in all fields'); return; }
         setLoading(true);
         setError('');
+        setNeedsVerification(false);
+        setResendMessage('');
 
         try {
             const res = await fetch('/api/auth/login', {
@@ -43,11 +48,30 @@ export default function LoginPage() {
                 router.push('/problems');
             } else {
                 setError(data.error || 'Login failed');
+                setNeedsVerification(!!data.needsVerification);
             }
         } catch {
             setError('Connection failed. Please try again.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleResend = async () => {
+        setResending(true);
+        setResendMessage('');
+        try {
+            const res = await fetch('/api/auth/resend-verification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            setResendMessage(data.message || data.error || 'Something went wrong');
+        } catch {
+            setResendMessage('Connection failed. Please try again.');
+        } finally {
+            setResending(false);
         }
     };
 
@@ -148,6 +172,33 @@ export default function LoginPage() {
                         <p style={{ color: 'oklch(68% 0.18 25)', fontSize: 13, textAlign: 'center', margin: '0 0 16px' }}>
                             {error}
                         </p>
+                    )}
+
+                    {needsVerification && (
+                        <div style={{ textAlign: 'center', margin: '0 0 16px' }}>
+                            {resendMessage ? (
+                                <p className={jetbrainsMono.className} style={{ color: BLUE, fontSize: 13 }}>
+                                    {resendMessage}
+                                </p>
+                            ) : (
+                                <button
+                                    onClick={handleResend}
+                                    disabled={resending}
+                                    className={jetbrainsMono.className}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        color: BLUE,
+                                        fontSize: 13,
+                                        textDecoration: 'underline',
+                                        cursor: resending ? 'not-allowed' : 'pointer',
+                                        padding: 0
+                                    }}
+                                >
+                                    {resending ? 'Sending...' : 'Resend verification email'}
+                                </button>
+                            )}
+                        </div>
                     )}
 
                     <button
