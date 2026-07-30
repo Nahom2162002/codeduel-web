@@ -7,6 +7,11 @@ const userSchema = new Schema({
     passwordHistory:    { type: [String], required: true },
     resetToken:         { type: String },
     resetTokenExpiry:   { type: Date },
+    // Defaults to true so existing accounts (created before this field existed)
+    // are treated as verified on read; register explicitly sets it to false.
+    isEmailVerified:        { type: Boolean, default: true },
+    verificationToken:      { type: String },
+    verificationTokenExpiry: { type: Date },
     createdAt:          { type: Date, default: Date.now },
     plan:               { type: String, enum: ['free', 'pro'], default: 'free' },
     stripeCustomerId:   { type: String },

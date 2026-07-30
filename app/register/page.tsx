@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import posthog from 'posthog-js';
@@ -28,8 +27,8 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const requirements = [
         { text: 'At least 8 characters', met: password.length >= 8 },
@@ -55,6 +54,7 @@ export default function RegisterPage() {
 
         setLoading(true);
         setError('');
+        setMessage('');
 
         try {
             const res = await fetch('/api/auth/register', {
@@ -64,7 +64,7 @@ export default function RegisterPage() {
             });
             const data = await res.json();
             if (data.message) {
-                router.push('/login');
+                setMessage(data.message);
                 posthog.capture('user_registered');
             } else {
                 setError(data.error || 'Registration failed');
@@ -138,104 +138,132 @@ export default function RegisterPage() {
                         <p style={{ fontSize: 15, color: 'oklch(65% 0.02 260)', margin: 0 }}>Create your account and start dueling</p>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginBottom: 24 }}>
-                        <div>
-                            <label className={jetbrainsMono.className} style={labelStyle}>Username</label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                                placeholder="yourhandle"
-                                className={spaceGrotesk.className}
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div>
-                            <label className={jetbrainsMono.className} style={labelStyle}>Email</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                                placeholder="you@example.com"
-                                className={spaceGrotesk.className}
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div>
-                            <label className={jetbrainsMono.className} style={labelStyle}>Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                                placeholder="••••••••"
-                                className={spaceGrotesk.className}
-                                style={inputStyle}
-                            />
-                        </div>
+                    {message ? (
+                        <>
+                            <p style={{ color: BLUE, fontSize: 14, textAlign: 'center', lineHeight: 1.6, margin: '0 0 24px' }}>
+                                {message}
+                            </p>
+                            <Link
+                                href="/login"
+                                style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    boxSizing: 'border-box',
+                                    textAlign: 'center',
+                                    background: BLUE,
+                                    color: 'oklch(16% 0.02 260)',
+                                    padding: 13,
+                                    borderRadius: 8,
+                                    textDecoration: 'none',
+                                    fontWeight: 700,
+                                    fontSize: 16
+                                }}
+                            >
+                                Go to Login
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginBottom: 24 }}>
+                                <div>
+                                    <label className={jetbrainsMono.className} style={labelStyle}>Username</label>
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={e => setUsername(e.target.value)}
+                                        onKeyDown={e => e.key === 'Enter' && handleRegister()}
+                                        placeholder="yourhandle"
+                                        className={spaceGrotesk.className}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={jetbrainsMono.className} style={labelStyle}>Email</label>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                        onKeyDown={e => e.key === 'Enter' && handleRegister()}
+                                        placeholder="you@example.com"
+                                        className={spaceGrotesk.className}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={jetbrainsMono.className} style={labelStyle}>Password</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        onKeyDown={e => e.key === 'Enter' && handleRegister()}
+                                        placeholder="••••••••"
+                                        className={spaceGrotesk.className}
+                                        style={inputStyle}
+                                    />
+                                </div>
 
-                        {password && (
-                            <div className={jetbrainsMono.className} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: -8 }}>
-                                {requirements.map((req, i) => (
-                                    <p key={i} style={{
-                                        fontSize: 11,
-                                        color: req.met ? GREEN : RED,
-                                        margin: 0
-                                    }}>
-                                        {req.met ? '✓' : '✗'} {req.text}
-                                    </p>
-                                ))}
+                                {password && (
+                                    <div className={jetbrainsMono.className} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: -8 }}>
+                                        {requirements.map((req, i) => (
+                                            <p key={i} style={{
+                                                fontSize: 11,
+                                                color: req.met ? GREEN : RED,
+                                                margin: 0
+                                            }}>
+                                                {req.met ? '✓' : '✗'} {req.text}
+                                            </p>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div>
+                                    <label className={jetbrainsMono.className} style={labelStyle}>Confirm Password</label>
+                                    <input
+                                        type="password"
+                                        value={confirm}
+                                        onChange={e => setConfirm(e.target.value)}
+                                        onKeyDown={e => e.key === 'Enter' && handleRegister()}
+                                        placeholder="••••••••"
+                                        className={spaceGrotesk.className}
+                                        style={inputStyle}
+                                    />
+                                </div>
                             </div>
-                        )}
 
-                        <div>
-                            <label className={jetbrainsMono.className} style={labelStyle}>Confirm Password</label>
-                            <input
-                                type="password"
-                                value={confirm}
-                                onChange={e => setConfirm(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                                placeholder="••••••••"
-                                className={spaceGrotesk.className}
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div>
+                            {error && (
+                                <p style={{ color: RED, fontSize: 13, textAlign: 'center', margin: '0 0 16px' }}>
+                                    {error}
+                                </p>
+                            )}
 
-                    {error && (
-                        <p style={{ color: RED, fontSize: 13, textAlign: 'center', margin: '0 0 16px' }}>
-                            {error}
-                        </p>
+                            <button
+                                onClick={handleRegister}
+                                disabled={loading}
+                                style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    background: loading ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
+                                    color: 'oklch(16% 0.02 260)',
+                                    padding: 13,
+                                    border: 'none',
+                                    borderRadius: 8,
+                                    fontWeight: 700,
+                                    fontSize: 16,
+                                    marginBottom: 20,
+                                    cursor: loading ? 'not-allowed' : 'pointer',
+                                    fontFamily: 'inherit'
+                                }}
+                            >
+                                {loading ? 'Creating account...' : 'Create account'}
+                            </button>
+
+                            <div style={{ textAlign: 'center', fontSize: 14, color: 'oklch(60% 0.02 260)' }}>
+                                Already have an account?{' '}
+                                <Link href="/login" style={{ color: BLUE, textDecoration: 'none', fontWeight: 600 }}>Sign in</Link>
+                            </div>
+                        </>
                     )}
-
-                    <button
-                        onClick={handleRegister}
-                        disabled={loading}
-                        style={{
-                            display: 'block',
-                            width: '100%',
-                            textAlign: 'center',
-                            background: loading ? 'oklch(75% 0.15 220 / 0.5)' : BLUE,
-                            color: 'oklch(16% 0.02 260)',
-                            padding: 13,
-                            border: 'none',
-                            borderRadius: 8,
-                            fontWeight: 700,
-                            fontSize: 16,
-                            marginBottom: 20,
-                            cursor: loading ? 'not-allowed' : 'pointer',
-                            fontFamily: 'inherit'
-                        }}
-                    >
-                        {loading ? 'Creating account...' : 'Create account'}
-                    </button>
-
-                    <div style={{ textAlign: 'center', fontSize: 14, color: 'oklch(60% 0.02 260)' }}>
-                        Already have an account?{' '}
-                        <Link href="/login" style={{ color: BLUE, textDecoration: 'none', fontWeight: 600 }}>Sign in</Link>
-                    </div>
                 </div>
             </main>
 

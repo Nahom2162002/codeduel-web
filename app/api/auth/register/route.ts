@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { validatePassword } from '@/lib/passwordValidator';
+import { sendVerificationEmail } from '@/lib/mailer';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -35,15 +37,25 @@ export async function POST(req: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
     const user = new User({
       username,
       email,
       password: hashedPassword,
-      passwordHistory: [hashedPassword]
+      passwordHistory: [hashedPassword],
+      isEmailVerified: false,
+      verificationToken,
+      verificationTokenExpiry: new Date(Date.now() + 24 * 3600000)
     });
     await user.save();
 
-    return NextResponse.json({ message: 'Account created!', userId: user._id });
+    try {
+      await sendVerificationEmail(user.email, verificationToken);
+    } catch (err: any) {
+      return NextResponse.json({ error: `Account created, but we couldn't send the verification email: ${err.message}` }, { status: 500, headers: corsHeaders });
+    }
+
+    return NextResponse.json({ message: 'Account created! Check your email to verify your account before logging in.', userId: user._id });
   } catch (err: any) {
     if (err.code === 11000) {
       const field = Object.keys(err.keyPattern ?? {})[0];

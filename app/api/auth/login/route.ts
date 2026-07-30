@@ -29,6 +29,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
     }
 
+    if (!user.isEmailVerified) {
+      return NextResponse.json(
+        { error: 'Please verify your email before logging in.', needsVerification: true },
+        { status: 403, headers: corsHeaders }
+      );
+    }
+
     const token = jwt.sign(
         { userId: user._id.toString() },
         process.env.JWT_SECRET!,
