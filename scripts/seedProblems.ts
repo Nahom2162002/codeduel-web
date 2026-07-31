@@ -31,42 +31,18 @@ You can return the answer in any order.`,
             { input: { nums: [1, 2, 3, 4, 5], target: 9 }, expectedOutput: [3, 4], isHidden: true },
         ],
         starterCode: {
-            python: `import json 
-            import sys 
-            def two_sum(nums: list[int], target: int) -> list[int]:
-            # Write your solution here
-            pass 
-            # Do not modify below this line
-            if __name__ == "__main__":
-                data = json.loads(sys.stdin.read())
-                result = two_sum(data["nums"], data["target"])
-                print(json.dumps(result))`,
-            javascript: `const readline = require('readline');
-            const rl = readline.createInterface({ input: process.stdin });
-            let input = '';
-            rl.on('line', line => input += line);
-            rl.on('close', () => {
-                const data = JSON.parse(input);
-                console.log(JSON.stringify(twoSum(data.nums, data.target)));
-            });
-            function twoSum(nums, target) {
-                // Write your solution here
-            }`,
-            java: `import java.util.*;
-            import com.fasterxml.jackson.databind.ObjectMapper;
-            class Solution {
-                public int[] twoSum(int[] nums, int target) {
-                // Write your solution here
-                return new int[]{};
-                }
-                public static void main(String[] args) throws Exception {
-                    Scanner scanner = new Scanner(System.in);
-                    String input = scanner.useDelimiter("\\A").next();
-                    ObjectMapper mapper = new ObjectMapper();
-                    Map<String, Object> data = mapper.readValue(input, Map.class);
-                    // Parse and call solution
-                }
-            }`
+            python: `def two_sum(nums: list[int], target: int) -> list[int]:
+    # Write your solution here
+    pass`,
+            javascript: `function twoSum(nums, target) {
+    // Write your solution here
+}`,
+            java: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your solution here
+        return new int[]{};
+    }
+}`
         }
     },
     {
