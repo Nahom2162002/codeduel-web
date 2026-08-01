@@ -5,6 +5,7 @@ import { anthropic } from '@/lib/anthropic';
 import Problem from '@/models/Problem';
 import LiveSolveSession from '@/models/LiveSolveSession';
 import { buildSolutionPrompt } from '@/lib/claudeSolutionPrompt';
+import { isValidObjectId, isValidLanguage } from '@/lib/inputValidator';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,12 @@ export async function POST(req: NextRequest) {
         const { problemId, language } = await req.json().catch(() => ({}));
         if (!problemId || !language) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: corsHeaders });
+        }
+        if (!isValidObjectId(problemId)) {
+            return NextResponse.json({ error: 'Invalid problem ID' }, { status: 400, headers: corsHeaders });
+        }
+        if (!isValidLanguage(language)) {
+            return NextResponse.json({ error: 'Unsupported language' }, { status: 400, headers: corsHeaders });
         }
 
         const problem = await Problem.findById(problemId);

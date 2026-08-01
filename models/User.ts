@@ -32,4 +32,17 @@ const userSchema = new Schema({
     strongCategories:   { type: [String], default: [] }
 });
 
+// Defense-in-depth: every route today manually allowlists the fields it
+// returns, but nothing stopped a future one from doing `NextResponse.json(user)`
+// directly and leaking the password hash/tokens. Stripping them here means
+// that mistake is safe by default instead of relying on every call site to
+// remember not to make it.
+const SENSITIVE_FIELDS = ['password', 'passwordHistory', 'resetToken', 'resetTokenExpiry', 'verificationToken', 'verificationTokenExpiry', 'stripeCustomerId'];
+function stripSensitiveFields(_doc: unknown, ret: Record<string, unknown>) {
+    for (const field of SENSITIVE_FIELDS) delete ret[field];
+    return ret;
+}
+userSchema.set('toJSON', { transform: stripSensitiveFields });
+userSchema.set('toObject', { transform: stripSensitiveFields });
+
 export default mongoose.models.User || mongoose.model('User', userSchema);
