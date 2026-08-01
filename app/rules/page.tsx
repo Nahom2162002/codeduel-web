@@ -133,8 +133,8 @@ export default function RulesPage() {
                         <li><strong>Code quality (40 pts):</strong> Claude reviews both solutions and scores them on time complexity, space complexity, readability, edge-case handling, and overall elegance.</li>
                     </ul>
                     <p style={P_MB}>
-                        Whoever ends up with the higher total wins the duel — but it's not a hair-trigger comparison. Your score has to beat
-                        your opponent's by more than 5 points to count as a win or loss; anything closer than that is a <strong>draw</strong>.
+                        Whoever ends up with the higher total wins the duel. A <strong>draw</strong> only happens when both scores are exactly tied —
+                        any difference, even 1 point, decides a winner.
                     </p>
                     <p style={P}>
                         Your ELO rating then moves based on the result and the problem's difficulty — bigger swings on Hard problems,
