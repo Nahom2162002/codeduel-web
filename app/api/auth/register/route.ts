@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { validatePassword } from '@/lib/passwordValidator';
 import { sendVerificationEmail } from '@/lib/mailer';
 import { validateUsername, validateEmail } from '@/lib/inputValidator';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -20,6 +21,11 @@ export async function OPTIONS() {
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
+
+    const ip = getClientIp(req);
+    const ipLimit = await checkRateLimit(`register:ip:${ip}`, 6, 60 * 60 * 1000);
+    if (!ipLimit.allowed) return rateLimitResponse(ipLimit.retryAfterSeconds, corsHeaders);
+
     const { username, email, password } = await req.json();
 
     // Validate types/format before anything derived from these values ever

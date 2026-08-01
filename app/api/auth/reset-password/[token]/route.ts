@@ -41,6 +41,8 @@ export async function POST(
     user.password = hashedPassword;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
+    // Invalidates every token issued before this point — see lib/auth.ts.
+    user.tokenVersion = (user.tokenVersion ?? 0) + 1;
     await user.save();
 
     return NextResponse.json({ message: 'Password reset successful!' });

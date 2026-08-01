@@ -4,6 +4,7 @@ import User from '@/models/User';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '@/lib/mailer';
 import { validateEmail } from '@/lib/inputValidator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -24,6 +25,9 @@ export async function POST(req: NextRequest) {
     if (emailError) {
       return NextResponse.json({ error: emailError }, { status: 400, headers: corsHeaders });
     }
+
+    const emailLimit = await checkRateLimit(`resend-verification:email:${email.toLowerCase()}`, 4, 60 * 60 * 1000);
+    if (!emailLimit.allowed) return rateLimitResponse(emailLimit.retryAfterSeconds, corsHeaders);
 
     // Same response regardless of whether the account exists or is already
     // verified — see the identical reasoning in forgot-password/route.ts.

@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -26,6 +27,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
     }
 
+    // Two layers: a tight per-account limit (the thing actually being
+    // brute-forced) and a looser per-IP limit (catches one attacker spraying
+    // many different email addresses from the same source).
+    const ip = getClientIp(req);
+    const emailLimit = await checkRateLimit(`login:email:${email.toLowerCase()}`, 8, 15 * 60 * 1000);
+    if (!emailLimit.allowed) return rateLimitResponse(emailLimit.retryAfterSeconds, corsHeaders);
+    const ipLimit = await checkRateLimit(`login:ip:${ip}`, 30, 15 * 60 * 1000);
+    if (!ipLimit.allowed) return rateLimitResponse(ipLimit.retryAfterSeconds, corsHeaders);
+
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
@@ -44,9 +54,9 @@ export async function POST(req: NextRequest) {
     }
 
     const token = jwt.sign(
-        { userId: user._id.toString() },
+        { userId: user._id.toString(), tokenVersion: user.tokenVersion },
         process.env.JWT_SECRET!,
-        { expiresIn: '30d' } 
+        { expiresIn: '30d' }
     );
 
     return NextResponse.json({ message: 'Login successful!', token });

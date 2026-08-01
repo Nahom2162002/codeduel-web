@@ -4,6 +4,7 @@ import User from '@/models/User';
 import { transporter } from '@/lib/mailer';
 import crypto from 'crypto';
 import { validateEmail } from '@/lib/inputValidator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -24,6 +25,11 @@ export async function POST(req: NextRequest) {
     if (emailError) {
       return NextResponse.json({ error: emailError }, { status: 400, headers: corsHeaders });
     }
+
+    // Keyed on the raw email string, not on whether it belongs to a real
+    // account, so hitting this limit is itself not an enumeration signal.
+    const emailLimit = await checkRateLimit(`forgot-password:email:${email.toLowerCase()}`, 4, 60 * 60 * 1000);
+    if (!emailLimit.allowed) return rateLimitResponse(emailLimit.retryAfterSeconds, corsHeaders);
 
     // Always respond the same way whether or not the account exists — a
     // response that varies (or a distinct error) here would let anyone probe
