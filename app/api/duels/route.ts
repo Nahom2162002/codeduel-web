@@ -49,15 +49,34 @@ async function executeCode(code: string, language: string, testCases: any[]) {
             // JSON serializers format output differently (e.g. Python's json.dumps
             // adds spaces after commas), so an exact string match against
             // Judge0's expected_output is unreliable across languages.
+            const ran = result.status?.id === 3;
+            let actual: any = undefined;
             let outputsMatch = false;
-            try {
-                const actual = JSON.parse((result.stdout || '').trim());
-                outputsMatch = JSON.stringify(actual) === JSON.stringify(testCase.expectedOutput);
-            } catch {
-                outputsMatch = false;
+            if (ran) {
+                try {
+                    actual = JSON.parse((result.stdout || '').trim());
+                    outputsMatch = JSON.stringify(actual) === JSON.stringify(testCase.expectedOutput);
+                } catch {
+                    outputsMatch = false;
+                }
             }
 
-            return { passed: result.status?.id === 3 && outputsMatch, time: parseFloat(result.time || '0') };
+            // Non-3 statuses (compile error, runtime error, TLE, etc.) or output
+            // that didn't parse as JSON both surface as a readable error string
+            // instead of a bogus "actual output" — the results page shows this
+            // in place of the output when present.
+            const error = !ran
+                ? [result.status?.description, result.compile_output, result.stderr].filter(Boolean).join(': ').trim() || 'Execution failed'
+                : actual === undefined
+                    ? `Unparseable output: ${(result.stdout || '').trim().slice(0, 200) || '(empty)'}`
+                    : null;
+
+            return {
+                passed: ran && outputsMatch,
+                time: parseFloat(result.time || '0'),
+                output: actual,
+                error
+            };
         })
     );
     return results;
@@ -878,22 +897,39 @@ export async function POST(req: NextRequest) {
         const aiTestsPassed = aiResults.filter(r => r.passed).length;
 
         // Evaluate code quality
-        const { userScore: qualityScore, aiScore: aiQualityScore, explanation } =
+        const { userScore: userQualityRaw, aiScore: aiQualityRaw, explanation } =
             await evaluateCodeQuality(problem, userCode, aiCode, language);
 
         // Calculate final scores
         const totalTests = problem.testCases.length;
-        const userCorrectnessScore = (userTestsPassed / totalTests) * 50;
-        const aiCorrectnessScore = (aiTestsPassed / totalTests) * 50;
+        const userCorrectnessScore = Math.round((userTestsPassed / totalTests) * 50);
+        const aiCorrectnessScore = Math.round((aiTestsPassed / totalTests) * 50);
 
         // Speed score — faster time = higher score (max 30 points)
         const totalTime = userTime + aiTime;
-        const userSpeedScore = totalTime > 0 ? ((aiTime / totalTime)) * 30 : 15;
-        const aiSpeedScore = totalTime > 0 ? ((userTime / totalTime)) * 30 : 15;
+        const userSpeedScore = Math.round(totalTime > 0 ? ((aiTime / totalTime)) * 30 : 15);
+        const aiSpeedScore = Math.round(totalTime > 0 ? ((userTime / totalTime)) * 30 : 15);
 
-        // Quality score — max 20 points
-        const userFinalScore = Math.round(userCorrectnessScore + userSpeedScore + (qualityScore / 100 * 20));
-        const aiFinalScore = Math.round(aiCorrectnessScore + aiSpeedScore + (aiQualityScore / 100 * 20));
+        // Quality score — max 20 points, weighted from the raw 0-100 LLM rating
+        const userQualityScore = Math.round(userQualityRaw / 100 * 20);
+        const aiQualityScore = Math.round(aiQualityRaw / 100 * 20);
+
+        const userFinalScore = userCorrectnessScore + userSpeedScore + userQualityScore;
+        const aiFinalScore = aiCorrectnessScore + aiSpeedScore + aiQualityScore;
+
+        // Per-test-case breakdown for the results page — pairs each test case
+        // with both sides' actual output (or error) next to what was expected.
+        const testCaseResults = problem.testCases.map((tc: any, i: number) => ({
+            input: tc.input,
+            expectedOutput: tc.expectedOutput,
+            userOutput: userResults[i].output,
+            userError: userResults[i].error,
+            userPassed: userResults[i].passed,
+            aiOutput: aiResults[i].output,
+            aiError: aiResults[i].error,
+            aiPassed: aiResults[i].passed,
+            isHidden: !!tc.isHidden
+        }));
 
         // Determine result
         const diff = userFinalScore - aiFinalScore;
@@ -936,6 +972,15 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
             totalTests,
             userScore: userFinalScore,
             aiScore: aiFinalScore,
+            userCorrectnessScore,
+            aiCorrectnessScore,
+            userSpeedScore,
+            aiSpeedScore,
+            userQualityScore,
+            aiQualityScore,
+            userQualityRaw,
+            aiQualityRaw,
+            testCaseResults,
             result,
             aiExplanation: explanation,
             aiApproach: approachExplanation,
@@ -970,6 +1015,15 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
             result,
             userScore: userFinalScore,
             aiScore: aiFinalScore,
+            userCorrectnessScore,
+            aiCorrectnessScore,
+            userSpeedScore,
+            aiSpeedScore,
+            userQualityScore,
+            aiQualityScore,
+            userQualityRaw,
+            aiQualityRaw,
+            testCaseResults,
             userTestsPassed,
             aiTestsPassed,
             totalTests,
