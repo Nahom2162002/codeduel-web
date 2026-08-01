@@ -18,10 +18,31 @@ const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
 const NEUTRAL_BG = 'oklch(40% 0.02 260 / 0.4)';
 const NEUTRAL = 'oklch(85% 0.02 260)';
 
+interface TestCaseResult {
+    input: unknown;
+    expectedOutput: unknown;
+    userOutput: unknown;
+    userError?: string;
+    userPassed: boolean;
+    aiOutput: unknown;
+    aiError?: string;
+    aiPassed: boolean;
+    isHidden: boolean;
+}
+
 interface DuelResult {
     result: 'win' | 'loss' | 'draw';
     userScore: number;
     aiScore: number;
+    userCorrectnessScore: number;
+    aiCorrectnessScore: number;
+    userSpeedScore: number;
+    aiSpeedScore: number;
+    userQualityScore: number;
+    aiQualityScore: number;
+    userQualityRaw: number;
+    aiQualityRaw: number;
+    testCaseResults: TestCaseResult[];
     userTestsPassed: number;
     aiTestsPassed: number;
     totalTests: number;
@@ -70,7 +91,7 @@ export default function ResultsPage() {
     const [duel, setDuel] = useState<DuelResult | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState<'overview' | 'code' | 'learn'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'tests' | 'code' | 'learn'>('overview');
     const [me, setMe] = useState<Me | null>(null);
 
     useEffect(() => {
@@ -151,6 +172,7 @@ export default function ResultsPage() {
 
     const config = RESULT_CONFIG[duel.result];
     const formatTime = (s: number) => s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`;
+    const formatValue = (v: unknown) => v === undefined ? '—' : JSON.stringify(v);
 
     return (
         <div className={`${spaceGrotesk.className} app-page`} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)' }}>
@@ -222,7 +244,7 @@ export default function ResultsPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: 'oklch(21% 0.02 260)', padding: 4, borderRadius: 10 }}>
-                    {(['overview', 'code', 'learn'] as const).map(tab => (
+                    {(['overview', 'tests', 'code', 'learn'] as const).map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
@@ -234,15 +256,104 @@ export default function ResultsPage() {
                                 fontSize: 13, fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize'
                             }}
                         >
-                            {tab === 'overview' ? '📊 Overview' : tab === 'code' ? '💻 Code' : '📚 Learn'}
+                            {tab === 'overview' ? '📊 Overview' : tab === 'tests' ? '🧪 Tests' : tab === 'code' ? '💻 Code' : '📚 Learn'}
                         </button>
                     ))}
                 </div>
 
                 {activeTab === 'overview' && (
-                    <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 12px' }}>Claude's Assessment</h3>
-                        <p style={{ color: 'oklch(80% 0.02 260)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{duel.aiExplanation}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                        <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24 }}>
+                            <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 16px' }}>Score Breakdown</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                                {([
+                                    { label: 'Correctness', max: 50, user: duel.userCorrectnessScore, ai: duel.aiCorrectnessScore, note: `${duel.userTestsPassed}/${duel.totalTests} vs ${duel.aiTestsPassed}/${duel.totalTests} tests passed` },
+                                    { label: 'Speed', max: 30, user: duel.userSpeedScore, ai: duel.aiSpeedScore, note: `${formatTime(duel.userTime)} vs ${formatTime(Math.round(duel.aiTime))}` },
+                                    { label: 'Code Quality', max: 20, user: duel.userQualityScore, ai: duel.aiQualityScore, note: `${duel.userQualityRaw}/100 vs ${duel.aiQualityRaw}/100 rated by Claude` },
+                                ] as const).map(row => (
+                                    <div key={row.label}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                                            <span style={{ fontSize: 13, fontWeight: 600 }}>{row.label}</span>
+                                            <span className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(60% 0.02 260)' }}>{row.note}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                <span className={jetbrainsMono.className} style={{ fontSize: 11, color: BLUE, width: 62 }}>You</span>
+                                                <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'oklch(28% 0.02 260)', overflow: 'hidden' }}>
+                                                    <div style={{ width: `${Math.min(100, (row.user / row.max) * 100)}%`, height: '100%', background: BLUE, borderRadius: 999 }} />
+                                                </div>
+                                                <span className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(75% 0.02 260)', width: 48, textAlign: 'right' }}>{row.user}/{row.max}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                <span className={jetbrainsMono.className} style={{ fontSize: 11, color: ORANGE, width: 62 }}>Claude</span>
+                                                <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'oklch(28% 0.02 260)', overflow: 'hidden' }}>
+                                                    <div style={{ width: `${Math.min(100, (row.ai / row.max) * 100)}%`, height: '100%', background: ORANGE, borderRadius: 999 }} />
+                                                </div>
+                                                <span className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(75% 0.02 260)', width: 48, textAlign: 'right' }}>{row.ai}/{row.max}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24 }}>
+                            <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 12px' }}>Claude's Assessment</h3>
+                            <p style={{ color: 'oklch(80% 0.02 260)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{duel.aiExplanation}</p>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'tests' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        {duel.testCaseResults?.map((tc, i) => (
+                            <div key={i} style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, overflow: 'hidden' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderBottom: '1px solid oklch(30% 0.02 260)' }}>
+                                    <span style={{ fontSize: 13, fontWeight: 600 }}>
+                                        Test Case {i + 1}{tc.isHidden && (
+                                            <span className={jetbrainsMono.className} style={{ marginLeft: 8, fontSize: 10, color: 'oklch(60% 0.02 260)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hidden</span>
+                                        )}
+                                    </span>
+                                    <div style={{ display: 'flex', gap: 8 }}>
+                                        <span className={jetbrainsMono.className} style={{ fontSize: 11, padding: '3px 8px', borderRadius: 999, background: tc.userPassed ? BLUE_BG : ORANGE_BG, color: tc.userPassed ? BLUE : ORANGE }}>
+                                            You {tc.userPassed ? '✓' : '✗'}
+                                        </span>
+                                        <span className={jetbrainsMono.className} style={{ fontSize: 11, padding: '3px 8px', borderRadius: 999, background: tc.aiPassed ? BLUE_BG : ORANGE_BG, color: tc.aiPassed ? BLUE : ORANGE }}>
+                                            Claude {tc.aiPassed ? '✓' : '✗'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                    <div>
+                                        <p className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(60% 0.02 260)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 6px' }}>Input</p>
+                                        <pre className={jetbrainsMono.className} style={{ margin: 0, fontSize: 12.5, color: 'oklch(85% 0.02 260)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{formatValue(tc.input)}</pre>
+                                    </div>
+                                    <div>
+                                        <p className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(60% 0.02 260)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 6px' }}>Expected Output</p>
+                                        <pre className={jetbrainsMono.className} style={{ margin: 0, fontSize: 12.5, color: 'oklch(85% 0.02 260)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{formatValue(tc.expectedOutput)}</pre>
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                        <div>
+                                            <p className={jetbrainsMono.className} style={{ fontSize: 11, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 6px' }}>Your Output</p>
+                                            <pre className={jetbrainsMono.className} style={{ margin: 0, fontSize: 12.5, color: tc.userError ? ORANGE : 'oklch(85% 0.02 260)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                                {tc.userError || formatValue(tc.userOutput)}
+                                            </pre>
+                                        </div>
+                                        <div>
+                                            <p className={jetbrainsMono.className} style={{ fontSize: 11, color: ORANGE, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 6px' }}>Claude's Output</p>
+                                            <pre className={jetbrainsMono.className} style={{ margin: 0, fontSize: 12.5, color: tc.aiError ? ORANGE : 'oklch(85% 0.02 260)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                                {tc.aiError || formatValue(tc.aiOutput)}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        {(!duel.testCaseResults || duel.testCaseResults.length === 0) && (
+                            <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 24, textAlign: 'center', color: 'oklch(60% 0.02 260)', fontSize: 14 }}>
+                                No test case details available for this duel.
+                            </div>
+                        )}
                     </div>
                 )}
 
