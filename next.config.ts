@@ -16,13 +16,21 @@ import type { NextConfig } from "next";
 // guessing from the config value, which pointed at the wrong host entirely.
 const POSTHOG_HOSTS = 'https://us.i.posthog.com https://us-assets.i.posthog.com';
 
+// @monaco-editor/react loads the Monaco editor (used for the code editor on
+// the duel page) from jsdelivr's CDN by default rather than bundling it —
+// confirmed by loading the duel page against this CSP and reading the actual
+// blocked request rather than assuming. Monaco's loader also spins up web
+// workers from the same host, hence worker-src.
+const MONACO_CDN = 'https://cdn.jsdelivr.net';
+
 const CSP = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline' ${POSTHOG_HOSTS}`,
-    "style-src 'self' 'unsafe-inline'",
+    `script-src 'self' 'unsafe-inline' ${POSTHOG_HOSTS} ${MONACO_CDN}`,
+    `style-src 'self' 'unsafe-inline' ${MONACO_CDN}`,
     "img-src 'self' data:",
-    "font-src 'self' data:",
-    `connect-src 'self' ${POSTHOG_HOSTS}`,
+    `font-src 'self' data: ${MONACO_CDN}`,
+    `connect-src 'self' ${POSTHOG_HOSTS} ${MONACO_CDN}`,
+    `worker-src 'self' blob: ${MONACO_CDN}`,
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
