@@ -19,6 +19,13 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const { email, password } = await req.json();
 
+    // Reject non-string values before they ever reach a query filter or
+    // bcrypt — folded into the generic credentials error so a type-check
+    // failure isn't distinguishable from a wrong password.
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 400, headers: corsHeaders });

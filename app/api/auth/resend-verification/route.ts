@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '@/lib/mailer';
+import { validateEmail } from '@/lib/inputValidator';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -19,13 +20,18 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const { email } = await req.json();
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return NextResponse.json({ error: 'No account found with that email' }, { status: 400, headers: corsHeaders });
+    const emailError = validateEmail(email);
+    if (emailError) {
+      return NextResponse.json({ error: emailError }, { status: 400, headers: corsHeaders });
     }
 
-    if (user.isEmailVerified) {
-      return NextResponse.json({ error: 'This email is already verified. You can log in.' }, { status: 400, headers: corsHeaders });
+    // Same response regardless of whether the account exists or is already
+    // verified — see the identical reasoning in forgot-password/route.ts.
+    const successMessage = { message: "If an account with that email exists and needs verification, we've sent a new verification link." };
+
+    const user = await User.findOne({ email });
+    if (!user || user.isEmailVerified) {
+      return NextResponse.json(successMessage, { headers: corsHeaders });
     }
 
     const verificationToken = crypto.randomBytes(32).toString('hex');
@@ -39,7 +45,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
     }
 
-    return NextResponse.json({ message: 'Verification email sent! Check your inbox.' });
+    return NextResponse.json(successMessage, { headers: corsHeaders });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
   }

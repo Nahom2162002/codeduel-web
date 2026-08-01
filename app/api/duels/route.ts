@@ -8,6 +8,7 @@ import User from '@/models/User';
 import DailyDuelCount from '@/models/DailyDuelCount';
 import LiveSolveSession from '@/models/LiveSolveSession';
 import { buildSolutionPrompt } from '@/lib/claudeSolutionPrompt';
+import { isValidObjectId, isValidLanguage } from '@/lib/inputValidator';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -834,6 +835,21 @@ export async function POST(req: NextRequest) {
 
         if (!problemId || !language || !userCode || userTime === undefined) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: corsHeaders });
+        }
+
+        // Reject non-primitive values before they reach a query filter —
+        // Mongoose passes '$'-prefixed object keys straight through to MongoDB
+        // as operators (e.g. Problem.findById({"$ne": null}) matches an
+        // arbitrary document instead of throwing), so a raw client value here
+        // is a NoSQL injection vector.
+        if (!isValidObjectId(problemId)) {
+            return NextResponse.json({ error: 'Invalid problem ID' }, { status: 400, headers: corsHeaders });
+        }
+        if (!isValidLanguage(language)) {
+            return NextResponse.json({ error: 'Unsupported language' }, { status: 400, headers: corsHeaders });
+        }
+        if (typeof userCode !== 'string' || typeof userTime !== 'number' || !Number.isFinite(userTime)) {
+            return NextResponse.json({ error: 'Invalid submission' }, { status: 400, headers: corsHeaders });
         }
 
         // Fetch the problem

@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
 import { transporter } from '@/lib/mailer';
 import crypto from 'crypto';
+import { validateEmail } from '@/lib/inputValidator';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -19,9 +20,20 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const { email } = await req.json();
 
+    const emailError = validateEmail(email);
+    if (emailError) {
+      return NextResponse.json({ error: emailError }, { status: 400, headers: corsHeaders });
+    }
+
+    // Always respond the same way whether or not the account exists — a
+    // response that varies (or a distinct error) here would let anyone probe
+    // which emails are registered. The actual email only goes out if a
+    // matching account is found; the branch below is a silent no-op otherwise.
+    const successMessage = { message: 'If an account with that email exists, a password reset link has been sent.' };
+
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: 'No account found with that email' }, { status: 400, headers: corsHeaders });
+      return NextResponse.json(successMessage, { headers: corsHeaders });
     }
 
     const resetToken = crypto.randomBytes(32).toString('hex');
@@ -89,7 +101,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
     }
 
-    return NextResponse.json({ message: 'Password reset email sent!' });
+    return NextResponse.json(successMessage, { headers: corsHeaders });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders });
   }

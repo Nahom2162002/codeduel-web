@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { validatePassword } from '@/lib/passwordValidator';
 import { sendVerificationEmail } from '@/lib/mailer';
+import { validateUsername, validateEmail } from '@/lib/inputValidator';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -21,6 +22,23 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const { username, email, password } = await req.json();
 
+    // Validate types/format before anything derived from these values ever
+    // reaches a Mongoose query filter (see lib/inputValidator.ts).
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return NextResponse.json({ error: usernameError }, { status: 400, headers: corsHeaders });
+    }
+
+    const emailError = validateEmail(email);
+    if (emailError) {
+      return NextResponse.json({ error: emailError }, { status: 400, headers: corsHeaders });
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return NextResponse.json({ error: passwordError }, { status: 400, headers: corsHeaders });
+    }
+
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return NextResponse.json({ error: 'Account already exists' }, { status: 400, headers: corsHeaders });
@@ -29,11 +47,6 @@ export async function POST(req: NextRequest) {
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return NextResponse.json({ error: 'A user account with this email already exists' }, { status: 400, headers: corsHeaders });
-    }
-
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      return NextResponse.json({ error: passwordError }, { status: 400, headers: corsHeaders });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
