@@ -124,13 +124,13 @@ export default function RulesPage() {
                     <p style={P_MB}>Each duel score is out of 100 points, split across three factors:</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
                         <ScoreBar label="Correctness — tests passed" points="UP TO 50" color={BLUE} />
-                        <ScoreBar label="Speed — relative to your opponent" points="UP TO 30" color={ORANGE} />
-                        <ScoreBar label="Code quality — judged by Claude" points="UP TO 20" color={BLUE} />
+                        <ScoreBar label="Speed — relative to your opponent" points="UP TO 10" color={ORANGE} />
+                        <ScoreBar label="Code quality — judged by Claude" points="UP TO 40" color={BLUE} />
                     </div>
                     <ul style={UL}>
                         <li><strong>Correctness (50 pts):</strong> the percentage of test cases your code passes, out of 50.</li>
-                        <li><strong>Speed (30 pts):</strong> not just your raw time — it's scored relative to how long your opponent took, so beating a slow solution is worth more than beating a fast one.</li>
-                        <li><strong>Code quality (20 pts):</strong> Claude reviews both solutions and scores them on time complexity, space complexity, readability, edge-case handling, and overall elegance.</li>
+                        <li><strong>Speed (10 pts):</strong> not just your raw time — it's scored relative to how long your opponent took, so beating a slow solution is worth more than beating a fast one.</li>
+                        <li><strong>Code quality (40 pts):</strong> Claude reviews both solutions and scores them on time complexity, space complexity, readability, edge-case handling, and overall elegance.</li>
                     </ul>
                     <p style={P_MB}>
                         Whoever ends up with the higher total wins the duel — but it's not a hair-trigger comparison. Your score has to beat

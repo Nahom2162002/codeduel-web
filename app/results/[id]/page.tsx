@@ -268,8 +268,8 @@ export default function ResultsPage() {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                                 {([
                                     { label: 'Correctness', max: 50, user: duel.userCorrectnessScore, ai: duel.aiCorrectnessScore, note: `${duel.userTestsPassed}/${duel.totalTests} vs ${duel.aiTestsPassed}/${duel.totalTests} tests passed` },
-                                    { label: 'Speed', max: 30, user: duel.userSpeedScore, ai: duel.aiSpeedScore, note: `${formatTime(duel.userTime)} vs ${formatTime(Math.round(duel.aiTime))}` },
-                                    { label: 'Code Quality', max: 20, user: duel.userQualityScore, ai: duel.aiQualityScore, note: `${duel.userQualityRaw}/100 vs ${duel.aiQualityRaw}/100 rated by Claude` },
+                                    { label: 'Speed', max: 10, user: duel.userSpeedScore, ai: duel.aiSpeedScore, note: `${formatTime(duel.userTime)} vs ${formatTime(Math.round(duel.aiTime))}` },
+                                    { label: 'Code Quality', max: 40, user: duel.userQualityScore, ai: duel.aiQualityScore, note: `${duel.userQualityRaw}/100 vs ${duel.aiQualityRaw}/100 rated by Claude` },
                                 ] as const).map(row => (
                                     <div key={row.label}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>

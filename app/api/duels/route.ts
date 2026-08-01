@@ -905,14 +905,14 @@ export async function POST(req: NextRequest) {
         const userCorrectnessScore = Math.round((userTestsPassed / totalTests) * 50);
         const aiCorrectnessScore = Math.round((aiTestsPassed / totalTests) * 50);
 
-        // Speed score — faster time = higher score (max 30 points)
+        // Speed score — faster time = higher score (max 10 points)
         const totalTime = userTime + aiTime;
-        const userSpeedScore = Math.round(totalTime > 0 ? ((aiTime / totalTime)) * 30 : 15);
-        const aiSpeedScore = Math.round(totalTime > 0 ? ((userTime / totalTime)) * 30 : 15);
+        const userSpeedScore = Math.round(totalTime > 0 ? ((aiTime / totalTime)) * 10 : 5);
+        const aiSpeedScore = Math.round(totalTime > 0 ? ((userTime / totalTime)) * 10 : 5);
 
-        // Quality score — max 20 points, weighted from the raw 0-100 LLM rating
-        const userQualityScore = Math.round(userQualityRaw / 100 * 20);
-        const aiQualityScore = Math.round(aiQualityRaw / 100 * 20);
+        // Quality score — max 40 points, weighted from the raw 0-100 LLM rating
+        const userQualityScore = Math.round(userQualityRaw / 100 * 40);
+        const aiQualityScore = Math.round(aiQualityRaw / 100 * 40);
 
         const userFinalScore = userCorrectnessScore + userSpeedScore + userQualityScore;
         const aiFinalScore = aiCorrectnessScore + aiSpeedScore + aiQualityScore;
