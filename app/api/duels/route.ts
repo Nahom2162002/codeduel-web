@@ -933,7 +933,7 @@ export async function POST(req: NextRequest) {
 
         // Determine result
         const diff = userFinalScore - aiFinalScore;
-        const result: 'win' | 'loss' | 'draw' = diff > 5 ? 'win' : diff < -5 ? 'loss' : 'draw';
+        const result: 'win' | 'loss' | 'draw' = diff > 0 ? 'win' : diff < 0 ? 'loss' : 'draw';
 
         // Calculate ELO change
         const eloChange = calculateEloChange(result, problem.difficulty);
