@@ -5,6 +5,10 @@ const userSchema = new Schema({
     email:              { type: String, required: true, unique: true },
     password:           { type: String, required: true },
     passwordHistory:    { type: [String], required: true },
+    // Bumped whenever a password is reset — every JWT issued before that
+    // carries the old value and getUserFromRequest rejects it, so changing
+    // your password logs out any other session/device using a stolen token.
+    tokenVersion:       { type: Number, default: 0 },
     resetToken:         { type: String },
     resetTokenExpiry:   { type: Date },
     // Defaults to true so existing accounts (created before this field existed)
