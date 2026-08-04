@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\(process.argv[1],'utf8'\\)\\).token\\)\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\practice_setup.json\")",
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\(process.argv[1],'utf8'\\)\\).token\\)\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\practice_free.json\")",
+      "Bash(node practice_browser_test.js)"
+    ]
+  }
+}

@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import { getUserFromRequest } from '@/lib/auth';
 import Duel from '@/models/Duel';
 import Problem from '@/models/Problem';
+import { getCategoryPerformance } from '@/lib/weakCategories';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -33,17 +34,10 @@ export async function GET(req: NextRequest) {
             completedAt: { $gte: thirtyDaysAgo }
         }).populate('problemId').sort({ completedAt: -1 });
 
-        // Win rate by category
-        const categoryStats: Record<string, { wins: number; losses: number; draws: number }> = {};
-        for (const duel of duels) {
-            const problem = await Problem.findById(duel.problemId);
-            if (!problem) continue;
-            const cat = problem.category;
-            if (!categoryStats[cat]) categoryStats[cat] = { wins: 0, losses: 0, draws: 0 };
-            if (duel.result === 'win') categoryStats[cat].wins++;
-            else if (duel.result === 'loss') categoryStats[cat].losses++;
-            else categoryStats[cat].draws++;
-        }
+        // Win rate by category, plus the weak/strong category detection this
+        // powers on the dashboard (and that /api/practice reuses to pick which
+        // categories to serve problems from).
+        const { categoryStats, weakCategories, strongCategories } = await getCategoryPerformance(user._id);
 
         // Win rate by difficulty
         const difficultyStats: Record<string, { wins: number; total: number }> = {
@@ -72,21 +66,6 @@ export async function GET(req: NextRequest) {
                 wins: dayDuels.filter(d => d.result === 'win').length
             };
         });
-
-        // Weak and strong categories
-        const weakCategories = Object.entries(categoryStats)
-            .filter(([, s]) => {
-                const total = s.wins + s.losses + s.draws;
-                return total >= 3 && (s.wins / total) < 0.4;
-            })
-            .map(([cat]) => cat);
-
-        const strongCategories = Object.entries(categoryStats)
-            .filter(([, s]) => {
-                const total = s.wins + s.losses + s.draws;
-                return total >= 3 && (s.wins / total) >= 0.7;
-            })
-            .map(([cat]) => cat);
 
         return NextResponse.json({
             stats: user.stats,
