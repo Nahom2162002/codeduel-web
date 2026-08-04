@@ -33,7 +33,15 @@ const userSchema = new Schema({
         eloRating:      { type: Number, default: 1000 }
     },
     weakCategories:     { type: [String], default: [] },
-    strongCategories:   { type: [String], default: [] }
+    strongCategories:   { type: [String], default: [] },
+    // Daily Drills streak — separate from stats.currentStreak (which tracks
+    // consecutive duel wins). This tracks consecutive calendar days on which
+    // all 3 drill problems were completed; see app/api/drills/submit.
+    drillStats: {
+        currentStreak:    { type: Number, default: 0 },
+        bestStreak:       { type: Number, default: 0 },
+        lastCompletedDate: { type: Date, default: null }
+    }
 });
 
 // Defense-in-depth: every route today manually allowlists the fields it
