@@ -101,9 +101,9 @@ STRIPE_PRICE_ID=            # monthly Pro price
 STRIPE_ANNUAL_PRICE_ID=     # annual Pro price
 STRIPE_WEBHOOK_SECRET=
 
-# Email (password reset, via Gmail)
-GMAIL_USER=
-GMAIL_APP_PASSWORD=
+# Email (verification, password reset, via Brevo SMTP)
+EMAIL_USER=                 # your Brevo login email
+EMAIL_PASS=                 # your Brevo SMTP key
 
 # App
 NEXT_PUBLIC_APP_URL=        # e.g. https://duelai.dev
