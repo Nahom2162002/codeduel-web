@@ -43,7 +43,13 @@ interface ProblemSummary {
 const LANGUAGES = [
     { value: 'python', label: 'Python' },
     { value: 'javascript', label: 'JavaScript' },
-    { value: 'java', label: 'Java' }
+    { value: 'typescript', label: 'TypeScript' },
+    { value: 'java', label: 'Java' },
+    { value: 'cpp', label: 'C++' },
+    { value: 'c', label: 'C' },
+    { value: 'csharp', label: 'C#' },
+    { value: 'rust', label: 'Rust' },
+    { value: 'go', label: 'Go' }
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -667,15 +673,15 @@ export default function DuelPage() {
                 </div>
 
                 <div className="duel-editor-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid oklch(28% 0.02 260)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0 }}>
-                        <div style={{ display: 'flex', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0, minWidth: 0 }}>
+                        <div className="lang-tabs" style={{ display: 'flex', gap: 4, overflowX: 'auto', minWidth: 0 }}>
                             {LANGUAGES.map(lang => (
                                 <div
                                     key={lang.value}
                                     onClick={() => handleLanguageChange(lang.value)}
                                     className={jetbrainsMono.className}
                                     style={{
-                                        cursor: 'pointer', padding: '7px 14px', borderRadius: 6, fontSize: 13.5,
+                                        cursor: 'pointer', padding: '7px 11px', borderRadius: 6, fontSize: 13, flexShrink: 0,
                                         background: language === lang.value ? BLUE_BG : 'transparent',
                                         color: language === lang.value ? BLUE : 'oklch(65% 0.02 260)'
                                     }}

@@ -3,10 +3,31 @@
 // it into a runnable stdin/stdout program, then execute it against a
 // problem's test cases.
 
+import {
+    wrapFunctionGo, wrapMultiCallGo, wrapInteractiveGo,
+    wrapFunctionCSharp, wrapMultiCallCSharp, wrapInteractiveCSharp,
+    wrapFunctionTypeScript, wrapMultiCallTypeScript, wrapInteractiveTypeScript,
+    wrapFunctionCpp, wrapMultiCallCpp, wrapInteractiveCpp,
+    wrapFunctionRust, wrapMultiCallRust, wrapInteractiveRust,
+    wrapFunctionC, wrapMultiCallC, wrapInteractiveC
+} from './newLangCodegen';
+
+// Go/C# need the raw driver string (with a {{SOLUTION}} placeholder) since
+// their package/using declarations must precede solutionCode; see
+// wrapConcurrent below.
+
+const NEW_LANGUAGES = ['go', 'csharp', 'typescript', 'cpp', 'rust', 'c'];
+
 const LANGUAGE_IDS: Record<string, number> = {
     python: 100, // Python (3.12.5) — 71 is 3.8.1, too old for `list[int]`-style starter code annotations
     javascript: 63,
-    java: 62
+    java: 62,
+    typescript: 101, // TypeScript 5.6.2
+    cpp: 105,        // C++ (GCC 14.1.0)
+    c: 103,          // C (GCC 14.1.0)
+    csharp: 51,       // C# (Mono 6.6.0.161) — only version Judge0 offers
+    rust: 108,        // Rust 1.85.0
+    go: 107           // Go 1.23.5
 };
 
 export async function executeCode(code: string, language: string, testCases: any[]) {
@@ -504,6 +525,13 @@ public class Main {
 }`;
     }
 
+    if (language === 'go') return wrapFunctionGo(solutionCode, problem);
+    if (language === 'csharp') return wrapFunctionCSharp(solutionCode, problem);
+    if (language === 'typescript') return wrapFunctionTypeScript(solutionCode, problem);
+    if (language === 'cpp') return wrapFunctionCpp(solutionCode, problem);
+    if (language === 'rust') return wrapFunctionRust(solutionCode, problem);
+    if (language === 'c') return wrapFunctionC(solutionCode, problem);
+
     return solutionCode;
 }
 
@@ -603,6 +631,13 @@ public class Main {
 }`;
     }
 
+    if (language === 'go') return wrapMultiCallGo(solutionCode, problem);
+    if (language === 'csharp') return wrapMultiCallCSharp(solutionCode, problem);
+    if (language === 'typescript') return wrapMultiCallTypeScript(solutionCode, problem);
+    if (language === 'cpp') return wrapMultiCallCpp(solutionCode, problem);
+    if (language === 'rust') return wrapMultiCallRust(solutionCode, problem);
+    if (language === 'c') return wrapMultiCallC(solutionCode, problem);
+
     return solutionCode;
 }
 
@@ -676,6 +711,13 @@ public class Main {
 }`;
     }
 
+    if (language === 'go') return wrapInteractiveGo(solutionCode, driver, problem);
+    if (language === 'csharp') return wrapInteractiveCSharp(solutionCode, driver, problem);
+    if (language === 'typescript') return wrapInteractiveTypeScript(solutionCode, driver, problem);
+    if (language === 'cpp') return wrapInteractiveCpp(solutionCode, driver, problem);
+    if (language === 'rust') return wrapInteractiveRust(solutionCode, driver, problem);
+    if (language === 'c') return wrapInteractiveC(solutionCode, driver, problem);
+
     return solutionCode;
 }
 
@@ -709,6 +751,29 @@ ${driver}`;
         return `${JAVA_JSON_HELPER}
 
 ${solutionCode}
+
+${driver}`;
+    }
+
+    // Go and C# both require package/using declarations to precede every
+    // other top-level item in the file, so solutionCode can't simply follow
+    // the driver text the way it does for every other language here — the
+    // driver instead contains a {{SOLUTION}} placeholder marking where it goes.
+    if (language === 'go' || language === 'csharp') {
+        return driver.replace('{{SOLUTION}}', solutionCode);
+    }
+
+    if (language === 'typescript') {
+        return `/// <reference lib="es2017" />
+declare const process: any;
+
+${solutionCode}
+
+${driver}`;
+    }
+
+    if (language === 'rust') {
+        return `${solutionCode}
 
 ${driver}`;
     }

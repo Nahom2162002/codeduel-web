@@ -45,7 +45,15 @@
       "Bash(node review_browser_test.js)",
       "Bash(node tabs_browser_test.js)",
       "Bash(node tabs_browser_test2.js)",
-      "Bash(node tabs_step_test.js)"
+      "Bash(node tabs_step_test.js)",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).token\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\langs_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).twoSumId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\langs_setup.json')",
+      "Bash(node -e \"const d=require\\(process.argv[1]\\); console.log\\('result:', d.result, '| userTestsPassed:', d.userTestsPassed, '/', d.totalTests, '| aiTestsPassed:', d.aiTestsPassed\\);\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\duel_rust_result2.json\")",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('testsPassed:',j.testsPassed+'/'+j.totalTests,'totalScore:',j.totalScore, j.error||''\\);}\\)\")",
+      "Bash(node lang_ui_test.js)",
+      "Bash(mv scripts/_migrate_concurrent.ts scripts/migrateConcurrentDrivers.ts)",
+      "Bash(mv scripts/_migrate_interactive_drivers.ts scripts/migrateInteractiveDrivers.ts)",
+      "Bash(rm -f scripts/_check_all_starters.ts scripts/_check_clone_graph.ts scripts/_check_reverse_starters.ts scripts/_check_starter_sample.ts scripts/_get_reverse_id.ts scripts/_judge0_test.ts scripts/_scope_check.ts scripts/_survey_all_java.ts scripts/_survey_drivers.ts scripts/_survey_node_type.ts scripts/_survey_signatures.ts scripts/_test_codegen.ts scripts/_test_codegen2.ts scripts/_test_codegen3.ts scripts/_test_codegen4.ts scripts/_test_codegen5.ts scripts/_test_codegen6.ts scripts/_test_concurrent.ts scripts/_test_interactive.ts scripts/_test_interactive2.ts scripts/_test_langs_setup.ts scripts/_test_starter_coverage.ts)"
     ]
   }
 }

@@ -16,13 +16,41 @@ const starterCodeSchema = new Schema({
     python:     { type: String, default: '' },
     javascript: { type: String, default: '' },
     java:       { type: String, default: '' },
-    cpp:        { type: String, default: '' }
+    typescript: { type: String, default: '' },
+    cpp:        { type: String, default: '' },
+    c:          { type: String, default: '' },
+    csharp:     { type: String, default: '' },
+    rust:       { type: String, default: '' },
+    go:         { type: String, default: '' }
 });
+
+// A single parameter/return type, using a compact canonical vocabulary
+// ("int", "int[]", "int[][]", "string", "listNode", "treeNode", "bool", ...)
+// derived once from the existing Java signature and reused at execution time
+// to generate statically-typed parsing/call code for languages with no
+// runtime reflection (C++, C, Rust) and no dynamic typing (Go, C#) — see
+// lib/codeExecution.ts and scripts/migrateLanguageSignatures.ts.
+const paramTypeSchema = new Schema({
+    name: { type: String, required: true },
+    type: { type: String, required: true }
+}, { _id: false });
+
+const methodSignatureSchema = new Schema({
+    name:       { type: String, required: true },
+    paramTypes: [paramTypeSchema],
+    returnType: { type: String, required: true }
+}, { _id: false });
 
 const customDriverSchema = new Schema({
     python:     { type: String },
     javascript: { type: String },
-    java:       { type: String }
+    java:       { type: String },
+    typescript: { type: String },
+    cpp:        { type: String },
+    c:          { type: String },
+    csharp:     { type: String },
+    rust:       { type: String },
+    go:         { type: String }
 }, { _id: false });
 
 const problemSchema = new Schema({
@@ -50,7 +78,16 @@ const problemSchema = new Schema({
     treeNodeParams:   { type: [String], default: [] }, // input keys to convert level-order array -> TreeNode
     returnsTreeNode:  { type: Boolean, default: false }, // convert the return value TreeNode -> level-order array
     customDriver:     customDriverSchema, // full driver code per language, for 'interactive'/'concurrent'
-    interactiveSecretKeys: { type: [String], default: [] } // input keys hidden from the user's function args, only visible to customDriver (e.g. the secret in Guess Number)
+    interactiveSecretKeys: { type: [String], default: [] }, // input keys hidden from the user's function args, only visible to customDriver (e.g. the secret in Guess Number)
+
+    // Parsed once from starterCode.java (see scripts/migrateLanguageSignatures.ts)
+    // — drives statically-typed code generation for the newer languages.
+    // paramTypes/returnType apply to 'function'/'interactive' problems;
+    // methods applies to 'multi-call' problems (constructor first, named
+    // functionName, then each instance method in call order).
+    paramTypes: [paramTypeSchema],
+    returnType: { type: String },
+    methods:    [methodSignatureSchema]
 });
 
 export default mongoose.models.Problem || mongoose.model('Problem', problemSchema);

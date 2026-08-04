@@ -23,7 +23,7 @@ export function isValidObjectId(value: unknown): value is string {
     return typeof value === 'string' && /^[0-9a-fA-F]{24}$/.test(value);
 }
 
-export const SUPPORTED_LANGUAGES = ['python', 'javascript', 'java'] as const;
+export const SUPPORTED_LANGUAGES = ['python', 'javascript', 'java', 'typescript', 'cpp', 'c', 'csharp', 'rust', 'go'] as const;
 export type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
 
 export function isValidLanguage(value: unknown): value is SupportedLanguage {
