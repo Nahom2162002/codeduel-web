@@ -301,6 +301,25 @@ export default function ProblemsPage() {
                                                 Sandbox
                                             </Link>
                                         )}
+                                        {!locked && (
+                                            <Link
+                                                href={`/step/${problem._id}`}
+                                                onClick={(e) => e.stopPropagation()}
+                                                className={jetbrainsMono.className}
+                                                style={{
+                                                    color: 'oklch(80% 0.02 260)',
+                                                    padding: '10px 16px',
+                                                    borderRadius: 6,
+                                                    border: '1px solid oklch(38% 0.02 260)',
+                                                    fontSize: 13,
+                                                    fontWeight: 600,
+                                                    whiteSpace: 'nowrap',
+                                                    textDecoration: 'none'
+                                                }}
+                                            >
+                                                🎓 Step by Step
+                                            </Link>
+                                        )}
                                         <span style={{
                                             background: locked ? BLUE_BG : BLUE,
                                             color: locked ? BLUE : 'oklch(16% 0.02 260)',
