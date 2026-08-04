@@ -95,12 +95,16 @@ function DuelIcon({ size = 28 }: { size?: number }) {
     );
 }
 
+interface DrillProblem { _id: string; title: string; difficulty: string; completed: boolean; }
+interface DrillsToday { problems: DrillProblem[]; allCompleted: boolean; streak: { current: number; best: number }; }
+
 export default function DashboardPage() {
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [requiresPro, setRequiresPro] = useState(false);
     const [me, setMe] = useState<Me | null>(null);
+    const [drills, setDrills] = useState<DrillsToday | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -124,6 +128,13 @@ export default function DashboardPage() {
             setError('Failed to load dashboard');
             setLoading(false);
         });
+
+        // Dashboard is already Pro-gated end to end, so no separate check here —
+        // a free user never reaches this component (see requiresPro above).
+        fetch('/api/drills/today', { headers: { authorization: `Bearer ${token}` } })
+            .then(res => res.json())
+            .then(data => { if (Array.isArray(data.problems)) setDrills(data); })
+            .catch(() => {});
     }, []);
 
     const nav = (
@@ -140,6 +151,7 @@ export default function DashboardPage() {
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
                     <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
                     <Link href="/practice" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Practice</Link>
+                    <Link href="/drills" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Drills</Link>
                     <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Rules</Link>
                     <Link href="/leaderboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Leaderboard</Link>
                 </div>
@@ -265,6 +277,37 @@ export default function DashboardPage() {
                         </div>
                     ))}
                 </div>
+
+                {drills && (
+                    <div style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
+                        background: drills.streak.current > 0 ? BLUE_BG : 'oklch(21% 0.02 260)',
+                        border: `1px solid ${drills.streak.current > 0 ? BLUE + '66' : 'oklch(30% 0.02 260)'}`,
+                        borderRadius: 12, padding: '22px 28px', marginBottom: 40
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                            <div>
+                                <div className={jetbrainsMono.className} style={{ fontSize: 24, fontWeight: 700, color: drills.streak.current > 0 ? BLUE : NEUTRAL }}>
+                                    🔥 {drills.streak.current}
+                                </div>
+                                <div style={{ fontSize: 12, color: 'oklch(60% 0.02 260)' }}>drill streak</div>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Daily Drills</div>
+                                <div className={jetbrainsMono.className} style={{ fontSize: 12.5, color: 'oklch(65% 0.02 260)' }}>
+                                    {drills.problems.filter(p => p.completed).length}/3 done today
+                                    {drills.allCompleted ? ' · complete!' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <Link href="/drills" style={{
+                            background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 18px', borderRadius: 8,
+                            textDecoration: 'none', fontWeight: 700, fontSize: 13.5, whiteSpace: 'nowrap'
+                        }}>
+                            {drills.allCompleted ? 'View Drills' : 'Start Drilling →'}
+                        </Link>
+                    </div>
+                )}
 
                 <div className="chart-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 24, marginBottom: 40 }}>
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
