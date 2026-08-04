@@ -11,7 +11,7 @@ const BLUE = 'oklch(75% 0.15 220)';
 const ORANGE = 'oklch(75% 0.15 55)';
 const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 
-type Reason = 'limit' | 'problem' | 'dashboard' | 'practice' | 'drills' | 'general';
+type Reason = 'limit' | 'problem' | 'dashboard' | 'practice' | 'drills' | 'review' | 'general';
 
 const BLOCKED_HEADING: Record<Reason, string> = {
     limit: "You've hit your daily limit",
@@ -19,6 +19,7 @@ const BLOCKED_HEADING: Record<Reason, string> = {
     dashboard: 'Dashboard is a Pro feature',
     practice: 'Practice Mode is a Pro feature',
     drills: 'Daily Drills is a Pro feature',
+    review: 'Code Review is a Pro feature',
     general: 'Upgrade to Pro'
 };
 
@@ -28,6 +29,7 @@ const SUBTEXT: Record<Reason, string> = {
     dashboard: 'Unlock your dashboard and everything else Pro has to offer.',
     practice: 'Unlock your guided practice queue and everything else Pro has to offer.',
     drills: 'Unlock daily drill streaks and everything else Pro has to offer.',
+    review: 'Unlock Claude code reviews and everything else Pro has to offer.',
     general: 'Unlock unlimited duels and everything else Pro has to offer.'
 };
 
