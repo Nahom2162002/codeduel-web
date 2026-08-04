@@ -42,7 +42,10 @@
       "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\(process.argv[1],'utf8'\\)\\).sessionId\\)\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\rev_start.json\")",
       "Bash(node -e \"const d=require\\(process.argv[1]\\); console.log\\('round:', d.roundNumber\\); console.log\\('review:', d.review.slice\\(0,400\\)\\);\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\rev1.json\")",
       "Bash(node -e \"const d=require\\(process.argv[1]\\); console.log\\('round:', d.roundNumber\\); console.log\\('review:', d.review\\);\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\rev2.json\")",
-      "Bash(node review_browser_test.js)"
+      "Bash(node review_browser_test.js)",
+      "Bash(node tabs_browser_test.js)",
+      "Bash(node tabs_browser_test2.js)",
+      "Bash(node tabs_step_test.js)"
     ]
   }
 }
