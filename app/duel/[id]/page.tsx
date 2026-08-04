@@ -674,22 +674,17 @@ export default function DuelPage() {
 
                 <div className="duel-editor-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid oklch(28% 0.02 260)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid oklch(28% 0.02 260)', flexShrink: 0, minWidth: 0 }}>
-                        <div className="lang-tabs" style={{ display: 'flex', gap: 4, overflowX: 'auto', minWidth: 0 }}>
-                            {LANGUAGES.map(lang => (
-                                <div
-                                    key={lang.value}
-                                    onClick={() => handleLanguageChange(lang.value)}
-                                    className={jetbrainsMono.className}
-                                    style={{
-                                        cursor: 'pointer', padding: '7px 11px', borderRadius: 6, fontSize: 13, flexShrink: 0,
-                                        background: language === lang.value ? BLUE_BG : 'transparent',
-                                        color: language === lang.value ? BLUE : 'oklch(65% 0.02 260)'
-                                    }}
-                                >
-                                    {lang.label}
-                                </div>
-                            ))}
-                        </div>
+                        <select
+                            value={language}
+                            onChange={e => handleLanguageChange(e.target.value)}
+                            className={jetbrainsMono.className}
+                            style={{
+                                background: 'oklch(16% 0.02 260)', border: '1px solid oklch(35% 0.02 260)', borderRadius: 6,
+                                padding: '8px 12px', color: BLUE, fontSize: 13, fontWeight: 600, cursor: 'pointer'
+                            }}
+                        >
+                            {LANGUAGES.map(lang => <option key={lang.value} value={lang.value}>{lang.label}</option>)}
+                        </select>
                     </div>
 
                     <div className="duel-editor-mount" style={{ flex: 1, minHeight: 0 }}>
