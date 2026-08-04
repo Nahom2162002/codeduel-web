@@ -28,7 +28,13 @@
       "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).proContinuingToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\drills_setup.json')",
       "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).proBrokenToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\drills_setup.json')",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{const r=JSON.parse\\(d\\);console.log\\('3 \\(final\\):',r.passed,r.allCompleted,r.streak\\);}\\)\")",
-      "Bash(node drills_browser_test.js)"
+      "Bash(node drills_browser_test.js)",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).freeToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\flashcards_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).proToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\flashcards_setup.json')",
+      "Bash(node -e \"const d=require\\(process.argv[1]\\); console.log\\('sessionSize:', d.sessionSize, 'cards.length:', d.cards.length\\); console.log\\('sample card:', JSON.stringify\\(d.cards[0], null, 2\\).slice\\(0,500\\)\\);\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\fc_free.json\")",
+      "Bash(node -e \"const d=require\\(process.argv[1]\\); console.log\\('sessionSize:', d.sessionSize, 'cards.length:', d.cards.length\\);\" \"C:\\\\\\\\Users\\\\\\\\Nahom\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\c--Users-Nahom-Programming-codeduel-web\\\\\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\\\\\scratchpad\\\\\\\\fc_pro.json\")",
+      "Bash(node flashcards_browser_test.js)",
+      "Bash(node flashcards_browser_test2.js)"
     ]
   }
 }
