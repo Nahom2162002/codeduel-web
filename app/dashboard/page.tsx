@@ -139,6 +139,7 @@ export default function DashboardPage() {
                 <div className="app-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 15, fontWeight: 500 }}>
                     <Link href="/problems" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Problems</Link>
                     <Link href="/dashboard" style={{ color: 'oklch(96% 0.01 260)', textDecoration: 'none', borderBottom: `2px solid ${BLUE}`, paddingBottom: 4 }}>Dashboard</Link>
+                    <Link href="/practice" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Practice</Link>
                     <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Rules</Link>
                     <Link href="/leaderboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Leaderboard</Link>
                 </div>
@@ -285,10 +286,17 @@ export default function DashboardPage() {
                     </div>
 
                     <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 12, padding: 28 }}>
-                        <h2 style={{ fontSize: 17, margin: '0 0 4px', fontWeight: 600 }}>Weak Spot Detection</h2>
-                        <p style={{ fontSize: 13, color: 'oklch(60% 0.02 260)', margin: '0 0 20px' }}>
-                            Categories you lose in most often
-                        </p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div>
+                                <h2 style={{ fontSize: 17, margin: '0 0 4px', fontWeight: 600 }}>Weak Spot Detection</h2>
+                                <p style={{ fontSize: 13, color: 'oklch(60% 0.02 260)', margin: '0 0 20px' }}>
+                                    Categories you lose in most often
+                                </p>
+                            </div>
+                            {weakSpots.length > 0 && (
+                                <Link href="/practice" style={{ color: BLUE, fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>Practice these →</Link>
+                            )}
+                        </div>
                         {weakSpots.length === 0 ? (
                             <div className={jetbrainsMono.className} style={{ textAlign: 'center', padding: '20px 0', color: 'oklch(55% 0.02 260)', fontSize: 13 }}>
                                 No weak spots detected yet — keep dueling!

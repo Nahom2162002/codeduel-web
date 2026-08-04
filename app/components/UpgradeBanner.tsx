@@ -11,12 +11,13 @@ const BLUE = 'oklch(75% 0.15 220)';
 const ORANGE = 'oklch(75% 0.15 55)';
 const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 
-type Reason = 'limit' | 'problem' | 'dashboard' | 'general';
+type Reason = 'limit' | 'problem' | 'dashboard' | 'practice' | 'general';
 
 const BLOCKED_HEADING: Record<Reason, string> = {
     limit: "You've hit your daily limit",
     problem: 'This is a Pro problem',
     dashboard: 'Dashboard is a Pro feature',
+    practice: 'Practice Mode is a Pro feature',
     general: 'Upgrade to Pro'
 };
 
@@ -24,6 +25,7 @@ const SUBTEXT: Record<Reason, string> = {
     limit: "You've used your 3 free duels for today.",
     problem: 'Unlock this problem and everything else Pro has to offer.',
     dashboard: 'Unlock your dashboard and everything else Pro has to offer.',
+    practice: 'Unlock your guided practice queue and everything else Pro has to offer.',
     general: 'Unlock unlimited duels and everything else Pro has to offer.'
 };
 

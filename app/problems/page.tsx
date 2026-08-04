@@ -146,6 +146,9 @@ export default function ProblemsPage() {
                         <Link href="/dashboard" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
                             Dashboard
                         </Link>
+                        <Link href="/practice" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
+                            Practice
+                        </Link>
                         <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
                             Rules
                         </Link>
