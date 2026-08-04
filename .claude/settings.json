@@ -57,7 +57,12 @@
       "Bash(node dropdown_test.js)",
       "Bash(awk -F= '{print \"EMAIL_PASS length=\" length\\($2\\) \", starts_with=\" substr\\($2,1,4\\) \", has_quotes=\" \\($2 ~ /^\"/ ? \"yes\" : \"no\"\\)}')",
       "Bash(awk -F= '{print \"EMAIL_USER length=\" length\\($2\\) \", has_quotes=\" \\($2 ~ /^\"/ ? \"yes\" : \"no\"\\), \"has_at=\" \\($2 ~ /@/ ? \"yes\":\"no\"\\)}')",
-      "Bash(powershell -Command \"Stop-Process -Id 29332 -Force\")"
+      "Bash(powershell -Command \"Stop-Process -Id 29332 -Force\")",
+      "Bash(rm -f \"/c/Users/Nahom/AppData/Local/Temp/claude/c--Users-Nahom-Programming-codeduel-web/955dc86d-2162-4224-a09a-e9af1c964121/scratchpad/footer_check.js\" \"/c/Users/Nahom/AppData/Local/Temp/claude/c--Users-Nahom-Programming-codeduel-web/955dc86d-2162-4224-a09a-e9af1c964121/scratchpad/footer.png\" *)",
+      "Bash(powershell -Command \"Stop-Process -Id 2796 -Force\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Nahom\\AppData\\Local\\Temp\\claude\\c--Users-Nahom-Programming-codeduel-web\\955dc86d-2162-4224-a09a-e9af1c964121\\scratchpad"
     ]
   }
 }
