@@ -244,7 +244,7 @@ export default function ProblemsPage() {
                                 flexWrap: 'wrap',
                                 textDecoration: 'none',
                                 opacity: locked ? 0.75 : 1,
-                                cursor: locked ? 'pointer' : undefined
+                                cursor: 'pointer'
                             };
 
                             const cardContent = (
@@ -282,6 +282,25 @@ export default function ProblemsPage() {
                                         }}>
                                             {problem.difficulty.toUpperCase()}
                                         </span>
+                                        {!locked && (
+                                            <Link
+                                                href={`/sandbox/${problem._id}`}
+                                                onClick={(e) => e.stopPropagation()}
+                                                className={jetbrainsMono.className}
+                                                style={{
+                                                    color: 'oklch(80% 0.02 260)',
+                                                    padding: '10px 16px',
+                                                    borderRadius: 6,
+                                                    border: '1px solid oklch(38% 0.02 260)',
+                                                    fontSize: 13,
+                                                    fontWeight: 600,
+                                                    whiteSpace: 'nowrap',
+                                                    textDecoration: 'none'
+                                                }}
+                                            >
+                                                Sandbox
+                                            </Link>
+                                        )}
                                         <span style={{
                                             background: locked ? BLUE_BG : BLUE,
                                             color: locked ? BLUE : 'oklch(16% 0.02 260)',
@@ -306,9 +325,9 @@ export default function ProblemsPage() {
                             }
 
                             return (
-                                <Link key={problem._id} href={`/duel/${problem._id}`} style={cardStyle}>
+                                <div key={problem._id} onClick={() => router.push(`/duel/${problem._id}`)} style={cardStyle}>
                                     {cardContent}
-                                </Link>
+                                </div>
                             );
                         })}
 
