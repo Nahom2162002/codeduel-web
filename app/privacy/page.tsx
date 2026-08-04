@@ -64,7 +64,7 @@ export default function PrivacyPolicy() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('1. Who We Are')}
-                    <p style={P}>CodeDuel is a web-based platform operated by Nahom Ashagrea that allows developers to practice coding by competing against Claude AI. You can contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
+                    <p style={P}>CodeDuel is a web-based platform operated by Nahom Ashagrea that allows developers to practice coding by competing against Claude AI. You can contact us at <a href="mailto:support@duelai.dev" style={{ color: BLUE }}>support@duelai.dev</a>.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -135,7 +135,7 @@ export default function PrivacyPolicy() {
                         <li>Request deletion of your account and associated data</li>
                         <li>Export your duel history</li>
                     </ul>
-                    <p style={P}>To exercise any of these rights, contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
+                    <p style={P}>To exercise any of these rights, contact us at <a href="mailto:support@duelai.dev" style={{ color: BLUE }}>support@duelai.dev</a>.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -150,7 +150,7 @@ export default function PrivacyPolicy() {
 
                 <section>
                     {H2('11. Contact')}
-                    <p style={P}>If you have any questions about this privacy policy, contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
+                    <p style={P}>If you have any questions about this privacy policy, contact us at <a href="mailto:support@duelai.dev" style={{ color: BLUE }}>support@duelai.dev</a>.</p>
                 </section>
             </main>
 

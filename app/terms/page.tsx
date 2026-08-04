@@ -146,7 +146,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('12. Termination')}
-                    <p style={P}>We may terminate or suspend your account at any time for violation of these terms. You may delete your account at any time by contacting us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>. Upon termination your right to use the service ceases immediately.</p>
+                    <p style={P}>We may terminate or suspend your account at any time for violation of these terms. You may delete your account at any time by contacting us at <a href="mailto:support@duelai.dev" style={{ color: BLUE }}>support@duelai.dev</a>. Upon termination your right to use the service ceases immediately.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -161,7 +161,7 @@ export default function TermsOfService() {
 
                 <section>
                     {H2('15. Contact')}
-                    <p style={P}>For questions about these terms, contact us at <a href="mailto:nahomashagrea2002@gmail.com" style={{ color: BLUE }}>nahomashagrea2002@gmail.com</a>.</p>
+                    <p style={P}>For questions about these terms, contact us at <a href="mailto:support@duelai.dev" style={{ color: BLUE }}>support@duelai.dev</a>.</p>
                 </section>
             </main>
 
