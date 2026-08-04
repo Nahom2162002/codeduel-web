@@ -1,10 +1,12 @@
 import nodemailer from 'nodemailer';
 
 export const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp-relay.brevo.com',
+    port: 587,
+    secure: false,
     auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
+        user: process.env.EMAIL_USER,  // your Brevo login email
+        pass: process.env.EMAIL_PASS   // your Brevo SMTP key
     }
 });
 
@@ -12,7 +14,7 @@ export async function sendVerificationEmail(email: string, token: string) {
     const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email/${token}`;
 
     await transporter.sendMail({
-        from: `CodeDuel <${process.env.GMAIL_USER}>`,
+        from: `CodeDuel <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Verify your CodeDuel email',
         html: `
