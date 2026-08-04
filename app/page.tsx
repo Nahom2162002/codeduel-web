@@ -36,7 +36,7 @@ const CLAUDE_CODE = `def two_sum(nums, target):
 
 const LEVELS = [
     { title: 'Pick a problem', desc: 'Choose from 120+ problems across 32 categories and 3 difficulty levels. New problems added regularly.' },
-    { title: 'Write your solution', desc: 'Code in the browser with a full VS Code-style editor. Python, JavaScript, and Java supported at launch.' },
+    { title: 'Write your solution', desc: 'Code in the browser with a full VS Code-style editor. 9 languages supported, including Python, JavaScript, TypeScript, Java, C++, and Go.' },
     { title: 'Submit and duel', desc: 'Hit submit and Claude races to solve the same problem. Both solutions run against the same test cases.' },
     { title: 'See who won', desc: 'Results show scores side by side. Claude explains its approach so you actually learn something every time.' },
 ];
@@ -60,6 +60,32 @@ function DuelIcon({ size = 28 }: { size?: number }) {
         <svg width={size} height={size * (24 / 32)} viewBox="0 0 32 24" fill="none">
             <path d="M4 4L14 12L4 20" stroke={BLUE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M28 4L18 12L28 20" stroke={ORANGE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function InstagramIcon({ size = 19 }: { size?: number }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
+            <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+        </svg>
+    );
+}
+
+function TikTokIcon({ size = 19 }: { size?: number }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z" />
+        </svg>
+    );
+}
+
+function XIcon({ size = 19 }: { size?: number }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.9 3H21.6l-5.85 6.69L22.6 21H17.3l-4.16-5.44L8.4 21H5.7l6.26-7.16L5.4 3h5.44l3.76 4.98L18.9 3zm-.93 16.3h1.48L8.1 4.62H6.5l11.47 14.68z" />
         </svg>
     );
 }
@@ -479,7 +505,18 @@ export default function LandingPage() {
                 <div style={{ fontSize: 13.5, color: 'oklch(55% 0.02 260)' }}>
                     © {new Date().getFullYear()} CodeDuel. All rights reserved.
                 </div>
-                <div style={{ display: 'flex', gap: 24, fontSize: 13.5 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 24, fontSize: 13.5 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                        <a href="https://x.com/Duel_with_AI" target="_blank" rel="noopener noreferrer" aria-label="CodeDuel on X" style={{ color: 'oklch(65% 0.02 260)', display: 'flex' }}>
+                            <XIcon />
+                        </a>
+                        <a href="https://www.instagram.com/code.duel/" target="_blank" rel="noopener noreferrer" aria-label="CodeDuel on Instagram" style={{ color: 'oklch(65% 0.02 260)', display: 'flex' }}>
+                            <InstagramIcon />
+                        </a>
+                        <a href="https://www.tiktok.com/@duel_ai" target="_blank" rel="noopener noreferrer" aria-label="CodeDuel on TikTok" style={{ color: 'oklch(65% 0.02 260)', display: 'flex' }}>
+                            <TikTokIcon />
+                        </a>
+                    </div>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
                     <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
                 </div>
