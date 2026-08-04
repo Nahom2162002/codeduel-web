@@ -4,6 +4,7 @@ import { getUserFromRequest } from '@/lib/auth';
 import Problem from '@/models/Problem';
 import { isValidObjectId } from '@/lib/inputValidator';
 import { generateHint, MAX_HINT_LEVEL } from '@/lib/hintGenerator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -24,6 +25,9 @@ export async function POST(req: NextRequest) {
         if (user.plan !== 'pro') {
             return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
         }
+
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`practice-hint:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { problemId, hintNumber } = await req.json().catch(() => ({}));
 

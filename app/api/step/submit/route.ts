@@ -9,6 +9,7 @@ import { buildSolutionPrompt } from '@/lib/claudeSolutionPrompt';
 import { isValidObjectId, isValidLanguage } from '@/lib/inputValidator';
 import { executeCode, wrapWithIO } from '@/lib/codeExecution';
 import { MAX_HINT_LEVEL } from '@/lib/hintGenerator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,11 @@ export async function POST(req: NextRequest) {
         const user = await getUserFromRequest(req);
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
         userId = user._id.toString();
+
+        // Each submission is a real Judge0 run plus two Claude calls (solution +
+        // explanation) — same abuse-guard as step/hint, sized the same way.
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`step-submit:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { problemId, language, userCode, hintsUsed } = await req.json().catch(() => ({}));
 

@@ -4,6 +4,7 @@ import { getUserFromRequest } from '@/lib/auth';
 import { anthropic } from '@/lib/anthropic';
 import CodeReviewSession from '@/models/CodeReviewSession';
 import { isValidObjectId } from '@/lib/inputValidator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -26,6 +27,10 @@ export async function POST(req: NextRequest) {
         if (user.plan !== 'pro') {
             return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
         }
+
+        // Each submission is a real Claude call — same abuse-guard as sandbox/step.
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`review-submit:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { sessionId, code } = await req.json().catch(() => ({}));
 
