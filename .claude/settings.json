@@ -7,7 +7,13 @@
       "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).token\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\sandbox_setup.json')",
       "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).twoSumId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\sandbox_setup.json')",
       "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).premiumId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\sandbox_setup.json')",
-      "Bash(node sandbox_browser_test.js)"
+      "Bash(node sandbox_browser_test.js)",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).freeToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\step_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).twoSumId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\step_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).proToken\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\step_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).premiumId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\step_setup.json')",
+      "Bash(node -e 'console.log\\(JSON.parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\(process.argv[1],'\\\\''utf8'\\\\''\\)\\).maxSubId\\)' 'C:\\\\Users\\\\Nahom\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Nahom-Programming-codeduel-web\\\\955dc86d-2162-4224-a09a-e9af1c964121\\\\scratchpad\\\\step_setup.json')",
+      "Bash(node step_browser_test.js)"
     ]
   }
 }
