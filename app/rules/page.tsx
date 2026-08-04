@@ -148,8 +148,16 @@ export default function RulesPage() {
 
                 <section style={{ marginBottom: 40 }}>
                     {H2('Daily limits')}
-                    <p style={P_MB}><strong>Free plan:</strong> 3 duels per day, resetting at midnight. Premium problems are visible but locked.</p>
-                    <p style={P}><strong>Pro plan:</strong> unlimited duels per day and full access to every problem.</p>
+                    <p style={P_MB}><strong>Free plan:</strong> 3 duels per day, resetting at midnight. Premium problems are visible but locked. Sandbox, Step by Step, and Flashcards are available on non-premium problems.</p>
+                    <p style={P}><strong>Pro plan:</strong> unlimited duels per day, full access to every problem, and unlocks Practice, Daily Drills, and Code Review mode.</p>
+                </section>
+
+                <section style={{ marginBottom: 40 }}>
+                    {H2('Other modes')}
+                    <p style={P}>
+                        Practice, Daily Drills, Sandbox, Step by Step, Flashcards, and Code Review are all for training —
+                        none of them affect your ELO rating or duel record. Only Duels count toward your rating.
+                    </p>
                 </section>
 
                 <section style={{ marginBottom: 40 }}>
@@ -172,7 +180,7 @@ export default function RulesPage() {
                 <section style={{ marginBottom: 8 }}>
                     {H2('Good to know')}
                     <ul style={UL_LAST}>
-                        <li>Python, JavaScript, and Java are supported.</li>
+                        <li>Python, JavaScript, TypeScript, Java, C++, C, C#, Rust, and Go are all supported.</li>
                         <li>Code runs in a sandbox with a 5-second CPU time limit and 128MB memory limit per test case.</li>
                         <li>Claude writes a fresh solution every duel — it's not cached or the same each time, even for the same problem.</li>
                     </ul>
