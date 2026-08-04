@@ -54,7 +54,10 @@
       "Bash(mv scripts/_migrate_concurrent.ts scripts/migrateConcurrentDrivers.ts)",
       "Bash(mv scripts/_migrate_interactive_drivers.ts scripts/migrateInteractiveDrivers.ts)",
       "Bash(rm -f scripts/_check_all_starters.ts scripts/_check_clone_graph.ts scripts/_check_reverse_starters.ts scripts/_check_starter_sample.ts scripts/_get_reverse_id.ts scripts/_judge0_test.ts scripts/_scope_check.ts scripts/_survey_all_java.ts scripts/_survey_drivers.ts scripts/_survey_node_type.ts scripts/_survey_signatures.ts scripts/_test_codegen.ts scripts/_test_codegen2.ts scripts/_test_codegen3.ts scripts/_test_codegen4.ts scripts/_test_codegen5.ts scripts/_test_codegen6.ts scripts/_test_concurrent.ts scripts/_test_interactive.ts scripts/_test_interactive2.ts scripts/_test_langs_setup.ts scripts/_test_starter_coverage.ts)",
-      "Bash(node dropdown_test.js)"
+      "Bash(node dropdown_test.js)",
+      "Bash(awk -F= '{print \"EMAIL_PASS length=\" length\\($2\\) \", starts_with=\" substr\\($2,1,4\\) \", has_quotes=\" \\($2 ~ /^\"/ ? \"yes\" : \"no\"\\)}')",
+      "Bash(awk -F= '{print \"EMAIL_USER length=\" length\\($2\\) \", has_quotes=\" \\($2 ~ /^\"/ ? \"yes\" : \"no\"\\), \"has_at=\" \\($2 ~ /@/ ? \"yes\":\"no\"\\)}')",
+      "Bash(powershell -Command \"Stop-Process -Id 29332 -Force\")"
     ]
   }
 }

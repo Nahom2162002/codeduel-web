@@ -14,7 +14,7 @@ export async function sendVerificationEmail(email: string, token: string) {
     const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email/${token}`;
 
     await transporter.sendMail({
-        from: `CodeDuel <${process.env.EMAIL_USER}>`,
+        from: 'CodeDuel <support@duelai.dev>',
         to: email,
         subject: 'Verify your CodeDuel email',
         html: `

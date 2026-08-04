@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     try {
       await transporter.sendMail({
-          from: `CodeDuel <${process.env.EMAIL_USER}>`,
+          from: 'CodeDuel <support@duelai.dev>',
           to: user.email,
           subject: 'CodeDuel Password Reset',
           html: `
