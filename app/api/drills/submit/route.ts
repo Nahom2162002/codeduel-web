@@ -7,6 +7,7 @@ import DailyDrillSet from '@/models/DailyDrillSet';
 import { selectDrillProblems } from '@/lib/drillSelection';
 import { isValidObjectId, isValidLanguage } from '@/lib/inputValidator';
 import { executeCode, wrapWithIO } from '@/lib/codeExecution';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -33,6 +34,10 @@ export async function POST(req: NextRequest) {
         if (user.plan !== 'pro') {
             return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
         }
+
+        // Each submission is a real Judge0 run — same abuse-guard as sandbox/run.
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`drills-submit:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { problemId, language, userCode } = await req.json().catch(() => ({}));
 

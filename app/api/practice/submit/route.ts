@@ -7,6 +7,7 @@ import PracticeAttempt from '@/models/PracticeAttempt';
 import { buildSolutionPrompt } from '@/lib/claudeSolutionPrompt';
 import { isValidObjectId, isValidLanguage } from '@/lib/inputValidator';
 import { executeCode, wrapWithIO } from '@/lib/codeExecution';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,11 @@ export async function POST(req: NextRequest) {
         if (user.plan !== 'pro') {
             return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
         }
+
+        // Each submission is a real Judge0 run plus two Claude calls (solution +
+        // explanation) — same abuse-guard as sandbox/step, sized the same way.
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`practice-submit:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { problemId, language, userCode } = await req.json().catch(() => ({}));
 

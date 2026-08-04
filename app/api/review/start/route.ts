@@ -4,6 +4,7 @@ import { getUserFromRequest } from '@/lib/auth';
 import Problem from '@/models/Problem';
 import CodeReviewSession from '@/models/CodeReviewSession';
 import { isValidObjectId } from '@/lib/inputValidator';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rateLimit';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -27,6 +28,11 @@ export async function POST(req: NextRequest) {
         if (user.plan !== 'pro') {
             return NextResponse.json({ error: 'Pro plan required', requiresPro: true }, { status: 403, headers: corsHeaders });
         }
+
+        // No external API call here, but each request creates a new DB document —
+        // same abuse-guard as review/submit to stop scripted session spam.
+        const { allowed, retryAfterSeconds } = await checkRateLimit(`review-start:${user._id}`, 40, 10 * 60 * 1000);
+        if (!allowed) return rateLimitResponse(retryAfterSeconds, corsHeaders);
 
         const { problemId, customTitle, customDescription, language } = await req.json().catch(() => ({}));
 
