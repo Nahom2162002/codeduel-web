@@ -155,6 +155,9 @@ export default function ProblemsPage() {
                         <Link href="/flashcards" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
                             Flashcards
                         </Link>
+                        <Link href="/review" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
+                            Code Review
+                        </Link>
                         <Link href="/rules" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>
                             Rules
                         </Link>
