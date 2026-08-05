@@ -59,7 +59,18 @@
       "Bash(awk -F= '{print \"EMAIL_USER length=\" length\\($2\\) \", has_quotes=\" \\($2 ~ /^\"/ ? \"yes\" : \"no\"\\), \"has_at=\" \\($2 ~ /@/ ? \"yes\":\"no\"\\)}')",
       "Bash(powershell -Command \"Stop-Process -Id 29332 -Force\")",
       "Bash(rm -f \"/c/Users/Nahom/AppData/Local/Temp/claude/c--Users-Nahom-Programming-codeduel-web/955dc86d-2162-4224-a09a-e9af1c964121/scratchpad/footer_check.js\" \"/c/Users/Nahom/AppData/Local/Temp/claude/c--Users-Nahom-Programming-codeduel-web/955dc86d-2162-4224-a09a-e9af1c964121/scratchpad/footer.png\" *)",
-      "Bash(powershell -Command \"Stop-Process -Id 2796 -Force\")"
+      "Bash(powershell -Command \"Stop-Process -Id 2796 -Force\")",
+      "Bash(rm -f \"/c/Users/Nahom/AppData/Local/Temp/claude/c--Users-Nahom-Programming-codeduel-web/955dc86d-2162-4224-a09a-e9af1c964121/scratchpad/posthog_check\"*.js *)",
+      "Bash(powershell -Command \"Stop-Process -Id 2184 -Force\")",
+      "Bash(nslookup -type=MX duelai.dev)",
+      "Bash(nslookup -type=TXT duelai.dev)",
+      "Bash(nslookup -type=TXT mail._domainkey.duelai.dev)",
+      "Bash(nslookup -type=TXT brevo._domainkey.duelai.dev)",
+      "Bash(nslookup -type=CNAME brevo1._domainkey.duelai.dev)",
+      "Bash(nslookup -type=TXT spf.brevo.com)",
+      "Bash(nslookup b1.duelai-dev.dkim.brevo.com)",
+      "Bash(nslookup b2.duelai-dev.dkim.brevo.com)",
+      "Bash(powershell -Command \"Stop-Process -Id 38708 -Force\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Nahom\\AppData\\Local\\Temp\\claude\\c--Users-Nahom-Programming-codeduel-web\\955dc86d-2162-4224-a09a-e9af1c964121\\scratchpad"
