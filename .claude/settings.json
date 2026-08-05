@@ -70,7 +70,8 @@
       "Bash(nslookup -type=TXT spf.brevo.com)",
       "Bash(nslookup b1.duelai-dev.dkim.brevo.com)",
       "Bash(nslookup b2.duelai-dev.dkim.brevo.com)",
-      "Bash(powershell -Command \"Stop-Process -Id 38708 -Force\")"
+      "Bash(powershell -Command \"Stop-Process -Id 38708 -Force\")",
+      "Bash(nslookup -type=TXT _dmarc.duelai.dev)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Nahom\\AppData\\Local\\Temp\\claude\\c--Users-Nahom-Programming-codeduel-web\\955dc86d-2162-4224-a09a-e9af1c964121\\scratchpad"
