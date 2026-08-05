@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     // Same response regardless of whether the account exists or is already
     // verified — see the identical reasoning in forgot-password/route.ts.
-    const successMessage = { message: "If an account with that email exists and needs verification, we've sent a new verification link." };
+    const successMessage = { message: "If an account with that email exists and needs verification, we've sent a new verification link. Don't see it? Check your spam folder." };
 
     const user = await User.findOne({ email });
     if (!user || user.isEmailVerified) {

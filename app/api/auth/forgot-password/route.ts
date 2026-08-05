@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     // response that varies (or a distinct error) here would let anyone probe
     // which emails are registered. The actual email only goes out if a
     // matching account is found; the branch below is a silent no-op otherwise.
-    const successMessage = { message: 'If an account with that email exists, a password reset link has been sent.' };
+    const successMessage = { message: "If an account with that email exists, a password reset link has been sent. Don't see it? Check your spam folder." };
 
     const user = await User.findOne({ email });
     if (!user) {

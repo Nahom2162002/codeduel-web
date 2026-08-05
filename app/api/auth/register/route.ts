@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Account created, but we couldn't send the verification email: ${err.message}` }, { status: 500, headers: corsHeaders });
     }
 
-    return NextResponse.json({ message: 'Account created! Check your email to verify your account before logging in.', userId: user._id });
+    return NextResponse.json({ message: "Account created! Check your email to verify your account before logging in. Don't see it? Check your spam folder.", userId: user._id });
   } catch (err: any) {
     if (err.code === 11000) {
       const field = Object.keys(err.keyPattern ?? {})[0];
