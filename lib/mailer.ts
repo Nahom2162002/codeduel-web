@@ -15,8 +15,13 @@ export async function sendVerificationEmail(email: string, token: string) {
 
     await transporter.sendMail({
         from: 'CodeDuel <support@duelai.dev>',
+        replyTo: 'support@duelai.dev',
         to: email,
         subject: 'Verify your CodeDuel email',
+        // A plain-text alternative alongside the HTML body — HTML-only mail
+        // with no multipart/alternative part is a minor spam-score signal on
+        // most filters (e.g. SpamAssassin's MIME_HTML_ONLY rule).
+        text: `Welcome to CodeDuel! Verify your email to activate your account:\n\n${verifyUrl}\n\nThis link expires in 24 hours. If you did not create this account, you can safely ignore this email.`,
         html: `
             <!DOCTYPE html>
             <html>
