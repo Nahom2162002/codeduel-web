@@ -300,8 +300,10 @@ In 2-3 sentences, explain your approach and the key insight that makes this solu
             statsUpdate['stats.losses'] = user.stats.losses + 1;
             statsUpdate['stats.currentStreak'] = 0;
         } else {
+            // A draw is neutral — it doesn't extend the streak like a win,
+            // but it doesn't break it like a loss either, so currentStreak/
+            // bestStreak are left untouched here.
             statsUpdate['stats.draws'] = user.stats.draws + 1;
-            statsUpdate['stats.currentStreak'] = user.stats.currentStreak + 1;
         }
 
         await User.findByIdAndUpdate(user._id, { $set: statsUpdate });
