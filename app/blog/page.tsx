@@ -77,7 +77,7 @@ export default function BlogPage() {
 
                     <h1 style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 12px' }}>Blog</h1>
                     <p style={{ fontSize: 17, color: 'oklch(70% 0.02 260)', margin: '0 0 48px', lineHeight: 1.6 }}>
-                        Thoughts on coding, AI tools, and staying sharp as a developer.
+                        Thoughts on coding, AI tools, and staying sharp as a Developer.
                     </p>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
