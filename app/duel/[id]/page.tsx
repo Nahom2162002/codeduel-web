@@ -418,22 +418,40 @@ export default function DuelPage() {
         notifyClipboardBlocked();
     };
 
-    const handleEditorMount = (editorInstance: any, monaco: any) => {
-        // Catches the right-click menu and any native OS-level paste.
+    const handleEditorMount = (editorInstance: any) => {
         const node = editorInstance.getDomNode();
-        if (node) {
-            node.addEventListener('paste', blockClipboard, true);
-            node.addEventListener('copy', blockClipboard, true);
-            node.addEventListener('cut', blockClipboard, true);
-        }
+        if (!node) return;
+
+        // Catches the right-click menu and any native OS-level paste.
+        node.addEventListener('paste', blockClipboard, true);
+        node.addEventListener('copy', blockClipboard, true);
+        node.addEventListener('cut', blockClipboard, true);
+
         // When the browser grants async Clipboard API access, Monaco's own
         // Ctrl/Cmd+V/C/X keybindings read/write the clipboard directly and
         // never fire a native paste/copy/cut DOM event at all — bypassing the
-        // listeners above entirely. Rebinding the same keychords to a no-op
-        // here closes that gap regardless of which path the browser takes.
-        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, notifyClipboardBlocked);
-        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, notifyClipboardBlocked);
-        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyX, notifyClipboardBlocked);
+        // listeners above entirely. A capture-phase keydown listener on this
+        // editor's own DOM node runs before Monaco's internal handler on its
+        // inner textarea ever sees the event, so stopping it here pre-empts
+        // that path too. This is scoped to this one DOM node/editor instance
+        // only — unlike `editor.addCommand`, which registers against Monaco's
+        // shared keybinding service and (confirmed the hard way) leaks to
+        // every other editor on the site, since it isn't torn down when this
+        // component unmounts.
+        const onKeyDown = (e: KeyboardEvent) => {
+            const key = e.key.toLowerCase();
+            if ((e.ctrlKey || e.metaKey) && (key === 'v' || key === 'c' || key === 'x')) {
+                blockClipboard(e);
+            }
+        };
+        node.addEventListener('keydown', onKeyDown, true);
+
+        editorInstance.onDidDispose(() => {
+            node.removeEventListener('paste', blockClipboard, true);
+            node.removeEventListener('copy', blockClipboard, true);
+            node.removeEventListener('cut', blockClipboard, true);
+            node.removeEventListener('keydown', onKeyDown, true);
+        });
     };
 
     // Change language
