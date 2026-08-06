@@ -267,6 +267,8 @@ export default function DuelPage() {
     const [claudeSolving, setClaudeSolving] = useState(false);
     const [claudeDone, setClaudeDone] = useState(false);
     const [claudeElapsed, setClaudeElapsed] = useState(0);
+    const [pasteBlocked, setPasteBlocked] = useState(false);
+    const pasteBlockedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const startTimeRef = useRef<number>(0);
     const claudeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -325,6 +327,7 @@ export default function DuelPage() {
     useEffect(() => {
         return () => {
             if (claudeTimerRef.current) clearInterval(claudeTimerRef.current);
+            if (pasteBlockedTimerRef.current) clearTimeout(pasteBlockedTimerRef.current);
         };
     }, []);
 
@@ -397,6 +400,40 @@ export default function DuelPage() {
             }
             startLiveSolve(language);
         }
+    };
+
+    // Duels score on speed, so pasting in a pre-written solution defeats the
+    // point. Copy/cut are blocked too so a solution can't be typed once and
+    // pasted into another duel. Sandbox/Practice/Step/Drills are unaffected —
+    // this only mounts on the duel editor.
+    const notifyClipboardBlocked = () => {
+        setPasteBlocked(true);
+        if (pasteBlockedTimerRef.current) clearTimeout(pasteBlockedTimerRef.current);
+        pasteBlockedTimerRef.current = setTimeout(() => setPasteBlocked(false), 2500);
+    };
+
+    const blockClipboard = (e: Event) => {
+        e.preventDefault();
+        e.stopPropagation();
+        notifyClipboardBlocked();
+    };
+
+    const handleEditorMount = (editorInstance: any, monaco: any) => {
+        // Catches the right-click menu and any native OS-level paste.
+        const node = editorInstance.getDomNode();
+        if (node) {
+            node.addEventListener('paste', blockClipboard, true);
+            node.addEventListener('copy', blockClipboard, true);
+            node.addEventListener('cut', blockClipboard, true);
+        }
+        // When the browser grants async Clipboard API access, Monaco's own
+        // Ctrl/Cmd+V/C/X keybindings read/write the clipboard directly and
+        // never fire a native paste/copy/cut DOM event at all — bypassing the
+        // listeners above entirely. Rebinding the same keychords to a no-op
+        // here closes that gap regardless of which path the browser takes.
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, notifyClipboardBlocked);
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, notifyClipboardBlocked);
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyX, notifyClipboardBlocked);
     };
 
     // Change language
@@ -693,6 +730,7 @@ export default function DuelPage() {
                             language={language === 'cpp' ? 'cpp' : language}
                             value={code}
                             onChange={handleCodeChange}
+                            onMount={handleEditorMount}
                             theme="codeduel-dark"
                             beforeMount={defineMonacoTheme}
                             options={{
@@ -705,10 +743,21 @@ export default function DuelPage() {
                                 cursorBlinking: 'smooth',
                                 smoothScrolling: true,
                                 fontLigatures: true,
-                                fontFamily: 'JetBrains Mono, Fira Code, monospace'
+                                fontFamily: 'JetBrains Mono, Fira Code, monospace',
+                                contextmenu: false,
+                                dragAndDrop: false
                             }}
                         />
                     </div>
+
+                    {pasteBlocked && (
+                        <div className={spaceGrotesk.className} style={{
+                            padding: '12px 16px', background: ORANGE_BG, borderTop: '1px solid oklch(75% 0.15 55 / 0.35)',
+                            color: ORANGE, fontSize: 13, flexShrink: 0
+                        }}>
+                            Copy/paste is disabled during duels — speed is part of the score.
+                        </div>
+                    )}
 
                     {error && (
                         <div className={spaceGrotesk.className} style={{
