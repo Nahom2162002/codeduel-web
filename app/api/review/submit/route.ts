@@ -67,18 +67,23 @@ Here is their revised code:` : `Here is their solution:`}
 ${code}
 \`\`\`
 
-Write a detailed code review covering:
-1. Time complexity (state the Big-O and explain why)
-2. Space complexity (state the Big-O and explain why)
-3. Readability and code style
+Write a concise, high-signal code review covering:
+1. Time complexity (state the Big-O and explain why, in one sentence)
+2. Space complexity (state the Big-O and explain why, in one sentence)
+3. Readability and code style — only if there's something worth flagging
 4. Edge cases — either handled well or missed
 ${priorRound ? '5. Whether this revision actually improved on the specific issues raised in the previous review' : ''}
 
-End with specific, actionable suggestions for improvement. Be direct and constructive — this developer wants to genuinely get better, not just be told it's fine. Write in plain prose with short paragraphs per section, no markdown headers, no code in your response.`;
+End with the 2-3 most impactful, specific suggestions for improvement — not an exhaustive list. Be direct and constructive — this developer wants to genuinely get better, not just be told it's fine. Prioritize the issues that matter most over covering everything; skip a section entirely if there's nothing meaningful to say. Aim for around 250-350 words total. Write in plain prose with short paragraphs per section, no markdown headers, no code in your response.`;
 
         const message = await anthropic.messages.create({
             model: 'claude-sonnet-4-6',
-            max_tokens: 900,
+            // A full review (4-5 sections plus actionable suggestions) was
+            // measured landing at 720-760 output tokens on ordinary
+            // submissions against the old 900 cap — comfortable most of the
+            // time, but thin enough that longer or more complex code could
+            // genuinely run past it and get cut off mid-sentence.
+            max_tokens: 1500,
             messages: [{ role: 'user', content: prompt }]
         });
         const content = message.content[0];
