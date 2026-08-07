@@ -58,7 +58,7 @@ export default function TermsOfService() {
 
                 <h1 style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 10px' }}>Terms of Service</h1>
                 <div className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(55% 0.02 260)', marginBottom: 48 }}>
-                    Last updated: August 4, 2026
+                    Last updated: August 6, 2026
                 </div>
 
                 <section style={{ marginBottom: 36 }}>
@@ -68,7 +68,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('2. Description of Service')}
-                    <p style={P}>CodeDuel is a web platform for practicing and maintaining programming skills. Its core mode, Duels, pits you head-to-head against Claude AI on coding problems. CodeDuel also offers several solo training modes: Practice (guided problems from your weak spots), Daily Drills, a Sandbox for free-form testing, a guided Step by Step mode, Flashcards for pattern recognition, and Code Review, where you submit code you've already written for AI feedback. CodeDuel offers a free tier and a paid Pro tier with additional features. We reserve the right to modify, suspend, or discontinue any part of the service at any time.</p>
+                    <p style={P}>CodeDuel is a web platform for practicing and maintaining programming skills. Its core mode, Duels, pits you head-to-head against Claude AI on coding problems. CodeDuel also offers several solo training modes: Guided Practice, where Claude tutors you through a problem with escalating hints, either from a queue built from your weak spots or one you pick yourself, Daily Drills, a Sandbox for free-form testing, Flashcards for pattern recognition, and Code Review, where you submit code you've already written for AI feedback. CodeDuel offers a free tier and a paid Pro tier with additional features. We reserve the right to modify, suspend, or discontinue any part of the service at any time.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>
@@ -85,8 +85,8 @@ export default function TermsOfService() {
                 <section style={{ marginBottom: 36 }}>
                     {H2('4. Free and Pro Plans')}
                     <p style={P_MB}>CodeDuel offers two plans:</p>
-                    <p style={{ ...P, marginBottom: 8 }}><strong>Free Plan:</strong> 3 duels per day, access to non-premium problems across all categories, plus the Sandbox, Step by Step, and Flashcards modes. Available at no cost.</p>
-                    <p style={P_MB}><strong>Pro Plan:</strong> $6 per month, billed monthly. Includes unlimited duels, every problem, the Practice, Daily Drills, and Code Review modes, ELO rating system, progress dashboard, weak spot detection, and performance analytics.</p>
+                    <p style={{ ...P, marginBottom: 8 }}><strong>Free Plan:</strong> 3 duels per day, access to non-premium problems across all categories, plus the Sandbox mode, and 1 Guided Practice tutoring session and 1 Flashcards round per day. Available at no cost.</p>
+                    <p style={P_MB}><strong>Pro Plan:</strong> $6 per month, billed monthly. Includes unlimited duels, every problem, unlimited Guided Practice (including the weak-spot queue), unlimited Flashcards rounds, the Daily Drills and Code Review modes, ELO rating system, progress dashboard, weak spot detection, and performance analytics.</p>
                     <p style={P}>We reserve the right to change pricing with 30 days notice to existing subscribers.</p>
                 </section>
 
@@ -100,7 +100,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('6. Code Submissions')}
-                    <p style={P_MB}>By submitting code on CodeDuel — whether in a Duel, Practice, Daily Drills, Sandbox, Step by Step, or Code Review — you grant us a limited license to:</p>
+                    <p style={P_MB}>By submitting code on CodeDuel — whether in a Duel, Guided Practice, Daily Drills, Sandbox, or Code Review — you grant us a limited license to:</p>
                     <ul style={UL}>
                         <li>Execute your code against test cases via our sandboxed execution environment (not applicable to Code Review, which is evaluated by Claude without executing your code)</li>
                         <li>Send your code to Claude AI for quality evaluation, comparison, hints, or review feedback</li>
@@ -126,7 +126,7 @@ export default function TermsOfService() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('8. AI-Generated Content')}
-                    <p style={P}>CodeDuel uses Anthropic's Claude AI to generate competing solutions in Duels, evaluate code quality, provide hints in Practice and Step by Step, and review submissions in Code Review mode. Claude's output is generated in real time and may vary between sessions. We do not guarantee the accuracy or optimality of AI-generated solutions, hints, or reviews. The educational explanations provided by Claude are for learning purposes only and should not be taken as definitive best practices.</p>
+                    <p style={P}>CodeDuel uses Anthropic's Claude AI to generate competing solutions in Duels, evaluate code quality, provide tutoring hints in Guided Practice, and review submissions in Code Review mode. Claude's output is generated in real time and may vary between sessions. We do not guarantee the accuracy or optimality of AI-generated solutions, hints, or reviews. The educational explanations provided by Claude are for learning purposes only and should not be taken as definitive best practices.</p>
                 </section>
 
                 <section style={{ marginBottom: 36 }}>

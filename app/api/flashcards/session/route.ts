@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { getUserFromRequest } from '@/lib/auth';
 import Problem from '@/models/Problem';
+import DailyFlashcardCount from '@/models/DailyFlashcardCount';
 import { PATTERN_CATEGORIES } from '@/lib/flashcardCategories';
 
 const corsHeaders = {
@@ -23,9 +24,8 @@ function shuffle<T>(arr: T[]): T[] {
     return copy;
 }
 
-// Every other mode's Pro gate is all-or-nothing; this one is the exception —
-// both tiers get a real session, just a shorter one for free (5 cards vs 10),
-// matching the "quick, repeatable" framing rather than a scarcity gate.
+// Pro gets a full session every time; free gets a shorter one (5 cards vs
+// 10) and only 1 round per day — see the reservation below.
 function sessionSizeFor(plan: string) {
     return plan === 'pro' ? 10 : 5;
 }
@@ -35,6 +35,29 @@ export async function GET(req: NextRequest) {
         await connectDB();
         const user = await getUserFromRequest(req);
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+
+        // Free users get 1 flashcards round per day, resetting at midnight —
+        // its own allowance, not shared with the duels/practice slot pool.
+        if (user.plan !== 'pro') {
+            const dayKey = new Date();
+            dayKey.setHours(0, 0, 0, 0);
+
+            try {
+                await DailyFlashcardCount.findOneAndUpdate(
+                    { userId: user._id, date: dayKey, count: { $lt: 1 } },
+                    { $inc: { count: 1 } },
+                    { upsert: true, new: true }
+                );
+            } catch (reserveErr: any) {
+                if (reserveErr.code === 11000) {
+                    return NextResponse.json({
+                        error: 'You\'ve used your free flashcards round for today. Upgrade to Pro for unlimited rounds.',
+                        flashcardsLimitReached: true
+                    }, { status: 403, headers: corsHeaders });
+                }
+                throw reserveErr;
+            }
+        }
 
         const sessionSize = sessionSizeFor(user.plan);
         const filter: Record<string, unknown> = { category: { $in: PATTERN_CATEGORIES } };

@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
 
                 <h1 style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 10px' }}>Privacy Policy</h1>
                 <div className={jetbrainsMono.className} style={{ fontSize: 13, color: 'oklch(55% 0.02 260)', marginBottom: 48 }}>
-                    Last updated: August 4, 2026
+                    Last updated: August 6, 2026
                 </div>
 
                 <section style={{ marginBottom: 36 }}>
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
                     <p style={P_MB}>We collect the following information when you use CodeDuel:</p>
                     <ul style={UL_LAST}>
                         <li>Account information: your username and email address when you create an account</li>
-                        <li>Coding submissions: the code you write and submit during duels, practice, drills, sandbox, and step by step sessions</li>
+                        <li>Coding submissions: the code you write and submit during duels, guided practice, drills, and sandbox sessions</li>
                         <li>Code Review submissions: the code, problem titles, and descriptions you submit for AI review, which may include code originally written outside of CodeDuel</li>
                         <li>Duel results: scores, times, languages used, and problem history</li>
                         <li>Performance data: ELO rating, win/loss record, streak, and category statistics</li>
@@ -97,7 +97,7 @@ export default function PrivacyPolicy() {
 
                 <section style={{ marginBottom: 36 }}>
                     {H2('4. How Your Code Is Used')}
-                    <p style={P_MB}>When you submit a solution in a Duel, Practice session, Daily Drill, Sandbox run, or Step by Step problem, your code is sent to Judge0 (a sandboxed code execution service) to run against test cases, and is also sent to Anthropic's Claude API for quality evaluation, comparison, or hints.</p>
+                    <p style={P_MB}>When you submit a solution in a Duel, Guided Practice session, Daily Drill, or Sandbox run, your code is sent to Judge0 (a sandboxed code execution service) to run against test cases, and is also sent to Anthropic's Claude API for quality evaluation, comparison, or hints.</p>
                     <p style={P_MB}>In Code Review mode, your submitted code is sent only to Anthropic's Claude API for feedback — it is not executed. Code Review is designed for code you've already written elsewhere (LeetCode, an interview, your job), so submissions there may not have originated on CodeDuel.</p>
                     <p style={P}>We store your submitted code in our database as part of your activity history. We do not use your code submissions to train AI models.</p>
                 </section>
