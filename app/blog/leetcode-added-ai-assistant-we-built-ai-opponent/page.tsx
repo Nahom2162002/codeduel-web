@@ -125,23 +125,41 @@ export default function BlogPost() {
                         <h2 style={h2}>The Problem With AI Assistance During Practice</h2>
 
                         <p style={prose}>
-                            There's a well-documented phenomenon in skill development called the assistance paradox.
-                            When you reduce friction during practice you improve performance in the short term
-                            but slow long-term skill development. The struggle is the point.
+                            There's an important distinction between AI that helps you learn and AI that 
+                            does the thinking for you.      
                         </p>
 
                         <p style={prose}>
-                            Runners who train on flat surfaces perform worse on hills than runners who train on hills.
-                            Musicians who always practice with a metronome struggle more with natural timing than
-                            those who sometimes practice without one. Developers who always have AI assistance
-                            available may be slower to develop the pattern recognition that comes from working
-                            through a problem entirely on their own.
+                            A tutor who gives you a hint when you're completely stuck is different from 
+                            one who just hands you the answer. The first develops your ability to solve 
+                            problems — the second develops your ability to recognize correct solutions 
+                            when you see them. Both have value but they produce different skills.
                         </p>
 
                         <p style={prose}>
-                            Ask Leet makes LeetCode easier. That's its job. But easier practice doesn't necessarily
-                            produce better developers — it produces developers who practice better with AI assistance,
-                            which is a different and narrower skill.
+                            CodeDuel actually offers both modes. In a competitive duel there's no AI 
+                            assistance — just you and Claude racing to solve the same problem. But in 
+                            practice modes like Step by Step, Claude acts as a tutor — giving you hints 
+                            one at a time without revealing the full solution, helping you develop the 
+                            approach yourself rather than copying it.
+                        </p>
+
+                        <p style={prose}>
+                            The difference between CodeDuel's practice modes and Ask Leet isn't that 
+                            one uses AI and the other doesn't. It's that CodeDuel's AI assistance is 
+                            structured around developing your independent problem-solving ability — 
+                            hints that guide you toward the answer rather than tools that generate the 
+                            answer for you. And when you're ready to test what you've built you switch 
+                            to duel mode and find out honestly where you stand.
+                        </p>
+
+                        <p style={prose}>
+                            Ask Leet sits at the other end of that spectrum. It's a full AI assistant 
+                            integrated directly into your practice session — capable of generating 
+                            solutions, optimizing your code, and explaining approaches on demand. 
+                            For learning new concepts that's genuinely useful. But for measuring 
+                            whether your unassisted skills are where you want them to be it makes 
+                            the answer harder to find, not easier.
                         </p>
 
                         <h2 style={h2}>What We Built Instead</h2>
