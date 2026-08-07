@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 
 const POSTS = [
     {
+        slug: 'leetcode-added-ai-assistant-we-built-ai-opponent',
+        title: 'LeetCode Added an AI Assistant. We Built an AI Opponent. Here\'s Why That Matters.',
+        description: 'Ask Leet helps you solve coding problems. CodeDuel makes you compete against AI instead. The difference is more important than it sounds.',
+        date: 'August 2026',
+        readTime: '5 min read'
+    },
+    {
         slug: 'are-ai-tools-making-developers-worse',
         title: 'Are AI Coding Tools Making Developers Worse at Coding?',
         description: 'GitHub Copilot and Claude are making developers faster. But are they making developers better?',
