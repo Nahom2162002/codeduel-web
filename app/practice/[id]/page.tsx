@@ -17,6 +17,8 @@ const BLUE_BG = 'oklch(75% 0.15 220 / 0.18)';
 const ORANGE_BG = 'oklch(75% 0.15 55 / 0.18)';
 const NEUTRAL_BG = 'oklch(40% 0.02 260 / 0.4)';
 const NEUTRAL = 'oklch(85% 0.02 260)';
+const MAX_HINTS = 3;
+const MAX_ATTEMPTS = 3;
 
 interface Problem {
     _id: string;
@@ -43,8 +45,14 @@ interface SubmitResult {
     totalTests: number;
     passed: boolean;
     testCaseResults: TestCaseResult[];
-    solutionCode: string;
-    solutionExplanation: string;
+    attemptNumber: number;
+    solutionRevealed: boolean;
+    hintsUsed?: number;
+    correctnessScore?: number;
+    hintScore?: number;
+    totalScore?: number;
+    solutionCode?: string;
+    solutionExplanation?: string;
 }
 
 const LANGUAGES = [
@@ -85,6 +93,20 @@ function defineMonacoTheme(monaco: any) {
 
 const formatValue = (v: unknown) => v === undefined ? '—' : JSON.stringify(v);
 
+function ScoreBar({ label, value, max }: { label: string; value: number; max: number }) {
+    return (
+        <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
+                <span style={{ color: 'oklch(75% 0.02 260)' }}>{label}</span>
+                <span className={jetbrainsMono.className} style={{ color: BLUE }}>{value}/{max}</span>
+            </div>
+            <div style={{ height: 6, background: 'oklch(30% 0.02 260)', borderRadius: 999, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${Math.min(100, (value / max) * 100)}%`, background: BLUE }} />
+            </div>
+        </div>
+    );
+}
+
 export default function PracticeSolvePage() {
     const { id } = useParams();
     const router = useRouter();
@@ -94,11 +116,13 @@ export default function PracticeSolvePage() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
-    const [requiresPro, setRequiresPro] = useState(false);
+    const [blocked, setBlocked] = useState<{ reason: 'requiresPro' | 'limitReached' | 'practiceLimitReached'; message?: string } | null>(null);
     const [hasHadTrial, setHasHadTrial] = useState(false);
     const [hints, setHints] = useState<string[]>([]);
     const [hintLoading, setHintLoading] = useState(false);
     const [result, setResult] = useState<SubmitResult | null>(null);
+    const [attempts, setAttempts] = useState(0);
+    const [revealing, setRevealing] = useState(false);
     const [activeTab, setActiveTab] = useState<'problem' | 'result'>('problem');
 
     useEffect(() => {
@@ -115,7 +139,8 @@ export default function PracticeSolvePage() {
                 const meData = await meRes.json();
 
                 if (problemData.error) {
-                    setError(problemData.error);
+                    if (problemData.error === 'Pro plan required') setBlocked({ reason: 'requiresPro' });
+                    else setError(problemData.error);
                 } else {
                     setProblem(problemData);
                     setCode(problemData.starterCode.python || '');
@@ -131,57 +156,73 @@ export default function PracticeSolvePage() {
         loadData();
     }, [id]);
 
-    const handleLanguageChange = (lang: string) => {
-        setLanguage(lang);
-        if (problem) setCode(problem.starterCode[lang] || '');
-    };
-
-    const handleHint = async () => {
-        if (hints.length >= 3 || hintLoading) return;
+    const requestHint = async (hintNumber: number) => {
         setHintLoading(true);
         const token = localStorage.getItem('token');
         try {
             const res = await fetch('/api/practice/hint', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}` },
-                body: JSON.stringify({ problemId: id, hintNumber: hints.length + 1 })
+                body: JSON.stringify({ problemId: id, hintNumber })
             });
             const data = await res.json();
-            if (data.requiresPro) { setRequiresPro(true); return; }
+
+            if (data.requiresPro) { setBlocked({ reason: 'requiresPro' }); return; }
+            if (data.practiceLimitReached) { setBlocked({ reason: 'practiceLimitReached', message: data.error }); return; }
+            if (data.limitReached) { setBlocked({ reason: 'limitReached', message: data.error }); return; }
             if (data.hint) setHints(h => [...h, data.hint]);
         } catch {
-            // Silent — hints are a convenience, not required for submission.
+            // Silent — the initial hint is a convenience; the editor is still usable without it.
         } finally {
             setHintLoading(false);
         }
     };
 
-    const handleSubmit = async () => {
+    const handleLanguageChange = (lang: string) => {
+        setLanguage(lang);
+        if (problem) setCode(problem.starterCode[lang] || '');
+    };
+
+    // Shared by the Submit and Solution buttons — a "Solution" click still
+    // runs the current code through the same submit pipeline, it just forces
+    // the terminal (solution-revealing) path early instead of waiting for a
+    // pass or the 3rd attempt. See app/api/practice/submit for the gating.
+    const submitAttempt = async (forceReveal: boolean) => {
         if (!code.trim()) { setError('Please write your solution first'); return; }
-        setSubmitting(true);
+        const nextAttempt = attempts + 1;
+        if (forceReveal) setRevealing(true); else setSubmitting(true);
         setError('');
-        setResult(null);
 
         const token = localStorage.getItem('token');
         try {
             const res = await fetch('/api/practice/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}` },
-                body: JSON.stringify({ problemId: id, language, userCode: code })
+                body: JSON.stringify({
+                    problemId: id, language, userCode: code, hintsUsed: hints.length,
+                    attemptNumber: nextAttempt, forceReveal
+                })
             });
             const data = await res.json();
 
-            if (data.requiresPro) { setRequiresPro(true); setSubmitting(false); return; }
-            if (data.error) { setError(data.error); setSubmitting(false); return; }
+            if (data.requiresPro) { setBlocked({ reason: 'requiresPro' }); return; }
+            if (data.practiceLimitReached) { setBlocked({ reason: 'practiceLimitReached', message: data.error }); return; }
+            if (data.limitReached) { setBlocked({ reason: 'limitReached', message: data.error }); return; }
+            if (data.error) { setError(data.error); return; }
 
+            setAttempts(nextAttempt);
             setResult(data);
             setActiveTab('result');
         } catch {
             setError('Submission failed. Please try again.');
         } finally {
             setSubmitting(false);
+            setRevealing(false);
         }
     };
+
+    const handleSubmit = () => submitAttempt(false);
+    const handleRevealSolution = () => submitAttempt(true);
 
     const handleNext = () => {
         router.push('/practice');
@@ -190,6 +231,22 @@ export default function PracticeSolvePage() {
     if (loading) return (
         <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             Loading problem...
+        </div>
+    );
+
+    if (blocked) return (
+        <div className={spaceGrotesk.className} style={{ minHeight: '100vh', background: 'oklch(16% 0.02 260)', color: 'oklch(96% 0.01 260)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+            {blocked.reason === 'requiresPro' ? (
+                <UpgradeBanner hasHadTrial={hasHadTrial} reason="problem" />
+            ) : (
+                <div style={{ maxWidth: 440, textAlign: 'center' }}>
+                    <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 10 }}>
+                        {blocked.reason === 'practiceLimitReached' ? 'Guided Practice limit reached' : "You've hit your daily limit"}
+                    </div>
+                    <p style={{ color: 'oklch(70% 0.02 260)', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>{blocked.message}</p>
+                    <UpgradeBanner hasHadTrial={hasHadTrial} reason="limit" />
+                </div>
+            )}
         </div>
     );
 
@@ -202,6 +259,7 @@ export default function PracticeSolvePage() {
     if (!problem) return null;
 
     const diffBadge = diffColors(problem.difficulty);
+    const solutionRevealed = result?.solutionRevealed === true;
 
     return (
         <div className={`${spaceGrotesk.className} practice-page`} style={{
@@ -219,7 +277,7 @@ export default function PracticeSolvePage() {
                 <Link href="/practice" style={{ color: 'oklch(70% 0.02 260)', textDecoration: 'none', fontSize: 13.5 }}>
                     ← Back to Practice
                 </Link>
-                <span className={jetbrainsMono.className} style={{ fontSize: 12, color: BLUE }}>Guided Practice · No ELO on the line</span>
+                <span className={jetbrainsMono.className} style={{ fontSize: 12, color: BLUE }}>🎓 Guided Practice · Claude is tutoring, not racing · No ELO</span>
             </div>
 
             <div className="practice-columns" style={{ flex: 1, display: 'flex', minHeight: 0 }}>
@@ -237,7 +295,7 @@ export default function PracticeSolvePage() {
                                     marginBottom: -1
                                 }}
                             >
-                                {tab === 'problem' ? 'Problem' : `Results${result ? ` (${result.testsPassed}/${result.totalTests})` : ''}`}
+                                {tab === 'problem' ? 'Problem' : `Results${result ? ` (${result.solutionRevealed ? `${result.totalScore}/100` : `${result.testsPassed}/${result.totalTests}`})` : ''}`}
                             </div>
                         ))}
                     </div>
@@ -275,45 +333,69 @@ export default function PracticeSolvePage() {
 
                                 <div style={{ borderTop: '1px solid oklch(28% 0.02 260)', paddingTop: 20 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                                        <p className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(60% 0.02 260)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>Hints</p>
-                                        <button
-                                            onClick={handleHint}
-                                            disabled={hints.length >= 3 || hintLoading}
-                                            className={jetbrainsMono.className}
-                                            style={{
-                                                fontSize: 12, padding: '6px 12px', borderRadius: 6, border: `1px solid ${BLUE}66`,
-                                                background: 'transparent', color: hints.length >= 3 ? 'oklch(50% 0.02 260)' : BLUE,
-                                                cursor: hints.length >= 3 || hintLoading ? 'default' : 'pointer'
-                                            }}
-                                        >
-                                            {hintLoading ? 'Thinking…' : hints.length >= 3 ? 'No more hints' : `Get Hint ${hints.length + 1}/3`}
-                                        </button>
+                                        <p className={jetbrainsMono.className} style={{ fontSize: 11, color: 'oklch(60% 0.02 260)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>Claude's Hints</p>
+                                        {hints.length < MAX_HINTS && (
+                                            <button
+                                                onClick={() => requestHint(hints.length + 1)}
+                                                disabled={hintLoading}
+                                                className={jetbrainsMono.className}
+                                                style={{
+                                                    fontSize: 12, padding: '6px 12px', borderRadius: 6, border: `1px solid ${BLUE}66`,
+                                                    background: 'transparent', color: hintLoading ? 'oklch(50% 0.02 260)' : BLUE,
+                                                    cursor: hintLoading ? 'default' : 'pointer'
+                                                }}
+                                            >
+                                                {hintLoading ? 'Thinking…' : `Get Hint ${hints.length + 1}/${MAX_HINTS}`}
+                                            </button>
+                                        )}
                                     </div>
                                     {hints.map((h, i) => (
                                         <div key={i} style={{ background: BLUE_BG, borderRadius: 8, padding: '12px 14px', fontSize: 13.5, color: 'oklch(90% 0.02 260)', lineHeight: 1.6, marginBottom: 8 }}>
-                                            {h}
+                                            <span className={jetbrainsMono.className} style={{ fontSize: 10.5, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hint {i + 1}</span>
+                                            <div style={{ marginTop: 4 }}>{h}</div>
                                         </div>
                                     ))}
-                                    {hints.length === 0 && (
+                                    {hints.length === 0 && !hintLoading && (
                                         <p style={{ fontSize: 13, color: 'oklch(55% 0.02 260)' }}>Stuck? Hints never affect anything — ask away.</p>
                                     )}
+                                    <p style={{ fontSize: 12, color: 'oklch(55% 0.02 260)', marginTop: 10 }}>
+                                        Fewer hints used means a higher score — but it never affects your ELO.
+                                    </p>
                                 </div>
                             </div>
                         ) : result ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                <div style={{
-                                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                    background: result.passed ? BLUE_BG : ORANGE_BG, borderRadius: 10, padding: '14px 16px'
-                                }}>
-                                    <span style={{ fontSize: 14.5, fontWeight: 600, color: result.passed ? BLUE : ORANGE }}>
-                                        {result.passed ? 'All tests passed' : `${result.testsPassed}/${result.totalTests} tests passed`}
-                                    </span>
-                                    <button onClick={handleNext} className={jetbrainsMono.className} style={{
-                                        background: BLUE, color: 'oklch(16% 0.02 260)', border: 'none', borderRadius: 6,
-                                        padding: '8px 16px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer'
-                                    }}>
-                                        Next Problem →
-                                    </button>
+                                <div style={{ background: result.passed ? BLUE_BG : ORANGE_BG, borderRadius: 10, padding: '16px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <span style={{ fontSize: 14.5, fontWeight: 600, color: result.passed ? BLUE : ORANGE }}>
+                                            {result.passed ? 'All tests passed' : `${result.testsPassed}/${result.totalTests} tests passed`}
+                                        </span>
+                                        {result.solutionRevealed && (
+                                            <span className={jetbrainsMono.className} style={{ fontSize: 16, fontWeight: 700, color: BLUE }}>
+                                                {result.totalScore}/100
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {result.solutionRevealed ? (
+                                        <>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 14 }}>
+                                                <ScoreBar label="Correctness" value={result.correctnessScore!} max={70} />
+                                                <ScoreBar label={`Hint Efficiency (${result.hintsUsed} used)`} value={result.hintScore!} max={30} />
+                                            </div>
+                                            <button onClick={handleNext} className={jetbrainsMono.className} style={{
+                                                background: BLUE, color: 'oklch(16% 0.02 260)', border: 'none', borderRadius: 6,
+                                                padding: '8px 16px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', marginTop: 14
+                                            }}>
+                                                Next Problem →
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <p style={{ fontSize: 13, color: 'oklch(75% 0.02 260)', margin: '10px 0 0', lineHeight: 1.6 }}>
+                                            {MAX_ATTEMPTS - result.attemptNumber} attempt{MAX_ATTEMPTS - result.attemptNumber === 1 ? '' : 's'} left before Claude shows the solution.
+                                            Keep trying, or reveal it now from the editor.
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -349,14 +431,16 @@ export default function PracticeSolvePage() {
                                     ))}
                                 </div>
 
-                                <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 10, padding: 18 }}>
-                                    <p className={jetbrainsMono.className} style={{ fontSize: 11, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 10px' }}>Solution Walkthrough</p>
-                                    <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'oklch(85% 0.02 260)', margin: '0 0 14px' }}>{result.solutionExplanation}</p>
-                                    <pre className={jetbrainsMono.className} style={{
-                                        margin: 0, fontSize: 12.5, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-                                        background: 'oklch(16% 0.02 260)', borderRadius: 8, padding: 14, color: 'oklch(88% 0.02 260)', overflowX: 'auto'
-                                    }}>{result.solutionCode}</pre>
-                                </div>
+                                {result.solutionRevealed && (
+                                    <div style={{ background: 'oklch(21% 0.02 260)', border: '1px solid oklch(30% 0.02 260)', borderRadius: 10, padding: 18 }}>
+                                        <p className={jetbrainsMono.className} style={{ fontSize: 11, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 10px' }}>Solution Walkthrough</p>
+                                        <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'oklch(85% 0.02 260)', margin: '0 0 14px' }}>{result.solutionExplanation}</p>
+                                        <pre className={jetbrainsMono.className} style={{
+                                            margin: 0, fontSize: 12.5, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                                            background: 'oklch(16% 0.02 260)', borderRadius: 8, padding: 14, color: 'oklch(88% 0.02 260)', overflowX: 'auto'
+                                        }}>{result.solutionCode}</pre>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div style={{ textAlign: 'center', padding: '60px 0', color: 'oklch(55% 0.02 260)', fontSize: 13.5 }}>
@@ -379,18 +463,40 @@ export default function PracticeSolvePage() {
                         >
                             {LANGUAGES.map(lang => <option key={lang.value} value={lang.value}>{lang.label}</option>)}
                         </select>
-                        <button
-                            onClick={handleSubmit}
-                            disabled={submitting}
-                            className={jetbrainsMono.className}
-                            style={{
-                                background: submitting ? 'oklch(40% 0.02 260)' : BLUE, color: 'oklch(16% 0.02 260)',
-                                border: 'none', borderRadius: 6, padding: '8px 18px', fontSize: 13, fontWeight: 700,
-                                cursor: submitting ? 'default' : 'pointer'
-                            }}
-                        >
-                            {submitting ? 'Running…' : 'Submit'}
-                        </button>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            {!solutionRevealed && attempts > 0 && (
+                                <span className={jetbrainsMono.className} style={{ fontSize: 12, color: 'oklch(60% 0.02 260)' }}>
+                                    Attempt {attempts}/{MAX_ATTEMPTS}
+                                </span>
+                            )}
+                            {attempts > 0 && !solutionRevealed && (
+                                <button
+                                    onClick={handleRevealSolution}
+                                    disabled={submitting || revealing}
+                                    className={jetbrainsMono.className}
+                                    style={{
+                                        background: 'transparent', color: revealing ? 'oklch(50% 0.02 260)' : ORANGE,
+                                        border: `1px solid ${ORANGE}66`, borderRadius: 6, padding: '8px 16px', fontSize: 13, fontWeight: 700,
+                                        cursor: submitting || revealing ? 'default' : 'pointer'
+                                    }}
+                                >
+                                    {revealing ? 'Revealing…' : 'Solution'}
+                                </button>
+                            )}
+                            <button
+                                onClick={handleSubmit}
+                                disabled={submitting || revealing || solutionRevealed}
+                                className={jetbrainsMono.className}
+                                style={{
+                                    background: submitting || solutionRevealed ? 'oklch(40% 0.02 260)' : BLUE, color: 'oklch(16% 0.02 260)',
+                                    border: 'none', borderRadius: 6, padding: '8px 18px', fontSize: 13, fontWeight: 700,
+                                    cursor: submitting || revealing || solutionRevealed ? 'default' : 'pointer'
+                                }}
+                            >
+                                {submitting ? 'Running…' : 'Submit'}
+                            </button>
+                        </div>
                     </div>
 
                     <div style={{ flex: 1, minHeight: 0 }}>
@@ -423,12 +529,6 @@ export default function PracticeSolvePage() {
                     )}
                 </div>
             </div>
-
-            {requiresPro && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24 }}>
-                    <UpgradeBanner hasHadTrial={hasHadTrial} reason="practice" onClose={() => setRequiresPro(false)} />
-                </div>
-            )}
         </div>
     );
 }

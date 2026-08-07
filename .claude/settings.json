@@ -75,7 +75,11 @@
       "Bash(powershell -Command \"Stop-Process -Id 6808 -Force\")",
       "Bash(node duel_paste_check2.js)",
       "Bash(powershell -Command \"Stop-Process -Id 24096 -Force\")",
-      "Bash(powershell -Command \"Stop-Process -Id 14896 -Force\")"
+      "Bash(powershell -Command \"Stop-Process -Id 14896 -Force\")",
+      "Bash(powershell -Command \"Stop-Process -Id 40928 -Force\")",
+      "Bash(powershell -Command \"Stop-Process -Id 14376 -Force\")",
+      "Bash(node flashcards_blocked_check.js)",
+      "Bash(powershell -Command \"Stop-Process -Id 37292 -Force\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Nahom\\AppData\\Local\\Temp\\claude\\c--Users-Nahom-Programming-codeduel-web\\955dc86d-2162-4224-a09a-e9af1c964121\\scratchpad"

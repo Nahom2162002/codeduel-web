@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import UserMenu from '../components/UserMenu';
+import UpgradeBanner from '../components/UpgradeBanner';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -72,6 +73,7 @@ export default function FlashcardsPage() {
     const [answering, setAnswering] = useState(false);
     const [correctCount, setCorrectCount] = useState(0);
     const [error, setError] = useState('');
+    const [flashcardsLimitReached, setFlashcardsLimitReached] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -89,10 +91,12 @@ export default function FlashcardsPage() {
     const startSession = async () => {
         setPhase('loading');
         setError('');
+        setFlashcardsLimitReached(false);
         const token = localStorage.getItem('token');
         try {
             const res = await fetch('/api/flashcards/session', { headers: { authorization: `Bearer ${token}` } });
             const data = await res.json();
+            if (data.flashcardsLimitReached) { setFlashcardsLimitReached(true); setPhase('landing'); return; }
             if (data.error) { setError(data.error); setPhase('landing'); return; }
             setCards(data.cards);
             setIndex(0);
@@ -196,19 +200,25 @@ export default function FlashcardsPage() {
                         </div>
                     )}
 
-                    {error && <div style={{ color: ORANGE, fontSize: 13.5, marginBottom: 16 }}>{error}</div>}
+                    {flashcardsLimitReached ? (
+                        <UpgradeBanner hasHadTrial={me?.hasHadTrial} reason="flashcards" />
+                    ) : (
+                        <>
+                            {error && <div style={{ color: ORANGE, fontSize: 13.5, marginBottom: 16 }}>{error}</div>}
 
-                    <button
-                        onClick={startSession}
-                        disabled={phase === 'loading'}
-                        className={jetbrainsMono.className}
-                        style={{
-                            background: BLUE, color: 'oklch(16% 0.02 260)', border: 'none', borderRadius: 8,
-                            padding: '14px 28px', fontSize: 15, fontWeight: 700, cursor: phase === 'loading' ? 'default' : 'pointer'
-                        }}
-                    >
-                        {phase === 'loading' ? 'Loading…' : `Start Session (${sessionSize} cards)`}
-                    </button>
+                            <button
+                                onClick={startSession}
+                                disabled={phase === 'loading'}
+                                className={jetbrainsMono.className}
+                                style={{
+                                    background: BLUE, color: 'oklch(16% 0.02 260)', border: 'none', borderRadius: 8,
+                                    padding: '14px 28px', fontSize: 15, fontWeight: 700, cursor: phase === 'loading' ? 'default' : 'pointer'
+                                }}
+                            >
+                                {phase === 'loading' ? 'Loading…' : `Start Session (${sessionSize} cards)`}
+                            </button>
+                        </>
+                    )}
                 </main>
             </div>
         );

@@ -148,14 +148,14 @@ export default function RulesPage() {
 
                 <section style={{ marginBottom: 40 }}>
                     {H2('Daily limits')}
-                    <p style={P_MB}><strong>Free plan:</strong> 3 duels per day, resetting at midnight. Premium problems are visible but locked. Sandbox, Step by Step, and Flashcards are available on non-premium problems.</p>
-                    <p style={P}><strong>Pro plan:</strong> unlimited duels per day, full access to every problem, and unlocks Practice, Daily Drills, and Code Review mode.</p>
+                    <p style={P_MB}><strong>Free plan:</strong> 3 duels per day, resetting at midnight. Premium problems are visible but locked. Sandbox is available on non-premium problems, plus 1 Guided Practice tutoring session and 1 Flashcards round per day.</p>
+                    <p style={P}><strong>Pro plan:</strong> unlimited duels per day, full access to every problem, and unlocks unlimited Guided Practice (including the weak-spot queue), Daily Drills, and Code Review mode.</p>
                 </section>
 
                 <section style={{ marginBottom: 40 }}>
                     {H2('Other modes')}
                     <p style={P}>
-                        Practice, Daily Drills, Sandbox, Step by Step, Flashcards, and Code Review are all for training —
+                        Guided Practice, Daily Drills, Sandbox, Flashcards, and Code Review are all for training —
                         none of them affect your ELO rating or duel record. Only Duels count toward your rating.
                     </p>
                 </section>

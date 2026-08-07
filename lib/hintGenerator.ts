@@ -1,9 +1,7 @@
 import { anthropic } from '@/lib/anthropic';
 
-// Shared by /api/practice/hint and /api/step/hint — both need the same
-// escalating-specificity hint, just under different access rules (Practice
-// is Pro-gated with no daily cap; Step by Step is free-tier-eligible with a
-// daily cap, see app/api/step/submit).
+// Used by /api/practice/hint for the escalating-specificity hint Claude gives
+// while tutoring a user through a problem.
 const LEVEL_INSTRUCTIONS: Record<number, string> = {
     1: 'Give a high-level nudge: name the general pattern or technique that applies here (e.g. "this is a sliding window problem"), and briefly say why. Do not describe the steps to implement it.',
     2: 'Give a more specific direction: what data structure(s) or algorithmic idea to use and roughly how they fit together. Do not write code or pseudocode.',
