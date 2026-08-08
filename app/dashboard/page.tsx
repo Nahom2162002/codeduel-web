@@ -83,7 +83,11 @@ const CATEGORY_LABELS: Record<string, string> = {
     trie: 'Trie',
     iterator: 'Iterator',
     interactive: 'Interactive',
-    concurrency: 'Concurrency'
+    concurrency: 'Concurrency',
+    queue: 'Queue',
+    deque: 'Deque',
+    backtracking: 'Backtracking',
+    intervals: 'Intervals'
 };
 
 function DuelIcon({ size = 28 }: { size?: number }) {

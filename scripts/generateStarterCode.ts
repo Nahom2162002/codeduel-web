@@ -325,8 +325,18 @@ async function main() {
     let updated = 0;
     const skipped: string[] = [];
 
+    const failures: { title: string; error: string }[] = [];
+
     for (const p of targets) {
         const sc: any = p.starterCode.toObject ? p.starterCode.toObject() : p.starterCode;
+
+        if (p.executionType === 'multi-call' && (!p.methods || p.methods.length === 0)) {
+            // paramTypes/methods failed to parse for this problem in
+            // migrateLanguageSignatures.ts (e.g. an unsupported Java type) —
+            // skip it here rather than crash the whole run for everyone else.
+            failures.push({ title: p.title, error: 'no parsed methods (paramTypes/methods missing)' });
+            continue;
+        }
 
         if (p.executionType === 'multi-call') {
             const methods: MethodSig[] = (p.methods || []).map((m: any) => m.toObject ? m.toObject() : m);
@@ -337,9 +347,13 @@ async function main() {
             sc.csharp = csMultiCallStub(className, methods);
             sc.typescript = tsMultiCallStub(className, methods);
             if (!hasUnsupportedType(allTypes, false)) {
-                sc.cpp = cppMultiCallStub(className, methods);
-                sc.rust = rustMultiCallStub(className, methods);
-                sc.c = cMultiCallStub(className, methods);
+                try {
+                    sc.cpp = cppMultiCallStub(className, methods);
+                    sc.rust = rustMultiCallStub(className, methods);
+                    sc.c = cMultiCallStub(className, methods);
+                } catch (err: any) {
+                    skipped.push(`${p.title} (cpp/rust/c — ${err.message})`);
+                }
             } else {
                 skipped.push(`${p.title} (cpp/rust/c — dynamic type)`);
             }
@@ -352,9 +366,13 @@ async function main() {
             sc.csharp = csFunctionStub(p.functionName, params, returnType);
             sc.typescript = tsFunctionStub(p.functionName, params, returnType);
             if (!hasUnsupportedType(allTypes, false)) {
-                sc.cpp = cppFunctionStub(p.functionName, params, returnType);
-                sc.rust = rustFunctionStub(p.functionName, params, returnType);
-                sc.c = cFunctionStub(p.functionName, params, returnType);
+                try {
+                    sc.cpp = cppFunctionStub(p.functionName, params, returnType);
+                    sc.rust = rustFunctionStub(p.functionName, params, returnType);
+                    sc.c = cFunctionStub(p.functionName, params, returnType);
+                } catch (err: any) {
+                    skipped.push(`${p.title} (cpp/rust/c — ${err.message})`);
+                }
             } else {
                 skipped.push(`${p.title} (cpp/rust/c — dynamic type)`);
             }
@@ -367,6 +385,7 @@ async function main() {
 
     console.log(`Updated ${updated}/${targets.length} problems.`);
     if (skipped.length) console.log('Skipped cpp/rust/c for:', skipped);
+    if (failures.length) console.log('Failed (no parsed signature):', failures);
 
     await mongoose.disconnect();
 }

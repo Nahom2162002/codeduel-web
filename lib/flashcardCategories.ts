@@ -12,7 +12,7 @@ export const PATTERN_CATEGORIES = [
     'greedy', 'bit-manipulation', 'hash-table', 'two-pointers', 'heap',
     'sliding-window', 'matrix', 'sorting', 'union-find', 'topological-sort',
     'counting', 'shortest-path', 'number-theory', 'bitmask', 'recursion',
-    'divide-and-conquer', 'linked-list', 'trie'
+    'divide-and-conquer', 'linked-list', 'trie', 'queue', 'deque', 'backtracking', 'intervals'
 ] as const;
 
 export type PatternCategory = typeof PATTERN_CATEGORIES[number];

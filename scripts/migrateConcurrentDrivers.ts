@@ -89,6 +89,763 @@ async function main() {
         console.log('Saved: Fizz Buzz Multithreaded');
     }
 
+    // ============== 2026 EXPANSION BATCH ==============
+
+    // ============== Concurrent Counter with Increment (ThreadSafeCounter) ==============
+    {
+        const p = await Problem.findOne({ title: 'Concurrent Counter with Increment' });
+        const starterCode: any = p!.starterCode.toObject ? p!.starterCode.toObject() : p!.starterCode;
+        starterCode.go = `type ThreadSafeCounter struct {
+}
+
+func NewThreadSafeCounter() *ThreadSafeCounter {
+	return &ThreadSafeCounter{}
+}
+
+func (c *ThreadSafeCounter) Increment() {
+	// Write your solution here
+}
+
+func (c *ThreadSafeCounter) GetValue() int {
+	// Write your solution here
+	return 0
+}`;
+        starterCode.csharp = `class ThreadSafeCounter {
+    public ThreadSafeCounter() {
+    }
+
+    public void Increment() {
+        // Write your solution here
+    }
+
+    public int GetValue() {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        starterCode.rust = `pub struct ThreadSafeCounter {
+}
+
+impl ThreadSafeCounter {
+    pub fn new() -> Self {
+        ThreadSafeCounter {}
+    }
+
+    pub fn increment(&self) {
+        // Write your solution here
+    }
+
+    pub fn get_value(&self) -> i32 {
+        // Write your solution here
+        0
+    }
+}`;
+        starterCode.typescript = `class ThreadSafeCounter {
+    constructor() {
+        // Write your solution here
+    }
+
+    increment(): void {
+        // Write your solution here
+    }
+
+    getValue(): number {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        p!.starterCode = starterCode;
+
+        const cd: any = p!.customDriver.toObject ? p!.customDriver.toObject() : p!.customDriver;
+        cd.go = `package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"sync"
+)
+
+{{SOLUTION}}
+
+func main() {
+	inputBytes, _ := io.ReadAll(os.Stdin)
+	var raw map[string]interface{}
+	json.Unmarshal(inputBytes, &raw)
+	threadCount := int(raw["threadCount"].(float64))
+	incrementsPerThread := int(raw["incrementsPerThread"].(float64))
+
+	counter := NewThreadSafeCounter()
+	var wg sync.WaitGroup
+	wg.Add(threadCount)
+	for i := 0; i < threadCount; i++ {
+		go func() {
+			defer wg.Done()
+			for j := 0; j < incrementsPerThread; j++ {
+				counter.Increment()
+			}
+		}()
+	}
+	wg.Wait()
+
+	out, _ := json.Marshal(counter.GetValue())
+	fmt.Println(string(out))
+}`;
+        cd.csharp = `using System;
+using System.Threading;
+using System.Collections.Generic;
+${CSHARP_JSON_HELPERS}
+{{SOLUTION}}
+
+class Program {
+    static void Main() {
+        string input = Console.In.ReadToEnd();
+        var data = (Dictionary<string, object>)Json.Parse(input);
+        int threadCount = Convert.ToInt32(data["threadCount"]);
+        int incrementsPerThread = Convert.ToInt32(data["incrementsPerThread"]);
+
+        var counter = new ThreadSafeCounter();
+        var threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(() => {
+                for (int j = 0; j < incrementsPerThread; j++) counter.Increment();
+            });
+        }
+        foreach (var t in threads) t.Start();
+        foreach (var t in threads) t.Join();
+        Console.WriteLine(Json.Stringify(counter.GetValue()));
+    }
+}`;
+        cd.rust = `${RUST_JSON_HELPERS}
+use std::io::Read;
+use std::sync::Arc;
+use std::thread;
+
+fn main() {
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input).unwrap();
+    let data = __parse_json(&input);
+    let thread_count = data.get("threadCount").as_int();
+    let increments_per_thread = data.get("incrementsPerThread").as_int();
+
+    let counter = Arc::new(ThreadSafeCounter::new());
+    let mut handles = vec![];
+    for _ in 0..thread_count {
+        let c = Arc::clone(&counter);
+        handles.push(thread::spawn(move || {
+            for _ in 0..increments_per_thread {
+                c.increment();
+            }
+        }));
+    }
+    for h in handles { h.join().unwrap(); }
+
+    println!("{}", counter.get_value());
+}`;
+        cd.typescript = `const chunks: any[] = [];
+process.stdin.on('data', (chunk: any) => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const threadCount: number = data.threadCount;
+    const incrementsPerThread: number = data.incrementsPerThread;
+    const counter = new ThreadSafeCounter();
+    const worker = () => new Promise<void>(r => setTimeout(() => {
+        for (let i = 0; i < incrementsPerThread; i++) counter.increment();
+        r();
+    }, 0));
+    const promises: Promise<void>[] = [];
+    for (let i = 0; i < threadCount; i++) promises.push(worker());
+    Promise.all(promises).then(() => console.log(JSON.stringify(counter.getValue())));
+});`;
+        p!.customDriver = cd;
+        await p!.save();
+        console.log('Saved: Concurrent Counter with Increment');
+    }
+
+    // ============== Parallel Range Sum (ParallelRangeSum) ==============
+    {
+        const p = await Problem.findOne({ title: 'Parallel Range Sum' });
+        const starterCode: any = p!.starterCode.toObject ? p!.starterCode.toObject() : p!.starterCode;
+        starterCode.go = `type ParallelRangeSum struct {
+	nums []int
+}
+
+func NewParallelRangeSum(nums []int) *ParallelRangeSum {
+	return &ParallelRangeSum{nums: nums}
+}
+
+func (p *ParallelRangeSum) SumRange(lo int, hi int) int {
+	// Write your solution here
+	return 0
+}`;
+        starterCode.csharp = `class ParallelRangeSum {
+    private int[] nums;
+
+    public ParallelRangeSum(int[] nums) {
+        this.nums = nums;
+    }
+
+    public int SumRange(int lo, int hi) {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        starterCode.rust = `pub struct ParallelRangeSum {
+    nums: Vec<i32>,
+}
+
+impl ParallelRangeSum {
+    pub fn new(nums: Vec<i32>) -> Self {
+        ParallelRangeSum { nums }
+    }
+
+    pub fn sum_range(&self, lo: i32, hi: i32) -> i32 {
+        // Write your solution here
+        0
+    }
+}`;
+        starterCode.typescript = `class ParallelRangeSum {
+    private nums: number[];
+
+    constructor(nums: number[]) {
+        this.nums = nums;
+    }
+
+    sumRange(lo: number, hi: number): number {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        p!.starterCode = starterCode;
+
+        const cd: any = p!.customDriver.toObject ? p!.customDriver.toObject() : p!.customDriver;
+        cd.go = `package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"sync"
+)
+
+{{SOLUTION}}
+
+func main() {
+	inputBytes, _ := io.ReadAll(os.Stdin)
+	var raw map[string]interface{}
+	json.Unmarshal(inputBytes, &raw)
+	numsRaw := raw["nums"].([]interface{})
+	nums := make([]int, len(numsRaw))
+	for i, v := range numsRaw { nums[i] = int(v.(float64)) }
+	threadCount := int(raw["threadCount"].(float64))
+	n := len(nums)
+	chunk := n / threadCount
+
+	solver := NewParallelRangeSum(nums)
+	results := make([]int, threadCount)
+	var wg sync.WaitGroup
+	wg.Add(threadCount)
+	for i := 0; i < threadCount; i++ {
+		go func(idx int) {
+			defer wg.Done()
+			lo := idx * chunk
+			hi := lo + chunk - 1
+			results[idx] = solver.SumRange(lo, hi)
+		}(i)
+	}
+	wg.Wait()
+
+	total := 0
+	for _, r := range results { total += r }
+	out, _ := json.Marshal(total)
+	fmt.Println(string(out))
+}`;
+        cd.csharp = `using System;
+using System.Threading;
+using System.Collections.Generic;
+${CSHARP_JSON_HELPERS}
+{{SOLUTION}}
+
+class Program {
+    static void Main() {
+        string input = Console.In.ReadToEnd();
+        var data = (Dictionary<string, object>)Json.Parse(input);
+        var numsList = (List<object>)data["nums"];
+        int n = numsList.Count;
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = Convert.ToInt32(numsList[i]);
+        int threadCount = Convert.ToInt32(data["threadCount"]);
+        int chunk = n / threadCount;
+
+        var solver = new ParallelRangeSum(nums);
+        var results = new int[threadCount];
+        var threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            int idx = i;
+            threads[idx] = new Thread(() => {
+                int lo = idx * chunk;
+                int hi = lo + chunk - 1;
+                results[idx] = solver.SumRange(lo, hi);
+            });
+        }
+        foreach (var t in threads) t.Start();
+        foreach (var t in threads) t.Join();
+        int total = 0;
+        foreach (var r in results) total += r;
+        Console.WriteLine(Json.Stringify(total));
+    }
+}`;
+        cd.rust = `${RUST_JSON_HELPERS}
+use std::io::Read;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input).unwrap();
+    let data = __parse_json(&input);
+    let nums = data.get("nums").as_int_array();
+    let thread_count = data.get("threadCount").as_int();
+    let n = nums.len() as i32;
+    let chunk = n / thread_count;
+
+    let solver = Arc::new(ParallelRangeSum::new(nums));
+    let results: Arc<Mutex<Vec<i32>>> = Arc::new(Mutex::new(vec![0; thread_count as usize]));
+    let mut handles = vec![];
+    for i in 0..thread_count {
+        let s = Arc::clone(&solver);
+        let r = Arc::clone(&results);
+        handles.push(thread::spawn(move || {
+            let lo = i * chunk;
+            let hi = lo + chunk - 1;
+            let sum = s.sum_range(lo, hi);
+            r.lock().unwrap()[i as usize] = sum;
+        }));
+    }
+    for h in handles { h.join().unwrap(); }
+
+    let total: i32 = results.lock().unwrap().iter().sum();
+    println!("{}", total);
+}`;
+        cd.typescript = `const chunks: any[] = [];
+process.stdin.on('data', (chunk: any) => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const nums: number[] = data.nums;
+    const threadCount: number = data.threadCount;
+    const n = nums.length;
+    const chunkSize = Math.floor(n / threadCount);
+    const solver = new ParallelRangeSum(nums);
+    const results: number[] = new Array(threadCount).fill(0);
+    const worker = (i: number) => new Promise<void>(r => setTimeout(() => {
+        const lo = i * chunkSize;
+        const hi = lo + chunkSize - 1;
+        results[i] = solver.sumRange(lo, hi);
+        r();
+    }, 0));
+    const promises: Promise<void>[] = [];
+    for (let i = 0; i < threadCount; i++) promises.push(worker(i));
+    Promise.all(promises).then(() => console.log(JSON.stringify(results.reduce((a, b) => a + b, 0))));
+});`;
+        p!.customDriver = cd;
+        await p!.save();
+        console.log('Saved: Parallel Range Sum');
+    }
+
+    // ============== Parallel Range Maximum (ParallelRangeMax) ==============
+    {
+        const p = await Problem.findOne({ title: 'Parallel Range Maximum' });
+        const starterCode: any = p!.starterCode.toObject ? p!.starterCode.toObject() : p!.starterCode;
+        starterCode.go = `type ParallelRangeMax struct {
+	nums []int
+}
+
+func NewParallelRangeMax(nums []int) *ParallelRangeMax {
+	return &ParallelRangeMax{nums: nums}
+}
+
+func (p *ParallelRangeMax) MaxRange(lo int, hi int) int {
+	// Write your solution here
+	return 0
+}`;
+        starterCode.csharp = `class ParallelRangeMax {
+    private int[] nums;
+
+    public ParallelRangeMax(int[] nums) {
+        this.nums = nums;
+    }
+
+    public int MaxRange(int lo, int hi) {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        starterCode.rust = `pub struct ParallelRangeMax {
+    nums: Vec<i32>,
+}
+
+impl ParallelRangeMax {
+    pub fn new(nums: Vec<i32>) -> Self {
+        ParallelRangeMax { nums }
+    }
+
+    pub fn max_range(&self, lo: i32, hi: i32) -> i32 {
+        // Write your solution here
+        0
+    }
+}`;
+        starterCode.typescript = `class ParallelRangeMax {
+    private nums: number[];
+
+    constructor(nums: number[]) {
+        this.nums = nums;
+    }
+
+    maxRange(lo: number, hi: number): number {
+        // Write your solution here
+        return 0;
+    }
+}`;
+        p!.starterCode = starterCode;
+
+        const cd: any = p!.customDriver.toObject ? p!.customDriver.toObject() : p!.customDriver;
+        cd.go = `package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"sync"
+)
+
+{{SOLUTION}}
+
+func main() {
+	inputBytes, _ := io.ReadAll(os.Stdin)
+	var raw map[string]interface{}
+	json.Unmarshal(inputBytes, &raw)
+	numsRaw := raw["nums"].([]interface{})
+	nums := make([]int, len(numsRaw))
+	for i, v := range numsRaw { nums[i] = int(v.(float64)) }
+	threadCount := int(raw["threadCount"].(float64))
+	n := len(nums)
+	chunk := n / threadCount
+
+	solver := NewParallelRangeMax(nums)
+	results := make([]int, threadCount)
+	var wg sync.WaitGroup
+	wg.Add(threadCount)
+	for i := 0; i < threadCount; i++ {
+		go func(idx int) {
+			defer wg.Done()
+			lo := idx * chunk
+			hi := lo + chunk - 1
+			results[idx] = solver.MaxRange(lo, hi)
+		}(i)
+	}
+	wg.Wait()
+
+	best := results[0]
+	for _, r := range results { if r > best { best = r } }
+	out, _ := json.Marshal(best)
+	fmt.Println(string(out))
+}`;
+        cd.csharp = `using System;
+using System.Threading;
+using System.Collections.Generic;
+${CSHARP_JSON_HELPERS}
+{{SOLUTION}}
+
+class Program {
+    static void Main() {
+        string input = Console.In.ReadToEnd();
+        var data = (Dictionary<string, object>)Json.Parse(input);
+        var numsList = (List<object>)data["nums"];
+        int n = numsList.Count;
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = Convert.ToInt32(numsList[i]);
+        int threadCount = Convert.ToInt32(data["threadCount"]);
+        int chunk = n / threadCount;
+
+        var solver = new ParallelRangeMax(nums);
+        var results = new int[threadCount];
+        var threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            int idx = i;
+            threads[idx] = new Thread(() => {
+                int lo = idx * chunk;
+                int hi = lo + chunk - 1;
+                results[idx] = solver.MaxRange(lo, hi);
+            });
+        }
+        foreach (var t in threads) t.Start();
+        foreach (var t in threads) t.Join();
+        int best = results[0];
+        foreach (var r in results) if (r > best) best = r;
+        Console.WriteLine(Json.Stringify(best));
+    }
+}`;
+        cd.rust = `${RUST_JSON_HELPERS}
+use std::io::Read;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input).unwrap();
+    let data = __parse_json(&input);
+    let nums = data.get("nums").as_int_array();
+    let thread_count = data.get("threadCount").as_int();
+    let n = nums.len() as i32;
+    let chunk = n / thread_count;
+
+    let solver = Arc::new(ParallelRangeMax::new(nums));
+    let results: Arc<Mutex<Vec<i32>>> = Arc::new(Mutex::new(vec![0; thread_count as usize]));
+    let mut handles = vec![];
+    for i in 0..thread_count {
+        let s = Arc::clone(&solver);
+        let r = Arc::clone(&results);
+        handles.push(thread::spawn(move || {
+            let lo = i * chunk;
+            let hi = lo + chunk - 1;
+            let m = s.max_range(lo, hi);
+            r.lock().unwrap()[i as usize] = m;
+        }));
+    }
+    for h in handles { h.join().unwrap(); }
+
+    let best = *results.lock().unwrap().iter().max().unwrap();
+    println!("{}", best);
+}`;
+        cd.typescript = `const chunks: any[] = [];
+process.stdin.on('data', (chunk: any) => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const nums: number[] = data.nums;
+    const threadCount: number = data.threadCount;
+    const n = nums.length;
+    const chunkSize = Math.floor(n / threadCount);
+    const solver = new ParallelRangeMax(nums);
+    const results: number[] = new Array(threadCount).fill(null);
+    const worker = (i: number) => new Promise<void>(r => setTimeout(() => {
+        const lo = i * chunkSize;
+        const hi = lo + chunkSize - 1;
+        results[i] = solver.maxRange(lo, hi);
+        r();
+    }, 0));
+    const promises: Promise<void>[] = [];
+    for (let i = 0; i < threadCount; i++) promises.push(worker(i));
+    Promise.all(promises).then(() => console.log(JSON.stringify(Math.max(...results))));
+});`;
+        p!.customDriver = cd;
+        await p!.save();
+        console.log('Saved: Parallel Range Maximum');
+    }
+
+    // ============== Parallel Contains Check (ParallelContains) ==============
+    {
+        const p = await Problem.findOne({ title: 'Parallel Contains Check' });
+        const starterCode: any = p!.starterCode.toObject ? p!.starterCode.toObject() : p!.starterCode;
+        starterCode.go = `type ParallelContains struct {
+	nums   []int
+	target int
+}
+
+func NewParallelContains(nums []int, target int) *ParallelContains {
+	return &ParallelContains{nums: nums, target: target}
+}
+
+func (p *ParallelContains) ContainsInRange(lo int, hi int) bool {
+	// Write your solution here
+	return false
+}`;
+        starterCode.csharp = `class ParallelContains {
+    private int[] nums;
+    private int target;
+
+    public ParallelContains(int[] nums, int target) {
+        this.nums = nums;
+        this.target = target;
+    }
+
+    public bool ContainsInRange(int lo, int hi) {
+        // Write your solution here
+        return false;
+    }
+}`;
+        starterCode.rust = `pub struct ParallelContains {
+    nums: Vec<i32>,
+    target: i32,
+}
+
+impl ParallelContains {
+    pub fn new(nums: Vec<i32>, target: i32) -> Self {
+        ParallelContains { nums, target }
+    }
+
+    pub fn contains_in_range(&self, lo: i32, hi: i32) -> bool {
+        // Write your solution here
+        false
+    }
+}`;
+        starterCode.typescript = `class ParallelContains {
+    private nums: number[];
+    private target: number;
+
+    constructor(nums: number[], target: number) {
+        this.nums = nums;
+        this.target = target;
+    }
+
+    containsInRange(lo: number, hi: number): boolean {
+        // Write your solution here
+        return false;
+    }
+}`;
+        p!.starterCode = starterCode;
+
+        const cd: any = p!.customDriver.toObject ? p!.customDriver.toObject() : p!.customDriver;
+        cd.go = `package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"sync"
+)
+
+{{SOLUTION}}
+
+func main() {
+	inputBytes, _ := io.ReadAll(os.Stdin)
+	var raw map[string]interface{}
+	json.Unmarshal(inputBytes, &raw)
+	numsRaw := raw["nums"].([]interface{})
+	nums := make([]int, len(numsRaw))
+	for i, v := range numsRaw { nums[i] = int(v.(float64)) }
+	target := int(raw["target"].(float64))
+	threadCount := int(raw["threadCount"].(float64))
+	n := len(nums)
+	chunk := n / threadCount
+
+	solver := NewParallelContains(nums, target)
+	results := make([]bool, threadCount)
+	var wg sync.WaitGroup
+	wg.Add(threadCount)
+	for i := 0; i < threadCount; i++ {
+		go func(idx int) {
+			defer wg.Done()
+			lo := idx * chunk
+			hi := lo + chunk - 1
+			results[idx] = solver.ContainsInRange(lo, hi)
+		}(i)
+	}
+	wg.Wait()
+
+	found := false
+	for _, r := range results { if r { found = true } }
+	out, _ := json.Marshal(found)
+	fmt.Println(string(out))
+}`;
+        cd.csharp = `using System;
+using System.Threading;
+using System.Collections.Generic;
+${CSHARP_JSON_HELPERS}
+{{SOLUTION}}
+
+class Program {
+    static void Main() {
+        string input = Console.In.ReadToEnd();
+        var data = (Dictionary<string, object>)Json.Parse(input);
+        var numsList = (List<object>)data["nums"];
+        int n = numsList.Count;
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) nums[i] = Convert.ToInt32(numsList[i]);
+        int target = Convert.ToInt32(data["target"]);
+        int threadCount = Convert.ToInt32(data["threadCount"]);
+        int chunk = n / threadCount;
+
+        var solver = new ParallelContains(nums, target);
+        var results = new bool[threadCount];
+        var threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            int idx = i;
+            threads[idx] = new Thread(() => {
+                int lo = idx * chunk;
+                int hi = lo + chunk - 1;
+                results[idx] = solver.ContainsInRange(lo, hi);
+            });
+        }
+        foreach (var t in threads) t.Start();
+        foreach (var t in threads) t.Join();
+        bool found = false;
+        foreach (var r in results) if (r) found = true;
+        Console.WriteLine(Json.Stringify(found));
+    }
+}`;
+        cd.rust = `${RUST_JSON_HELPERS}
+use std::io::Read;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input).unwrap();
+    let data = __parse_json(&input);
+    let nums = data.get("nums").as_int_array();
+    let target = data.get("target").as_int();
+    let thread_count = data.get("threadCount").as_int();
+    let n = nums.len() as i32;
+    let chunk = n / thread_count;
+
+    let solver = Arc::new(ParallelContains::new(nums, target));
+    let results: Arc<Mutex<Vec<bool>>> = Arc::new(Mutex::new(vec![false; thread_count as usize]));
+    let mut handles = vec![];
+    for i in 0..thread_count {
+        let s = Arc::clone(&solver);
+        let r = Arc::clone(&results);
+        handles.push(thread::spawn(move || {
+            let lo = i * chunk;
+            let hi = lo + chunk - 1;
+            let found = s.contains_in_range(lo, hi);
+            r.lock().unwrap()[i as usize] = found;
+        }));
+    }
+    for h in handles { h.join().unwrap(); }
+
+    let any_found = results.lock().unwrap().iter().any(|&x| x);
+    println!("{}", any_found);
+}`;
+        cd.typescript = `const chunks: any[] = [];
+process.stdin.on('data', (chunk: any) => chunks.push(chunk));
+process.stdin.on('end', () => {
+    const data = JSON.parse(chunks.join(''));
+    const nums: number[] = data.nums;
+    const target: number = data.target;
+    const threadCount: number = data.threadCount;
+    const n = nums.length;
+    const chunkSize = Math.floor(n / threadCount);
+    const solver = new ParallelContains(nums, target);
+    const results: boolean[] = new Array(threadCount).fill(false);
+    const worker = (i: number) => new Promise<void>(r => setTimeout(() => {
+        const lo = i * chunkSize;
+        const hi = lo + chunkSize - 1;
+        results[i] = solver.containsInRange(lo, hi);
+        r();
+    }, 0));
+    const promises: Promise<void>[] = [];
+    for (let i = 0; i < threadCount; i++) promises.push(worker(i));
+    Promise.all(promises).then(() => console.log(JSON.stringify(results.some(x => x))));
+});`;
+        p!.customDriver = cd;
+        await p!.save();
+        console.log('Saved: Parallel Contains Check');
+    }
+
     await mongoose.disconnect();
 }
 main().catch(e => { console.error(e); process.exit(1); });

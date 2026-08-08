@@ -84,7 +84,11 @@ const CATEGORY_LABELS: Record<string, string> = {
     trie: 'Trie',
     iterator: 'Iterator',
     interactive: 'Interactive',
-    concurrency: 'Concurrency'
+    concurrency: 'Concurrency',
+    queue: 'Queue',
+    deque: 'Deque',
+    backtracking: 'Backtracking',
+    intervals: 'Intervals'
 };
 
 // Purely decorative scaffold text revealed character-by-character in sync with

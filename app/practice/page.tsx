@@ -27,7 +27,8 @@ const CATEGORY_LABELS: Record<string, string> = {
     counting: 'Counting', 'shortest-path': 'Shortest Path', 'number-theory': 'Number Theory',
     bitmask: 'Bitmask', recursion: 'Recursion', geometry: 'Geometry',
     'divide-and-conquer': 'Divide and Conquer', 'game-theory': 'Game Theory', 'linked-list': 'Linked List',
-    trie: 'Trie', iterator: 'Iterator', interactive: 'Interactive', concurrency: 'Concurrency'
+    trie: 'Trie', iterator: 'Iterator', interactive: 'Interactive', concurrency: 'Concurrency',
+    queue: 'Queue', deque: 'Deque', backtracking: 'Backtracking', intervals: 'Intervals'
 };
 
 interface Me { username: string; plan: string; hasHadTrial?: boolean; isTrialing?: boolean; }
