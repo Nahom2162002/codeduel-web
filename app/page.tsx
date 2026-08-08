@@ -202,6 +202,7 @@ export default function LandingPage() {
                     <a href="#features" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Features</a>
                     <a href="#pricing" className="nav-anchor" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Pricing</a>
                     <Link href="/blog" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Blog</Link>
+                    <Link href="/contact" style={{ color: 'oklch(80% 0.02 260)', textDecoration: 'none' }}>Contact</Link>
                     <Link href="/register" style={{ background: BLUE, color: 'oklch(16% 0.02 260)', padding: '10px 20px', borderRadius: 6, textDecoration: 'none', fontWeight: 700 }}>
                         Start Dueling
                     </Link>
@@ -517,6 +518,7 @@ export default function LandingPage() {
                             <TikTokIcon />
                         </a>
                     </div>
+                    <Link href="/contact" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Contact</Link>
                     <Link href="/privacy" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Privacy Policy</Link>
                     <Link href="/terms" style={{ color: 'oklch(65% 0.02 260)', textDecoration: 'none' }}>Terms of Service</Link>
                 </div>
