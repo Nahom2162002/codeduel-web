@@ -57,7 +57,7 @@ const problemSchema = new Schema({
     title:        { type: String, required: true, unique: true },
     description:  { type: String, required: true },
     difficulty:   { type: String, enum: ['easy', 'medium', 'hard'], required: true },
-    category:     { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design', 'binary-search', 'stacks', 'greedy', 'bit-manipulation', 'hash-table', 'two-pointers', 'heap', 'sliding-window', 'matrix', 'sorting', 'union-find', 'topological-sort', 'simulation', 'counting', 'shortest-path', 'number-theory', 'bitmask', 'recursion', 'geometry', 'divide-and-conquer', 'game-theory', 'linked-list', 'trie', 'iterator', 'interactive', 'concurrency'], required: true },
+    category:     { type: String, enum: ['arrays', 'strings', 'trees', 'graphs', 'dynamic-programming', 'system-design', 'binary-search', 'stacks', 'greedy', 'bit-manipulation', 'hash-table', 'two-pointers', 'heap', 'sliding-window', 'matrix', 'sorting', 'union-find', 'topological-sort', 'simulation', 'counting', 'shortest-path', 'number-theory', 'bitmask', 'recursion', 'geometry', 'divide-and-conquer', 'game-theory', 'linked-list', 'trie', 'iterator', 'interactive', 'concurrency', 'queue', 'deque', 'backtracking', 'intervals'], required: true },
     functionName: { type: String, required: true },
     testCases:   [testCaseSchema],
     examples:    [exampleSchema],

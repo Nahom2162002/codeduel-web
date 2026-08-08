@@ -35,7 +35,7 @@ const CLAUDE_CODE = `def two_sum(nums, target):
     return []`;
 
 const LEVELS = [
-    { title: 'Pick a problem', desc: 'Choose from 120+ problems across 32 categories and 3 difficulty levels. New problems added regularly.' },
+    { title: 'Pick a problem', desc: 'Choose from 120+ problems across 36 categories and 3 difficulty levels. New problems added regularly.' },
     { title: 'Write your solution', desc: 'Code in the browser with a full VS Code-style editor. 9 languages supported, including Python, JavaScript, TypeScript, Java, C++, and Go.' },
     { title: 'Submit and duel', desc: 'Hit submit and Claude races to solve the same problem. Both solutions run against the same test cases.' },
     { title: 'See who won', desc: 'Results show scores side by side. Claude explains its approach so you actually learn something every time.' },
@@ -48,7 +48,7 @@ const FEATURES = [
     { icon: '🎯', title: 'ELO Rating System', desc: 'Your rating goes up when you win and down when you lose — just like chess.', pro: true },
     { icon: '🔍', title: 'Weak Spot Detection', desc: 'Your dashboard identifies which categories you consistently lose in and surfaces practice problems.', pro: true },
     { icon: '📈', title: 'Progress Dashboard', desc: 'Track your win rate, streak, ELO over time, and performance by difficulty and category.', pro: true },
-    { icon: '🗂', title: 'All Problem Categories', desc: 'All 32 categories — Arrays, Trees, Graphs, Dynamic Programming, Game Theory, Concurrency, Tries, and more.', pro: true },
+    { icon: '🗂', title: 'All Problem Categories', desc: 'All 36 categories — Arrays, Trees, Graphs, Dynamic Programming, Game Theory, Concurrency, Tries, and more.', pro: true },
     { icon: '⚡', title: 'Unlimited Duels', desc: 'Free tier is limited to 3 duels per day. Pro unlocks unlimited.', pro: true },
 ];
 
